@@ -19,16 +19,6 @@ type NewsCardProps = {
   variant?: NewsCardVariant;
 };
 
-function getDateParts(date: string) {
-  const parsed = new Date(`${date}T00:00:00.000Z`);
-
-  return {
-    day: new Intl.DateTimeFormat("en", { day: "2-digit", timeZone: "UTC" }).format(parsed),
-    month: new Intl.DateTimeFormat("en", { month: "short", timeZone: "UTC" }).format(parsed),
-    year: new Intl.DateTimeFormat("en", { year: "numeric", timeZone: "UTC" }).format(parsed),
-  };
-}
-
 function NewsThumbnail({
   item,
   mode = "card",
@@ -89,7 +79,6 @@ export function NewsCard({
   variant = "card",
 }: NewsCardProps) {
   const { t } = useI18n();
-  const dateParts = getDateParts(item.date);
 
   if (variant === "featured") {
     return (
@@ -121,15 +110,6 @@ export function NewsCard({
           </div>
           <div className="relative border-t border-als-line bg-[#f8fafc] p-4 lg:border-l lg:border-t-0 md:p-5">
             <NewsThumbnail item={item} mode="featured" />
-            <div className="absolute bottom-8 left-8 rounded-2xl border border-white/70 bg-white/88 p-4 shadow-xl shadow-als-blue/10 backdrop-blur">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-als-muted">
-                Published
-              </p>
-              <p className="mt-1 text-lg font-black text-als-blue">
-                {dateParts.month} {dateParts.day}
-              </p>
-              <p className="text-xs font-semibold text-als-red">{dateParts.year}</p>
-            </div>
           </div>
         </div>
       </Card>
@@ -142,38 +122,25 @@ export function NewsCard({
         <div className="absolute -left-[2.95rem] top-6 z-10 hidden h-8 w-8 place-items-center rounded-full border border-als-red/20 bg-white text-[0.68rem] font-black text-als-red shadow-sm md:grid">
           {String(timelineIndex).padStart(2, "0")}
         </div>
-        <div className="grid gap-5 md:grid-cols-[8.5rem_minmax(0,1fr)]">
-          <div className="rounded-xl border border-als-line bg-[#f8fafc] p-4">
-            <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-als-muted">
-              {dateParts.month}
-            </p>
-            <p className="mt-1 text-3xl font-black leading-none text-als-blue">
-              {dateParts.day}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-als-red">{dateParts.year}</p>
-            <div className="mt-5 h-px bg-als-line" />
-            <p className="mt-4 rounded-full bg-white px-3 py-1 text-xs font-bold text-als-blue ring-1 ring-als-line">
-              {item.category}
-            </p>
-          </div>
-          <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_11.5rem]">
-            <div className="flex min-w-0 flex-col justify-between py-1">
-              <div>
-                <h3 className="text-xl font-black leading-snug text-als-blue transition group-hover:text-als-red">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-als-muted">{item.excerpt}</p>
-              </div>
-              <Link
-                href={`/news/${item.slug}`}
-                className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-als-red transition group-hover:gap-3"
-              >
-                Read full update
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
+        <div className="flex min-w-0 flex-col justify-between py-1">
+          <div>
+            <div className="flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-als-muted">
+              <span>{formatDate(item.date)}</span>
+              <span className="h-1 w-1 rounded-full bg-als-red" aria-hidden="true" />
+              <span>{item.category}</span>
             </div>
-            <NewsThumbnail item={item} mode="timeline" />
+            <h3 className="mt-3 text-xl font-black leading-snug text-als-blue transition group-hover:text-als-red">
+              {item.title}
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-als-muted">{item.excerpt}</p>
           </div>
+          <Link
+            href={`/news/${item.slug}`}
+            className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-als-red transition group-hover:gap-3"
+          >
+            Read full update
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
       </article>
     );

@@ -107,27 +107,27 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
 
   return (
     <>
-      <section className="relative isolate overflow-hidden border-b border-als-line bg-[radial-gradient(circle_at_18%_18%,rgba(174,72,94,0.12),transparent_23rem),radial-gradient(circle_at_82%_10%,rgba(63,96,118,0.08),transparent_25rem),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-4 py-14 text-center md:py-16">
-        <div className="absolute inset-0 legal-pattern opacity-[0.12]" aria-hidden="true" />
+      <section className="relative isolate overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#3F6076] to-[#2F4C60] px-4 py-14 text-center text-white md:py-16">
+        <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
         <div
-          className="absolute left-1/2 top-24 h-52 w-52 -translate-x-1/2 rounded-full border border-als-red/15"
+          className="absolute left-1/2 top-24 h-52 w-52 -translate-x-1/2 rounded-full border border-white/15"
           aria-hidden="true"
         />
         <div
-          className="absolute left-1/2 top-32 h-80 w-80 -translate-x-1/2 rounded-full border border-als-blue/10"
+          className="absolute left-1/2 top-32 h-80 w-80 -translate-x-1/2 rounded-full border border-white/10"
           aria-hidden="true"
         />
 
         <div className="container-wide relative">
           <Reveal className="mx-auto max-w-5xl">
-            <Badge className="mx-auto gap-2 px-4 py-2">
+            <Badge variant="light" className="mx-auto gap-2 px-4 py-2">
               <Archive className="h-4 w-4" aria-hidden="true" />
               {t.team.leadershipArchive}
             </Badge>
-            <h1 className="mx-auto mt-6 max-w-4xl text-balance text-4xl font-black leading-[1.02] tracking-normal text-als-blue md:text-6xl">
+            <h1 className="mx-auto mt-6 max-w-4xl text-balance text-4xl font-black leading-[1.02] tracking-normal text-white md:text-6xl">
               {team.title}
             </h1>
-            <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-als-muted md:text-lg">
+            <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/[0.76] md:text-lg">
               {team.intro}
             </p>
           </Reveal>
@@ -135,7 +135,7 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
           <Reveal delay={0.06}>
             <nav
               aria-label={t.team.archiveNavigation}
-              className="mx-auto mt-8 flex max-w-fit gap-2 overflow-x-auto rounded-full border border-als-line bg-white/86 p-2 shadow-sm backdrop-blur"
+              className="mx-auto mt-8 flex max-w-fit gap-2 overflow-x-auto rounded-full border border-white/20 bg-white/12 p-2 shadow-sm backdrop-blur"
             >
               {teamArchiveYears.map((year) => {
                 const archiveTeam = getTeamYear(year);
@@ -162,19 +162,10 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-white px-4 py-14 md:py-16">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] px-4 py-10 md:py-12">
         <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-als-red/20 to-transparent" />
         <div className="container-wide relative">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-als-red">
-              {t.team.president}
-            </p>
-            <h2 className="mt-3 text-3xl font-black text-als-blue md:text-4xl">
-              {t.team.featuredLeadership}
-            </h2>
-          </Reveal>
-
-          <div className="mx-auto mt-9 max-w-7xl rounded-[2rem] border border-als-line bg-[radial-gradient(circle_at_50%_0%,rgba(174,72,94,0.10),transparent_23rem),linear-gradient(180deg,#ffffff_0%,#fbfcfe_100%)] p-4 shadow-[0_30px_90px_rgba(63,96,118,0.10)] md:p-8">
+          <div className="mx-auto max-w-7xl rounded-[2rem] border border-white/15 bg-[#2F4C60]/45 p-4 shadow-[0_30px_90px_rgba(16,24,40,0.16)] backdrop-blur md:p-8">
             {president ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.96 }}
@@ -190,21 +181,9 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
         </div>
       </section>
 
-      <section className="bg-[#fbfcfe] px-4 py-14 md:py-16">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] px-4 py-10 md:py-12">
         <div className="container-wide">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-als-red">
-              {t.team.roleGroups}
-            </p>
-            <h2 className="mt-3 text-3xl font-black text-als-blue md:text-4xl">
-              {t.team.members}
-            </h2>
-            <p className="mt-4 text-sm leading-7 text-als-muted md:text-base">
-              {t.team.teamDirectoryNote}
-            </p>
-          </Reveal>
-
-          <div className="mx-auto mt-10 max-w-7xl space-y-8">
+          <div className="mx-auto max-w-7xl space-y-8">
             {memberSections.map((section) => (
               <RoleSection
                 key={section.title}
@@ -238,14 +217,14 @@ function RoleSection({
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-90px" }}
-      className="rounded-[2rem] border border-als-line bg-white p-5 shadow-sm md:p-7"
+      className="rounded-[2rem] border border-white/15 bg-[#2F4C60]/45 p-5 shadow-[0_24px_70px_rgba(16,24,40,0.10)] backdrop-blur md:p-7"
     >
       <motion.div variants={itemVariants} className="mx-auto max-w-2xl text-center">
-        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-als-red/15 bg-als-red/[0.06] text-als-red shadow-sm">
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-white/15 bg-[#3F6076]/70 text-white shadow-sm">
           {icon}
         </div>
-        <h3 className="mt-4 text-2xl font-black text-als-blue md:text-3xl">{title}</h3>
-        <p className="mt-3 text-sm leading-7 text-als-muted">{description}</p>
+        <h3 className="mt-4 text-2xl font-black text-white md:text-3xl">{title}</h3>
+        <p className="mt-3 text-sm leading-7 text-white/72">{description}</p>
       </motion.div>
 
       <div className={cn("mt-7 grid gap-5", memberGridClass(members.length))}>

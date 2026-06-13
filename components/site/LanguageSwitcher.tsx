@@ -169,7 +169,7 @@ export function LanguageSwitcher({
           openMenu(true);
         }}
         className={cn(
-          "group relative isolate inline-grid place-items-center rounded-full border border-white/70 bg-white/65 leading-none shadow-[0_10px_28px_rgba(63,96,118,0.12)] backdrop-blur-xl transition hover:border-als-red/35 hover:bg-white/90 hover:shadow-[0_12px_34px_rgba(63,96,118,0.16)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-als-red",
+          "group relative isolate inline-grid place-items-center rounded-full border border-white/35 bg-white/88 leading-none shadow-[0_10px_28px_rgba(16,24,40,0.16)] backdrop-blur-xl transition hover:border-als-red/55 hover:bg-white hover:shadow-[0_12px_34px_rgba(16,24,40,0.22)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
           compact ? "h-10 w-10 text-xl" : "h-9 w-9 text-lg",
         )}
       >

@@ -11,14 +11,19 @@ export function FeaturedBlog() {
   const { t } = useI18n();
 
   return (
-    <section className="section-y bg-white">
-      <div className="container-wide">
+    <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
+      <div className="absolute inset-0 hero-grid opacity-[0.10]" aria-hidden="true" />
+      <div className="container-wide relative">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeading title={t.common.latestArticles} text={t.blog.intro} />
+          <SectionHeading
+            title={t.common.latestArticles}
+            text={t.blog.intro}
+            className="[&_h2]:text-white [&_p]:text-white/[0.74]"
+          />
           <Reveal>
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-als-red transition hover:gap-3"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:gap-3 hover:text-white/80"
             >
               {t.nav.blog}
               <ArrowRight className="h-4 w-4" />

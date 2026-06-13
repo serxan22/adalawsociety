@@ -17,8 +17,9 @@ export function PolicyPage({ title, intro, sections }: PolicyPageProps) {
 
   return (
     <>
-      <section className="bg-als-blue py-20 text-white">
-        <div className="container-wide">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-20 text-white">
+        <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
+        <div className="container-wide relative">
           <Reveal>
             <p className="text-sm font-semibold uppercase text-white/75">{t.footer.policies}</p>
             <h1 className="mt-4 text-4xl font-bold leading-tight md:text-6xl">{title}</h1>
@@ -27,7 +28,7 @@ export function PolicyPage({ title, intro, sections }: PolicyPageProps) {
         </div>
       </section>
 
-      <section className="section-y bg-white">
+      <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
         <div className="container-wide">
           <div className="mx-auto max-w-3xl space-y-5">
             {sections.map((section, index) => (

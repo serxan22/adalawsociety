@@ -6,7 +6,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   Bookmark,
-  BookOpenText,
   CalendarDays,
   FileText,
   Heart,
@@ -29,41 +28,22 @@ type ArticleCardProps = {
   variant?: ArticleCardVariant;
 };
 
-function ArticleMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const { t } = useI18n();
-
+function ArticleMark({ size = "md" }: { size?: "sm" | "md" }) {
   return (
     <div
       className={cn(
         "relative shrink-0 overflow-hidden rounded-2xl border border-als-line bg-[radial-gradient(circle_at_20%_18%,rgba(174,72,94,0.14),transparent_5rem),linear-gradient(135deg,#ffffff_0%,#f5f7fb_100%)] text-als-blue",
         size === "sm" && "h-16 w-16",
         size === "md" && "h-20 w-20",
-        size === "lg" && "h-full min-h-60 w-full",
       )}
     >
       <div className="absolute inset-x-0 top-0 h-1 bg-als-red" />
       <div className="absolute inset-0 legal-pattern opacity-[0.16]" />
-      <div
-        className={cn(
-          "relative flex h-full flex-col justify-between",
-          size === "lg" ? "p-6" : "p-3",
-        )}
-      >
+      <div className="relative flex h-full flex-col justify-between p-3">
         <div className="grid h-10 w-10 place-items-center rounded-full bg-white text-als-red shadow-sm ring-1 ring-als-red/10">
           <Scale className="h-5 w-5" aria-hidden="true" />
         </div>
-        {size === "lg" ? (
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-als-muted">
-              {t.blog.eyebrow}
-            </p>
-            <p className="mt-2 max-w-52 text-lg font-black leading-6 text-als-blue">
-              {t.blog.writingStandards[0]}
-            </p>
-          </div>
-        ) : (
-          <FileText className="h-4 w-4 text-als-muted" aria-hidden="true" />
-        )}
+        <FileText className="h-4 w-4 text-als-muted" aria-hidden="true" />
       </div>
     </div>
   );
@@ -87,79 +67,68 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
   if (variant === "featured") {
     return (
       <Card className="group overflow-hidden border-als-line/90 bg-white shadow-[0_22px_70px_rgba(63,96,118,0.09)] transition duration-300 hover:-translate-y-1 hover:border-als-red/25 hover:shadow-[0_28px_90px_rgba(63,96,118,0.13)]">
-        <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_19rem]">
-          <div className="relative p-6 md:p-8 lg:p-10">
-            <div className="absolute inset-y-8 left-0 hidden w-1 rounded-r-full bg-als-red md:block" />
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="navy">{article.category}</Badge>
-              {article.tags.slice(0, 3).map((tag) => (
-                <TagChip key={tag}>{tag}</TagChip>
-              ))}
-            </div>
-            <p className="mt-8 text-xs font-bold uppercase tracking-[0.18em] text-als-red">
-              {t.blog.featuredEssay}
-            </p>
-            <h2 className="mt-3 max-w-3xl text-3xl font-black leading-tight text-als-blue md:text-5xl">
-              {article.title}
-            </h2>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-als-muted">
-              {article.summary}
-            </p>
+        <div className="relative p-6 md:p-8 lg:p-10">
+          <div className="absolute inset-y-8 left-0 hidden w-1 rounded-r-full bg-als-red md:block" />
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="navy">{article.category}</Badge>
+            {article.tags.slice(0, 3).map((tag) => (
+              <TagChip key={tag}>{tag}</TagChip>
+            ))}
+          </div>
+          <p className="mt-8 text-xs font-bold uppercase tracking-[0.18em] text-als-red">
+            {t.blog.featuredBlog}
+          </p>
+          <h2 className="mt-3 max-w-3xl text-3xl font-black leading-tight text-als-blue md:text-5xl">
+            {article.title}
+          </h2>
+          <p className="mt-5 max-w-3xl text-base leading-8 text-als-muted">
+            {article.excerpt}
+          </p>
 
-            <div className="mt-7 flex flex-wrap gap-3 text-xs font-semibold text-als-muted">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-als-line bg-white px-3 py-1">
-                <UserRound className="h-3.5 w-3.5 text-als-red" aria-hidden="true" />
-                {article.author.name}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-als-line bg-white px-3 py-1">
-                <CalendarDays className="h-3.5 w-3.5 text-als-red" aria-hidden="true" />
-                {formatDate(article.date)}
-              </span>
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                href={`/blog/${article.slug}`}
-                className="inline-flex items-center gap-2 rounded-full bg-als-blue px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-als-blue/15 transition hover:-translate-y-0.5 hover:bg-als-ink"
-              >
-                {t.blog.readEssay}
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <ActionButton
-                active={liked}
-                label={t.blog.like}
-                onClick={() => setLiked((value) => !value)}
-                icon={<Heart className="h-4 w-4" fill={liked ? "currentColor" : "none"} />}
-                count={likeCount}
-              />
-              <ActionButton
-                active={saved}
-                label={saved ? t.blog.saved : t.blog.save}
-                onClick={() => setSaved((value) => !value)}
-                icon={<Bookmark className="h-4 w-4" fill={saved ? "currentColor" : "none"} />}
-                count={saveCount}
-              />
-            </div>
+          <div className="mt-7 flex flex-wrap gap-3 text-xs font-semibold text-als-muted">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-als-line bg-white px-3 py-1">
+              <UserRound className="h-3.5 w-3.5 text-als-red" aria-hidden="true" />
+              {article.author.name}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-als-line bg-white px-3 py-1">
+              <CalendarDays className="h-3.5 w-3.5 text-als-red" aria-hidden="true" />
+              {formatDate(article.date)}
+            </span>
           </div>
 
-          <div className="border-t border-als-line bg-[#fbfcfe] p-5 lg:border-l lg:border-t-0">
-            <ArticleMark size="lg" />
-            <div className="mt-5 rounded-2xl border border-als-line bg-white p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-muted">
-                {t.blog.essayBrief}
-              </p>
-              <div className="mt-4 grid gap-3">
-                <BriefMetric
-                  icon={<Quote className="h-4 w-4" aria-hidden="true" />}
-                  label={t.blog.citations}
-                  value={String(article.citations.length)}
-                />
-                <BriefMetric
-                  icon={<BookOpenText className="h-4 w-4" aria-hidden="true" />}
-                  label={t.blog.format}
-                  value={t.blog.summaryFirst}
-                />
-              </div>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link
+              href={`/blog/${article.slug}`}
+              className="inline-flex items-center gap-2 rounded-full bg-als-blue px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-als-blue/15 transition hover:-translate-y-0.5 hover:bg-als-ink"
+            >
+              {t.blog.readBlog}
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <ActionButton
+              active={liked}
+              label={t.blog.like}
+              onClick={() => setLiked((value) => !value)}
+              icon={<Heart className="h-4 w-4" fill={liked ? "currentColor" : "none"} />}
+              count={likeCount}
+            />
+            <ActionButton
+              active={saved}
+              label={saved ? t.blog.saved : t.blog.save}
+              onClick={() => setSaved((value) => !value)}
+              icon={<Bookmark className="h-4 w-4" fill={saved ? "currentColor" : "none"} />}
+              count={saveCount}
+            />
+          </div>
+          <div className="mt-8 rounded-2xl border border-als-line bg-[#fbfcfe] p-5">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-muted">
+              {t.blog.abstract}
+            </p>
+            <p className="mt-3 max-w-4xl text-sm leading-7 text-als-blue/80">
+              {article.summary}
+            </p>
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-als-line bg-white px-3 py-1 text-xs font-bold text-als-muted">
+              <Quote className="h-3.5 w-3.5 text-als-red" aria-hidden="true" />
+              {article.citations.length} {t.blog.citations}
             </div>
           </div>
         </div>
@@ -204,7 +173,7 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
               href={`/blog/${article.slug}`}
               className="inline-flex h-10 items-center gap-2 rounded-full border border-als-line bg-white px-4 text-sm font-bold text-als-red transition hover:border-als-red/35 hover:bg-als-red/5"
             >
-              {t.blog.readEssay}
+              {t.blog.readBlog}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <div className="flex items-center gap-2">
@@ -286,26 +255,6 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
         </div>
       </div>
     </Card>
-  );
-}
-
-function BriefMetric({
-  icon,
-  label,
-  value,
-}: {
-  icon: ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-3 rounded-xl bg-[#f8fafc] px-3 py-2 text-sm">
-      <span className="inline-flex items-center gap-2 font-semibold text-als-muted">
-        <span className="text-als-red">{icon}</span>
-        {label}
-      </span>
-      <span className="font-black text-als-blue">{value}</span>
-    </div>
   );
 }
 

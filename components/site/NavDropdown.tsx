@@ -36,8 +36,8 @@ export function NavDropdown({
         aria-current={active ? "page" : undefined}
         onClick={() => setOpen((value) => !value)}
         className={cn(
-          "nav-underline inline-flex items-center gap-1 text-sm font-semibold text-als-blue transition hover:text-als-red",
-          active && "text-als-red",
+          "nav-underline inline-flex items-center gap-1 text-sm font-semibold text-white/86 transition hover:text-white",
+          active && "text-white",
         )}
       >
         {label}
@@ -52,7 +52,7 @@ export function NavDropdown({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.16 }}
-            className="absolute left-1/2 z-50 mt-4 w-64 -translate-x-1/2 rounded-lg border border-als-line bg-white p-2 shadow-xl shadow-als-blue/10"
+            className="absolute left-1/2 z-50 mt-4 w-64 -translate-x-1/2 rounded-xl border border-white/80 bg-white/96 p-2 shadow-xl shadow-als-blue/15 backdrop-blur-xl"
           >
             {items.map((item) => (
               <Link

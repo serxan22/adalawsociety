@@ -3,7 +3,6 @@
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
   ArrowRight,
-  BookOpenText,
   CheckCircle2,
   FileText,
   Library,
@@ -43,8 +42,6 @@ const itemVariants: Variants = {
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
-
-const popularThemeQueries = ["Moot Court", "Human Rights", "Debate", "Legal Research", "Advocacy"];
 
 export function BlogListingPage() {
   const { t } = useI18n();
@@ -99,23 +96,23 @@ export function BlogListingPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-als-line bg-[radial-gradient(circle_at_8%_18%,rgba(174,72,94,0.10),transparent_24rem),radial-gradient(circle_at_90%_14%,rgba(63,96,118,0.07),transparent_28rem),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] py-16 md:py-20">
-        <div className="absolute inset-0 legal-pattern opacity-[0.12]" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-16 text-white md:py-20">
+        <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
         <div className="container-wide relative">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center">
             <Reveal>
               <div className="max-w-3xl">
-                <p className="text-sm font-bold uppercase tracking-[0.14em] text-als-red">
+                <p className="text-sm font-bold uppercase tracking-[0.14em] text-white/78">
                   {t.blog.eyebrow}
                 </p>
-                <h1 className="mt-5 text-4xl font-black leading-[1.02] tracking-normal text-als-blue md:text-6xl">
+                <h1 className="mt-5 text-4xl font-black leading-[1.02] tracking-normal text-white md:text-6xl">
                   {t.blog.title}
                 </h1>
-                <p className="mt-5 max-w-2xl text-base leading-8 text-als-muted md:text-lg">
+                <p className="mt-5 max-w-2xl text-base leading-8 text-white/[0.76] md:text-lg">
                   {t.blog.intro}
                 </p>
-                <div className="mt-8 flex flex-wrap items-center gap-3">
-                  {canCreate ? (
+                {canCreate ? (
+                  <div className="mt-8 flex flex-wrap items-center gap-3">
                     <Link
                       href="/dashboard/articles/new"
                       className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-red px-5 text-sm font-semibold text-white shadow-lg shadow-als-red/15 transition hover:-translate-y-0.5 hover:bg-[#96384d]"
@@ -123,20 +120,13 @@ export function BlogListingPage() {
                       <Plus className="h-4 w-4" aria-hidden="true" />
                       Write Article
                     </Link>
-                  ) : null}
-                  <Link
-                    href="/blog-policy"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-als-line bg-white/80 px-5 text-sm font-semibold text-als-blue shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-als-red/35 hover:bg-als-red/5 hover:text-als-red"
-                  >
-                    <FileText className="h-4 w-4" aria-hidden="true" />
-                    Blog Policy
-                  </Link>
-                </div>
+                  </div>
+                ) : null}
               </div>
             </Reveal>
 
             <Reveal delay={0.08}>
-              <div className="rounded-3xl border border-als-line bg-white/86 p-6 shadow-[0_24px_70px_rgba(63,96,118,0.10)] backdrop-blur">
+              <div className="rounded-3xl border border-white/20 bg-white/94 p-6 text-als-blue shadow-[0_24px_70px_rgba(16,24,40,0.20)] backdrop-blur">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-als-muted">
@@ -167,11 +157,59 @@ export function BlogListingPage() {
         </div>
       </section>
 
-      <section className="border-b border-als-line bg-white/90 backdrop-blur-xl">
+      <section className="border-b border-white/10 bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-6">
+        <div className="container-wide">
+          <Reveal>
+            <div className="grid gap-4 lg:grid-cols-[0.78fr_1.22fr] lg:items-stretch">
+              <div className="rounded-2xl border border-als-line bg-[#fbfcfe] p-5 shadow-sm">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-red">
+                  {t.blog.authorDocumentsTitle}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-als-muted">
+                  {t.blog.authorDocumentsText}
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Link
+                  href="/blog-policy"
+                  className="group flex h-full items-start gap-4 rounded-2xl border border-als-line bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-als-red/35 hover:bg-als-red/5"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-als-red/10 text-als-red">
+                    <FileText className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-black text-als-blue">
+                      {t.blog.blogPolicy}
+                    </span>
+                    <span className="mt-1 block text-sm leading-6 text-als-muted">
+                      {t.blog.blogPolicyText}
+                    </span>
+                  </span>
+                </Link>
+                <div className="flex h-full items-start gap-4 rounded-2xl border border-dashed border-als-line bg-[#fbfcfe] p-5 text-als-muted shadow-sm">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-als-red ring-1 ring-als-line">
+                    <FileText className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-black text-als-blue">
+                      {t.blog.submissionGuidelines}
+                    </span>
+                    <span className="mt-1 block text-sm leading-6">
+                      {t.blog.documentComingSoon}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="border-b border-white/10 bg-[#2F4C60]/70 backdrop-blur-xl">
         <div className="container-wide">
           <Reveal>
             <div className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center">
-              <div className="inline-flex shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-als-muted">
+              <div className="inline-flex shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-white/75">
                 <Library className="h-4 w-4 text-als-red" aria-hidden="true" />
                 {t.blog.browseInsights}
               </div>
@@ -218,18 +256,18 @@ export function BlogListingPage() {
                 >
                   <button
                     type="button"
-                    aria-label={searchExpanded ? "Focus essay search" : "Search essays"}
+                    aria-label={searchExpanded ? "Focus blog search" : "Search blogs"}
                     aria-expanded={searchExpanded}
                     className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold text-als-blue transition hover:bg-als-red/10 hover:text-als-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-als-red"
                     onClick={() => setSearchOpen(true)}
                   >
                     <Search className="h-4 w-4" aria-hidden="true" />
-                    <span className={cn(searchExpanded && "hidden")}>{t.blog.searchEssays}</span>
+                    <span className={cn(searchExpanded && "hidden")}>{t.blog.searchBlogs}</span>
                   </button>
                   <AnimatePresence>
                     {searchExpanded ? (
                       <motion.div
-                        key="essay-search-input"
+                        key="blog-search-input"
                         className="flex min-w-0 flex-1 items-center pr-2"
                         initial={{ opacity: 0, x: -8 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -246,7 +284,7 @@ export function BlogListingPage() {
                         />
                         <button
                           type="button"
-                          aria-label="Clear essay search"
+                          aria-label="Clear blog search"
                           className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-als-muted transition hover:bg-als-blue/5 hover:text-als-red"
                           onClick={clearSearch}
                         >
@@ -262,11 +300,11 @@ export function BlogListingPage() {
         </div>
       </section>
 
-      <section className="bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_30rem)] pb-20 pt-12 md:pb-24 md:pt-16">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-20 pt-12 md:pb-24 md:pt-16">
         <div className="container-wide">
           {filteredArticles.length > 0 && featuredArticle ? (
             <>
-              <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_21rem]">
+              <div>
                 <motion.div
                   variants={itemVariants}
                   initial="hidden"
@@ -275,74 +313,20 @@ export function BlogListingPage() {
                 >
                   <ArticleCard article={featuredArticle} variant="featured" />
                 </motion.div>
-
-                <motion.aside
-                  variants={listVariants}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: "-80px" }}
-                  className="grid gap-5"
-                >
-                  <motion.div
-                    variants={itemVariants}
-                    className="rounded-3xl border border-als-line bg-white p-6 shadow-sm"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="grid h-10 w-10 place-items-center rounded-full bg-als-red/10 text-als-red">
-                        <BookOpenText className="h-5 w-5" aria-hidden="true" />
-                      </div>
-                      <h2 className="text-lg font-black text-als-blue">
-                        {t.blog.writingStandardsTitle}
-                      </h2>
-                    </div>
-                    <div className="mt-5 space-y-3">
-                      {writingStandards.map((standard) => (
-                        <div key={standard} className="flex gap-3 text-sm leading-6 text-als-muted">
-                          <CheckCircle2
-                            className="mt-0.5 h-4 w-4 shrink-0 text-als-red"
-                            aria-hidden="true"
-                          />
-                          <span>{standard}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    variants={itemVariants}
-                    className="rounded-3xl border border-als-line bg-white p-6 shadow-sm"
-                  >
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-muted">
-                      {t.blog.popularThemesTitle}
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {t.blog.popularThemes.map((theme, index) => (
-                        <button
-                          key={theme}
-                          type="button"
-                          onClick={() => setQuery(popularThemeQueries[index] ?? theme)}
-                          className="rounded-full border border-als-line bg-white px-3 py-1.5 text-xs font-bold text-als-blue transition hover:border-als-red/30 hover:bg-als-red/5 hover:text-als-red"
-                        >
-                          {theme}
-                        </button>
-                      ))}
-                    </div>
-                  </motion.div>
-                </motion.aside>
               </div>
 
-              <div className="mt-14 flex flex-col gap-3 border-t border-als-line pt-10 md:flex-row md:items-end md:justify-between">
+              <div className="mt-14 flex flex-col gap-3 border-t border-white/20 pt-10 md:flex-row md:items-end md:justify-between">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-red">
-                    {t.blog.journalIndex}
+                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">
+                    {t.blog.blogIndex}
                   </p>
-                  <h2 className="mt-2 text-3xl font-black text-als-blue">
-                    {t.blog.latestEssays}
+                  <h2 className="mt-2 text-3xl font-black text-white">
+                    {t.blog.latestBlogs}
                   </h2>
                 </div>
-                <p className="text-sm font-semibold text-als-muted">
+                <p className="text-sm font-semibold text-white/70">
                   {filteredArticles.length}{" "}
-                  {filteredArticles.length === 1 ? t.blog.essay : t.blog.essays} {t.blog.inView}
+                  {filteredArticles.length === 1 ? t.blog.singleBlog : t.blog.blogs} {t.blog.inView}
                 </p>
               </div>
 

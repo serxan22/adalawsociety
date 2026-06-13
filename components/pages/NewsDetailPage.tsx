@@ -21,9 +21,10 @@ export function NewsDetailPage({
 
   return (
     <>
-      <article className="bg-white">
-        <section className="bg-als-blue py-16 text-white">
-          <div className="container-wide">
+      <article className="bg-als-blue-dark">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-16 text-white">
+          <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
+          <div className="container-wide relative">
             <Reveal>
               <Link
                 href="/news"
@@ -55,12 +56,12 @@ export function NewsDetailPage({
               className="aspect-[16/8] border-0 shadow-2xl shadow-als-blue/10"
             />
           </Reveal>
-          <div className="mx-auto mt-10 max-w-3xl space-y-6 text-lg leading-8 text-als-blue/[0.82]">
+          <div className="mx-auto mt-10 max-w-3xl space-y-6 rounded-2xl border border-white/70 bg-white/95 p-6 text-lg leading-8 text-als-blue/[0.82] shadow-xl shadow-black/10 md:p-8">
             {item.content.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
             {item.sourceUrl ? (
-              <p className="rounded-lg border border-als-line bg-[#f7f8fb] p-4 text-sm leading-6 text-als-muted">
+              <p className="rounded-lg border border-als-line bg-als-blue-soft p-4 text-sm leading-6 text-als-muted">
                 <span className="font-semibold text-als-blue">Public source: </span>
                 <Link
                   href={item.sourceUrl}
@@ -76,9 +77,12 @@ export function NewsDetailPage({
       </article>
 
       {related.length > 0 ? (
-        <section className="section-y bg-[#f7f8fb]">
+        <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
           <div className="container-wide">
-            <SectionHeading title={t.common.relatedNews} />
+            <SectionHeading
+              title={t.common.relatedNews}
+              className="[&_h2]:text-white [&_p]:text-white/[0.74]"
+            />
             <div className="mt-8 grid gap-5 md:grid-cols-3">
               {related.map((relatedItem) => (
                 <NewsCard key={relatedItem.slug} item={relatedItem} compact />

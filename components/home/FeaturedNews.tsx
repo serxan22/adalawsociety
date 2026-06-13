@@ -11,14 +11,18 @@ export function FeaturedNews() {
   const { t } = useI18n();
 
   return (
-    <section className="section-y bg-[#f7f8fb]">
+    <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
       <div className="container-wide">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeading title={t.common.latestNews} text={t.news.intro} />
+          <SectionHeading
+            title={t.common.latestNews}
+            text={t.news.intro}
+            className="[&_h2]:text-white [&_p]:text-white/[0.78]"
+          />
           <Reveal>
             <Link
               href="/news"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-als-red transition hover:gap-3"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white/90 transition hover:gap-3 hover:text-white"
             >
               {t.nav.news}
               <ArrowRight className="h-4 w-4" />

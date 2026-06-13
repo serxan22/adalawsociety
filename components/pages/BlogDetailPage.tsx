@@ -26,9 +26,10 @@ export function BlogDetailPage({
 
   return (
     <>
-      <article className="bg-white">
-        <section className="bg-als-blue py-16 text-white">
-          <div className="container-wide">
+      <article className="bg-als-blue-dark">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-16 text-white">
+          <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
+          <div className="container-wide relative">
             <Reveal>
               <Link
                 href="/blog"
@@ -74,10 +75,10 @@ export function BlogDetailPage({
             />
           </Reveal>
 
-          <div className="mx-auto mt-10 grid max-w-5xl gap-8 lg:grid-cols-[1fr_17rem]">
+          <div className="mx-auto mt-10 grid max-w-5xl gap-8 rounded-2xl border border-white/70 bg-white/95 p-4 shadow-xl shadow-black/10 md:p-6 lg:grid-cols-[1fr_17rem]">
             <div className="space-y-8">
               <Reveal>
-                <section className="rounded-lg border border-als-line bg-[#f7f8fb] p-6">
+                <section className="rounded-lg border border-als-line bg-als-blue-soft p-6">
                   <p className="text-sm font-semibold uppercase text-als-red">{t.blog.summary}</p>
                   <p className="mt-3 text-lg leading-8 text-als-blue">{article.summary}</p>
                 </section>
@@ -150,9 +151,12 @@ export function BlogDetailPage({
       </article>
 
       {related.length > 0 ? (
-        <section className="section-y bg-[#f7f8fb]">
+        <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
           <div className="container-wide">
-            <SectionHeading title={t.common.relatedArticles} />
+            <SectionHeading
+              title={t.common.relatedArticles}
+              className="[&_h2]:text-white [&_p]:text-white/[0.74]"
+            />
             <div className="mt-8 grid gap-5 lg:grid-cols-3">
               {related.map((item) => (
                 <ArticleCard key={item.slug} article={item} />

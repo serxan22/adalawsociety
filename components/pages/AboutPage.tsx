@@ -5,10 +5,6 @@ import {
   BookOpenCheck,
   Calendar,
   CheckCircle2,
-  Gavel,
-  GraduationCap,
-  Landmark,
-  MessagesSquare,
   Scale,
   UsersRound,
 } from "lucide-react";
@@ -16,14 +12,6 @@ import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { FallbackImage } from "@/components/ui/FallbackImage";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-
-const workItems = [
-  { title: "Lectures and talks", icon: GraduationCap },
-  { title: "Legal discussions", icon: MessagesSquare },
-  { title: "Academic excursions", icon: Landmark },
-  { title: "Moot courts and debates", icon: Gavel },
-  { title: "Blog and research", icon: CheckCircle2 },
-];
 
 const timeline = [
   {
@@ -71,7 +59,8 @@ export function AboutPage() {
 
   return (
     <>
-      <section className="bg-als-blue py-20 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-16 text-white md:py-18">
+        <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
         <div className="container-wide grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
           <Reveal>
             <p className="text-sm font-semibold uppercase text-white/75">{t.about.eyebrow}</p>
@@ -89,19 +78,20 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="section-y bg-white">
-        <div className="container-wide grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12 md:py-14">
+        <div className="container-wide grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <SectionHeading
             eyebrow="Our Story"
             title="Founded in 2019 to make legal education more active, practical, and collaborative"
             text="ALS gives law students a serious student-led platform for legal writing, advocacy, debate, research, professional development, and dialogue with the wider university community."
+            className="[&_h2]:text-white [&_p]:text-white/[0.78]"
           />
           <div className="grid gap-4">
             {storyCards.map((card, index) => {
               const Icon = card.icon;
               return (
                 <Reveal key={card.title} delay={index * 0.04}>
-                  <article className="flex gap-4 rounded-lg border border-als-line bg-[#f7f8fb] p-5 shadow-sm">
+                  <article className="flex gap-4 rounded-lg border border-white bg-white p-5 shadow-lg shadow-als-blue/10">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-white text-als-red shadow-sm">
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
@@ -117,7 +107,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="section-y bg-white">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12 md:py-14">
         <div className="container-wide grid gap-5 md:grid-cols-3">
           {[
             { title: t.about.missionTitle, text: t.about.mission },
@@ -125,7 +115,7 @@ export function AboutPage() {
             { title: t.about.historyTitle, text: t.about.history },
           ].map((item, index) => (
             <Reveal key={item.title} delay={index * 0.04}>
-              <article className="h-full rounded-lg border border-als-line bg-white p-6 shadow-sm">
+              <article className="h-full rounded-lg border border-white bg-white p-6 shadow-lg shadow-als-blue/10">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-als-red/10 text-als-red">
                   <Calendar className="h-5 w-5" />
                 </div>
@@ -137,15 +127,20 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="section-y bg-[#f7f8fb]">
-        <div className="container-wide grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          <SectionHeading title={t.about.valuesTitle} text={t.about.joinText} />
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12 text-white md:py-14">
+        <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
+        <div className="container-wide grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <SectionHeading
+            title={t.about.valuesTitle}
+            text={t.about.joinText}
+            className="[&_h2]:text-white [&_p]:text-white/[0.74]"
+          />
           <Reveal>
             <div className="grid gap-3 sm:grid-cols-2">
               {t.about.values.map((value) => (
                 <div
                   key={value}
-                  className="flex items-center gap-3 rounded-lg border border-als-line bg-white p-4 text-sm font-semibold text-als-blue shadow-sm"
+                  className="flex items-center gap-3 rounded-lg border border-white/15 bg-white p-4 text-sm font-semibold text-als-blue shadow-xl shadow-black/10"
                 >
                   <CheckCircle2 className="h-5 w-5 text-als-red" />
                   {value}
@@ -156,32 +151,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="section-y bg-white">
-        <div className="container-wide">
-          <SectionHeading
-            title={t.about.whatTitle}
-            text="Legal writing, advocacy, debate, research, academic visits, and professional exposure form the practical side of the society's student-led mission."
-            align="center"
-          />
-          <div className="mt-10 grid gap-4 md:grid-cols-5">
-            {workItems.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <Reveal key={item.title} delay={index * 0.04}>
-                  <article className="h-full rounded-lg border border-als-line bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-als-blue/10">
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-als-blue text-white">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <h3 className="mt-4 text-sm font-bold leading-6 text-als-blue">{item.title}</h3>
-                  </article>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-y bg-als-blue text-white">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12 text-white md:py-14">
         <div className="container-wide">
           <SectionHeading
             title="Timeline"
@@ -189,7 +159,7 @@ export function AboutPage() {
             align="center"
             className="[&_h2]:text-white [&_p]:text-white/[0.72]"
           />
-          <div className="mt-12 grid gap-4 md:grid-cols-4">
+          <div className="mt-8 grid gap-4 md:grid-cols-4">
             {timeline.map((item, index) => (
               <Reveal key={`${item.year}-${item.title}-${index}`} delay={index * 0.04}>
                 <article className="h-full rounded-lg border border-white/[0.12] bg-white/[0.08] p-5">
@@ -203,7 +173,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12">
         <div className="container-wide">
           <Reveal>
             <div className="grid gap-6 rounded-lg border border-als-line bg-white p-8 shadow-xl shadow-als-blue/[0.08] md:grid-cols-[1fr_auto] md:items-center">

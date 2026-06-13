@@ -41,20 +41,22 @@ export function Activities() {
   const { t } = useI18n();
 
   return (
-    <section className="section-y bg-white">
-      <div className="container-wide">
+    <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
+      <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
+      <div className="container-wide relative">
         <SectionHeading
           eyebrow={t.common.explore}
           title={t.home.activitiesTitle}
           text={t.home.activitiesText}
           align="center"
+          className="[&_h2]:text-white [&_p]:text-white/[0.74]"
         />
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {activities.map((activity, index) => {
             const Icon = activity.icon;
             return (
               <Reveal key={activity.title} delay={index * 0.04}>
-                <article className="group h-full rounded-lg border border-als-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-als-red/[0.35] hover:shadow-xl hover:shadow-als-blue/10">
+                <article className="group h-full rounded-lg border border-white/15 bg-white p-6 text-als-blue shadow-xl shadow-black/10 transition hover:-translate-y-1 hover:border-als-red/[0.45] hover:shadow-2xl hover:shadow-black/15">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-als-blue text-white transition group-hover:bg-als-red">
                     <Icon className="h-6 w-6" aria-hidden="true" />
                   </div>

@@ -85,7 +85,7 @@ export function ContentForm({ kind }: { kind: FormKind }) {
           <h2 className="mt-2 text-3xl font-bold text-als-blue">{title}</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-als-muted">{description}</p>
         </div>
-        <div className="rounded-lg border border-als-line bg-[#f7f8fb] p-4 text-sm text-als-muted">
+        <div className="rounded-lg border border-als-line bg-als-blue-soft p-4 text-sm text-als-muted">
           <p className="font-semibold text-als-blue">Role behavior</p>
           <p className="mt-1">
             ALS team can submit drafts or pending items. Editors and admins can publish.

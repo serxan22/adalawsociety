@@ -124,7 +124,7 @@ export const articles: Article[] = [
     summary:
       "Legal research begins with a precise question, then moves through authority, jurisdiction, hierarchy, relevance, and careful citation.",
     excerpt:
-      "A practical starting framework for students preparing blog articles, moot court memorials, or academic essays.",
+      "A practical starting framework for students preparing blog articles, moot court memorials, or academic writing.",
     coverImage: "/images/placeholders/blog-3.jpg",
     likes: 101,
     saves: 44,

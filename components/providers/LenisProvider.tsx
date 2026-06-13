@@ -6,10 +6,10 @@ import Lenis from "lenis";
 export function LenisProvider() {
   useEffect(() => {
     const lenis = new Lenis({
-      lerp: 0.1,
+      lerp: 0.12,
       smoothWheel: true,
-      wheelMultiplier: 1.25,
-      touchMultiplier: 1.4,
+      wheelMultiplier: 1.35,
+      touchMultiplier: 1.5,
     });
 
     let frame = 0;

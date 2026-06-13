@@ -4,6 +4,7 @@ import { Heart, MessageSquare, Send } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +31,7 @@ const initialComments: Comment[] = [
 export function CommentSection() {
   const { t } = useI18n();
   const [comments, setComments] = useState<Comment[]>(initialComments);
+  const [displayName, setDisplayName] = useState("");
   const [text, setText] = useState("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState("");
@@ -38,6 +40,15 @@ export function CommentSection() {
     () => comments.reduce((total, comment) => total + 1 + comment.replies.length, 0),
     [comments],
   );
+  const commentAuthors = useMemo(() => {
+    const names = new Set<string>();
+    comments.forEach((comment) => {
+      names.add(comment.author);
+      comment.replies.forEach((reply) => names.add(reply.author));
+    });
+    return Array.from(names);
+  }, [comments]);
+  const currentAuthor = displayName.trim() || "Guest Reader";
 
   const addComment = (event: FormEvent) => {
     event.preventDefault();
@@ -45,7 +56,7 @@ export function CommentSection() {
     setComments((current) => [
       {
         id: Date.now(),
-        author: "Guest Reader",
+        author: currentAuthor,
         text: text.trim(),
         likes: 0,
         liked: false,
@@ -67,7 +78,7 @@ export function CommentSection() {
                 ...comment.replies,
                 {
                   id: Date.now(),
-                  author: "Guest Reader",
+                  author: currentAuthor,
                   text: replyText.trim(),
                   likes: 0,
                   liked: false,
@@ -119,11 +130,22 @@ export function CommentSection() {
       </div>
 
       <form onSubmit={addComment} className="mt-6 space-y-3">
+        <Input
+          value={displayName}
+          onChange={(event) => setDisplayName(event.target.value)}
+          placeholder={t.blog.commentNamePlaceholder}
+          aria-label={t.blog.commentName}
+        />
         <Textarea
           value={text}
           onChange={(event) => setText(event.target.value)}
           placeholder={t.blog.addComment}
           aria-label={t.blog.addComment}
+        />
+        <MentionSuggestions
+          value={text}
+          names={commentAuthors}
+          onSelect={(name) => setText((current) => insertMention(current, name))}
         />
         <Button type="submit" className="gap-2">
           <Send className="h-4 w-4" />
@@ -152,6 +174,11 @@ export function CommentSection() {
                     placeholder={t.blog.reply}
                     aria-label={t.blog.reply}
                     className="min-h-20"
+                  />
+                  <MentionSuggestions
+                    value={replyText}
+                    names={commentAuthors}
+                    onSelect={(name) => setReplyText((current) => insertMention(current, name))}
                   />
                   <Button type="button" size="sm" onClick={() => addReply(comment.id)}>
                     {t.blog.reply}
@@ -197,7 +224,9 @@ function CommentBody({
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-sm font-bold text-als-blue">{comment.author}</h3>
-          <p className="mt-1 text-sm leading-6 text-als-muted">{comment.text}</p>
+          <p className="mt-1 text-sm leading-6 text-als-muted">
+            <MentionedText text={comment.text} />
+          </p>
         </div>
       </div>
       <div className="flex gap-2">
@@ -224,4 +253,67 @@ function CommentBody({
       </div>
     </div>
   );
+}
+
+function getMentionQuery(value: string) {
+  const match = value.match(/(^|\s)@([\p{L}\p{N}._-]*)$/u);
+  return match ? match[2].toLowerCase() : null;
+}
+
+function insertMention(value: string, name: string) {
+  return value.replace(/(^|\s)@([\p{L}\p{N}._-]*)$/u, `$1@${name} `);
+}
+
+function MentionSuggestions({
+  value,
+  names,
+  onSelect,
+}: {
+  value: string;
+  names: string[];
+  onSelect: (name: string) => void;
+}) {
+  const query = getMentionQuery(value);
+  const suggestions =
+    query === null
+      ? []
+      : names
+          .filter((name) => name.toLowerCase().includes(query))
+          .filter((name, index, list) => list.indexOf(name) === index)
+          .slice(0, 4);
+
+  if (suggestions.length === 0) return null;
+
+  return (
+    <div className="flex flex-wrap gap-2 rounded-xl border border-als-line bg-[#fbfcfe] p-2">
+      {suggestions.map((name) => (
+        <button
+          key={name}
+          type="button"
+          onClick={() => onSelect(name)}
+          className="rounded-full border border-als-line bg-white px-3 py-1 text-xs font-bold text-als-blue transition hover:border-als-red/35 hover:bg-als-red/5 hover:text-als-red"
+        >
+          @{name}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function MentionedText({ text }: { text: string }) {
+  return text
+    .split(/(@[\p{L}\p{N}._-]+(?:\s+[\p{L}\p{N}._-]+)?)/gu)
+    .filter(Boolean)
+    .map((part, index) =>
+      part.startsWith("@") ? (
+        <span
+          key={`${part}-${index}`}
+          className="rounded-full bg-als-red/10 px-1.5 py-0.5 font-bold text-als-red"
+        >
+          {part}
+        </span>
+      ) : (
+        <span key={`${part}-${index}`}>{part}</span>
+      ),
+    );
 }

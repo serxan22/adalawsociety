@@ -21,7 +21,7 @@ export function DashboardShell({
   const authorized = currentUser.authenticated && canCreateContent(currentUser.role);
 
   return (
-    <section className="bg-[#f7f8fb] py-12">
+    <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12">
       <div className="container-wide">
         <div className="mb-8 rounded-lg border border-als-line bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -35,7 +35,7 @@ export function DashboardShell({
                 enforced server-side through Supabase Auth, API routes, server actions, and RLS.
               </p>
             </div>
-            <div className="rounded-lg border border-als-line bg-[#f7f8fb] p-4 text-sm">
+            <div className="rounded-lg border border-als-line bg-als-blue-soft p-4 text-sm">
               <div className="flex items-center gap-3">
                 <ShieldCheck className="h-5 w-5 text-als-red" />
                 <div>

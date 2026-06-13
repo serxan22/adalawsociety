@@ -81,8 +81,8 @@ export function NewsListingPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-als-line bg-[radial-gradient(circle_at_10%_20%,rgba(174,72,94,0.10),transparent_28rem),radial-gradient(circle_at_90%_12%,rgba(63,96,118,0.08),transparent_26rem),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] pb-10 pt-16 md:pb-12 md:pt-20">
-        <div className="absolute inset-0 legal-pattern opacity-[0.18]" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-10 pt-16 text-white md:pb-12 md:pt-20">
+        <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
         <div className="container-wide relative">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <SectionHeading
@@ -90,7 +90,7 @@ export function NewsListingPage() {
               title={t.news.title}
               text={t.news.intro}
               headingLevel="h1"
-              className="[&_h1]:text-4xl [&_h1]:font-black [&_h1]:tracking-normal [&_h1]:text-als-blue md:[&_h1]:text-6xl [&_p]:max-w-2xl"
+              className="[&_h1]:text-4xl [&_h1]:font-black [&_h1]:tracking-normal [&_h1]:text-white md:[&_h1]:text-6xl [&_p]:max-w-2xl [&_p]:text-white/[0.76]"
             />
             <Reveal
               delay={0.06}
@@ -106,7 +106,7 @@ export function NewsListingPage() {
                 </Link>
               ) : null}
               <motion.div
-                className="group relative flex h-12 max-w-full items-center overflow-hidden rounded-full border border-als-line bg-white shadow-[0_18px_45px_rgba(63,96,118,0.10)]"
+                className="group relative flex h-12 max-w-full items-center overflow-hidden rounded-full border border-white/35 bg-white shadow-[0_18px_45px_rgba(16,24,40,0.20)]"
                 initial={false}
                 animate={{ width: searchExpanded ? 316 : 48 }}
                 transition={{ type: "spring", stiffness: 360, damping: 34 }}
@@ -156,8 +156,8 @@ export function NewsListingPage() {
           </div>
 
           <Reveal delay={0.1}>
-            <div className="mt-9 flex flex-col gap-4 rounded-2xl border border-white/80 bg-white/75 p-3 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between">
-              <div className="inline-flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-als-muted">
+            <div className="mt-9 flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/12 p-3 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between">
+              <div className="inline-flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-white/75">
                 <SlidersHorizontal className="h-4 w-4 text-als-red" aria-hidden="true" />
                 Filter updates
               </div>
@@ -189,7 +189,7 @@ export function NewsListingPage() {
         </div>
       </section>
 
-      <section className="bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_34%,#ffffff_100%)] pb-20 pt-12 md:pb-24 md:pt-16">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-20 pt-12 md:pb-24 md:pt-16">
         <div className="container-wide">
           {filteredNews.length > 0 && leadNews ? (
             <>

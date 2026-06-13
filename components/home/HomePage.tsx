@@ -4,13 +4,10 @@ import Link from "next/link";
 import {
   ArrowRight,
   Brain,
-  BriefcaseBusiness,
   Handshake,
   Lightbulb,
-  Megaphone,
   MessageSquareText,
   PenLine,
-  Scale,
   ShieldCheck,
   UsersRound,
 } from "lucide-react";
@@ -27,39 +24,6 @@ import { Badge } from "@/components/ui/badge";
 import { competitions } from "@/data/competitions";
 import { socials } from "@/data/socials";
 import { teamYears } from "@/data/team";
-
-const whyAlsMatters = [
-  {
-    title: "Student leadership",
-    description: "ALS gives students ownership of academic community-building beyond the classroom.",
-    icon: UsersRound,
-  },
-  {
-    title: "Legal confidence",
-    description: "Students practice speaking, writing, and reasoning in formats that make law feel usable.",
-    icon: Scale,
-  },
-  {
-    title: "Advocacy skills",
-    description: "Debate and moot court formats strengthen structured argument and persuasive delivery.",
-    icon: Megaphone,
-  },
-  {
-    title: "Critical thinking",
-    description: "Legal discussion asks students to test assumptions, compare authorities, and reason carefully.",
-    icon: Brain,
-  },
-  {
-    title: "Professional exposure",
-    description: "Talks and networking help students understand legal practice, ethics, and career pathways.",
-    icon: BriefcaseBusiness,
-  },
-  {
-    title: "Civic dialogue",
-    description: "ALS creates space for respectful public reasoning on legal and social questions.",
-    icon: Handshake,
-  },
-];
 
 export function HomePage() {
   const { t } = useI18n();
@@ -82,7 +46,7 @@ export function HomePage() {
 
       <MarqueeLine items={marqueeItems} />
 
-      <section className="section-y bg-white">
+      <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
         <div className="container-wide grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
             <div className="relative">
@@ -109,44 +73,18 @@ export function HomePage() {
             eyebrow={t.about.eyebrow}
             title={t.home.aboutTitle}
             text={t.home.aboutText}
+            className="[&_h2]:text-white [&_p]:text-white/[0.78]"
           />
         </div>
       </section>
 
       <Activities />
 
-      <section className="section-y bg-[#f7f8fb]">
-        <div className="container-wide">
-          <SectionHeading
-            eyebrow="Why ALS Matters"
-            title="A student-led bridge between legal study and legal practice"
-            text="ALS supports the habits future lawyers need: careful writing, confident speaking, ethical teamwork, professional curiosity, and serious dialogue."
-            align="center"
-          />
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {whyAlsMatters.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <Reveal key={item.title} delay={index * 0.04}>
-                  <article className="group h-full rounded-lg border border-als-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-als-red/30 hover:shadow-xl hover:shadow-als-blue/10">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-als-red/10 text-als-red transition group-hover:bg-als-red group-hover:text-white">
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </div>
-                    <h3 className="mt-5 text-lg font-bold text-als-blue">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-als-muted">{item.description}</p>
-                  </article>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-y bg-white">
+      <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
         <div className="container-wide">
           <Reveal>
-            <div className="grid overflow-hidden rounded-lg border border-als-line bg-white shadow-xl shadow-als-blue/[0.08] lg:grid-cols-[0.9fr_1.1fr]">
-              <div className="relative bg-als-blue p-8 text-white md:p-10">
+            <div className="grid overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] shadow-[0_28px_90px_rgba(16,24,40,0.16)] backdrop-blur lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="relative bg-gradient-to-br from-[#3F6076] to-[#2F4C60] p-8 text-white md:p-10">
                 <div className="absolute inset-0 hero-grid opacity-25" />
                 <div className="relative">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-als-red">
@@ -187,7 +125,7 @@ export function HomePage() {
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
-                    <article key={item.title} className="rounded-lg border border-als-line bg-[#f7f8fb] p-5">
+                    <article key={item.title} className="rounded-lg border border-white/80 bg-white/95 p-5 shadow-sm">
                       <Icon className="h-5 w-5 text-als-red" aria-hidden="true" />
                       <h3 className="mt-4 font-bold text-als-blue">{item.title}</h3>
                       <p className="mt-2 text-sm leading-6 text-als-muted">{item.text}</p>
@@ -203,7 +141,8 @@ export function HomePage() {
       <FeaturedNews />
       <FeaturedBlog />
 
-      <section className="section-y bg-als-blue text-white">
+      <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
+        <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
         <div className="container-wide">
           <SectionHeading
             eyebrow={t.competitions.eyebrow}
@@ -241,14 +180,18 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section-y bg-white">
+      <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
         <div className="container-wide">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <SectionHeading title={t.home.teamTitle} text={t.home.teamText} />
+            <SectionHeading
+              title={t.home.teamTitle}
+              text={t.home.teamText}
+              className="[&_h2]:text-white [&_p]:text-white/[0.78]"
+            />
             <Reveal>
               <Link
                 href="/team/2025-2026"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-als-red transition hover:gap-3"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white/90 transition hover:gap-3 hover:text-white"
               >
                 {t.nav.team}
                 <ArrowRight className="h-4 w-4" />
@@ -276,12 +219,14 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section-y bg-[#f7f8fb]">
+      <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
+        <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
         <div className="container-wide">
           <SectionHeading
             title={t.home.momentsTitle}
             text={t.home.momentsText}
             align="center"
+            className="[&_h2]:text-white [&_p]:text-white/[0.74]"
           />
           <div className="mt-12 grid gap-4 md:grid-cols-4">
             {["gallery-1", "gallery-2", "gallery-3", "gallery-4"].map((name, index) => (
@@ -298,10 +243,10 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-16">
         <div className="container-wide">
           <Reveal>
-            <div className="relative overflow-hidden rounded-lg bg-als-blue p-8 text-white md:p-10">
+            <div className="relative overflow-hidden rounded-lg border border-white/15 bg-[#2F4C60]/70 p-8 text-white shadow-[0_24px_80px_rgba(16,24,40,0.18)] md:p-10">
               <div className="absolute inset-0 hero-grid opacity-40" />
               <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
                 <div>

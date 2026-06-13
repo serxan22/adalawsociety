@@ -50,10 +50,13 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/60 bg-white/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/15 bg-[linear-gradient(135deg,#3F6076_0%,#2F4C60_100%)] text-white shadow-[0_14px_40px_rgba(47,76,96,0.22)] backdrop-blur-xl">
       <div className="container-wide">
-        <div className="flex h-20 items-center justify-between gap-4">
-          <Logo />
+        <div className="flex h-[5.25rem] items-center justify-between gap-4">
+          <Logo
+            markClassName="h-12 w-12 rounded-xl border-white/25 bg-white shadow-[0_10px_26px_rgba(16,24,40,0.14)]"
+            textClassName="text-lg text-white"
+          />
 
           <nav aria-label="Main navigation" className="hidden items-center gap-7 lg:flex">
             {navLinks.map((link) => (
@@ -62,8 +65,8 @@ export function Header() {
                 href={link.href}
                 aria-current={pathname === link.href ? "page" : undefined}
                 className={cn(
-                  "nav-underline text-sm font-semibold text-als-blue transition hover:text-als-red",
-                  pathname === link.href && "text-als-red",
+                  "nav-underline text-sm font-semibold text-white/86 transition hover:text-white",
+                  pathname === link.href && "text-white",
                 )}
               >
                 {link.label}
@@ -77,9 +80,9 @@ export function Header() {
             <LanguageSwitcher />
             <Link
               href="/contact"
-              className="inline-flex h-11 items-center justify-center rounded-full bg-als-red px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#96384d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-als-red"
+              className="inline-flex h-11 items-center justify-center rounded-full border border-white/35 bg-white px-5 text-sm font-bold text-als-blue-dark shadow-[0_12px_30px_rgba(16,24,40,0.16)] transition hover:-translate-y-0.5 hover:border-als-red hover:bg-als-red hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
-              {t.nav.join}
+              {t.nav.contactUs}
             </Link>
           </div>
 
@@ -88,7 +91,7 @@ export function Header() {
             aria-label={mobileOpen ? t.nav.close : t.nav.menu}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((value) => !value)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-als-line bg-white text-als-blue shadow-sm lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white shadow-sm backdrop-blur transition hover:bg-white/16 lg:hidden"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -146,7 +149,7 @@ export function Header() {
                 onClick={closeMobile}
                 className="mt-3 flex h-12 items-center justify-center rounded-full bg-als-red px-5 text-sm font-semibold text-white"
               >
-                {t.nav.join}
+                {t.nav.contactUs}
               </Link>
             </div>
           </motion.div>

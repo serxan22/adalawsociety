@@ -23,8 +23,9 @@ export function ContactPage() {
 
   return (
     <>
-      <section className="bg-als-blue py-20 text-white">
-        <div className="container-wide">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-20 text-white">
+        <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
+        <div className="container-wide relative">
           <SectionHeading
             eyebrow={t.contact.eyebrow}
             title={t.contact.title}
@@ -35,7 +36,7 @@ export function ContactPage() {
         </div>
       </section>
 
-      <section className="section-y bg-[#f7f8fb]">
+      <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
         <div className="container-wide grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <Reveal>
             <div className="space-y-5 rounded-lg border border-als-line bg-white p-6 shadow-sm">

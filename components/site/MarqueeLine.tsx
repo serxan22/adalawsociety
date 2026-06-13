@@ -13,7 +13,7 @@ export function MarqueeLine({ items, className }: MarqueeLineProps) {
       aria-label="ADA Law Society editorial themes"
       data-marquee-line
       className={cn(
-        "overflow-hidden border-y border-als-line bg-white/88 py-3 shadow-[0_12px_40px_rgba(63,96,118,0.04)] backdrop-blur",
+        "overflow-hidden border-y border-white/15 bg-white/[0.08] py-3 shadow-[0_12px_40px_rgba(16,24,40,0.12)] backdrop-blur",
         className,
       )}
     >
@@ -21,7 +21,7 @@ export function MarqueeLine({ items, className }: MarqueeLineProps) {
         <div className="marquee-line-track flex w-max items-center gap-5 whitespace-nowrap">
           {loopItems.map((item, index) => (
             <span key={`${item}-${index}`} className="inline-flex items-center gap-5">
-              <span className="text-xs font-black uppercase tracking-[0.22em] text-als-blue/88 md:text-sm">
+              <span className="text-xs font-black uppercase tracking-[0.22em] text-white/88 md:text-sm">
                 {item}
               </span>
               <span className="h-1.5 w-1.5 rounded-full bg-als-red" aria-hidden="true" />
