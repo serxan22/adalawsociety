@@ -12,6 +12,7 @@ import { NavDropdown } from "@/components/site/NavDropdown";
 import { cn } from "@/lib/utils";
 
 const teamItems = [
+  { labelKey: "teamArchive", href: "/team" },
   { labelKey: "team2023", href: "/team/2023-2024" },
   { labelKey: "team2024", href: "/team/2024-2025" },
   { labelKey: "team2025", href: "/team/2025-2026" },

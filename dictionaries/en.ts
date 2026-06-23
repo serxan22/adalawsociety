@@ -14,6 +14,7 @@ export const en = {
     language: "Language",
     menu: "Menu",
     close: "Close",
+    teamArchive: "ALS Team Archive",
     team2023: "ALS Team 2023-2024",
     team2024: "ALS Team 2024-2025",
     team2025: "ALS Team 2025-2026",

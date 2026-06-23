@@ -16,6 +16,7 @@ export const ru = {
     language: "Язык",
     menu: "Меню",
     close: "Закрыть",
+    teamArchive: "Архив команды ALS",
     team2023: "Команда ALS 2023-2024",
     team2024: "Команда ALS 2024-2025",
     team2025: "Команда ALS 2025-2026",

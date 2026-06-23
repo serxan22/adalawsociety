@@ -16,6 +16,7 @@ export const az = {
     language: "Dil",
     menu: "Menyu",
     close: "Bağla",
+    teamArchive: "ALS Komanda arxivi",
     team2023: "ALS Komandası 2023-2024",
     team2024: "ALS Komandası 2024-2025",
     team2025: "ALS Komandası 2025-2026",

@@ -30,6 +30,18 @@ export type TeamYear = {
   members: TeamMember[];
 };
 
+export type TeamPeriodMember = {
+  role: string;
+  name: string;
+};
+
+export type TeamPeriod = {
+  period: string;
+  title: string;
+  description: string;
+  members: TeamPeriodMember[];
+};
+
 type TeamMemberInput = {
   name: string;
   role: string;
@@ -37,6 +49,32 @@ type TeamMemberInput = {
 };
 
 const archiveYears: TeamYearId[] = ["2023-2024", "2024-2025", "2025-2026"];
+
+export const earlyTeamPeriods: TeamPeriod[] = [
+  {
+    period: "2019-2022",
+    title: "ALS Team 2019-2022",
+    description: "Founding-era ALS leadership records provided for the public team archive.",
+    members: [
+      { role: "President", name: "Elgun Ganizada" },
+      { role: "Vice President", name: "Anvar Yagubov" },
+      { role: "Vice President", name: "Aykhan Dadashov" },
+    ],
+  },
+  {
+    period: "2022/2023",
+    title: "ALS Team 2022/2023",
+    description: "Early ALS leadership and event planning records provided for the public team archive.",
+    members: [
+      { role: "President", name: "Elgun Ganizada" },
+      { role: "Vice President", name: "Anvar Yagubov" },
+      { role: "Vice President", name: "Aykhan Dadashov" },
+      { role: "Event Planner", name: "Afsan Kazimov" },
+      { role: "Event Planner", name: "Jala Nabiyeva" },
+      { role: "Event Planner", name: "Nilgun Mammadli" },
+    ],
+  },
+];
 
 function slugify(value: string) {
   return value
