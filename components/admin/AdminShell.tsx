@@ -5,7 +5,7 @@ import type { AdminSession } from "@/lib/admin/types";
 import { canManageAdmins } from "@/lib/admin/permissions";
 import { cn } from "@/lib/utils";
 
-const navItems = [
+const navItems: Array<{ label: string; href: string; active: string; icon: any; superOnly: boolean }> = [
   { label: "Overview", href: "/admin", active: "overview", icon: LayoutDashboard },
   { label: "Content", href: "/admin/content", active: "content", icon: FilePenLine },
   { label: "Admins", href: "/admin/users", active: "users", icon: UsersRound, superOnly: true },
