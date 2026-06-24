@@ -1,11 +1,9 @@
-import { redirect } from "next/navigation";
-
 export default function AdminLoginPage({
   searchParams,
 }: {
   searchParams: { error?: string; next?: string };
 }) {
-  const next = searchParams.next ?? "/admin";
+  const next = searchParams.next ?? '/admin';
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-950">
