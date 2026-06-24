@@ -1,25 +1,19 @@
-import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const url = new URL(request.url);
-  const code = url.searchParams.get("code");
-  const next = url.searchParams.get("next") || "/admin";
-  const supabase = await createSupabaseServerClient();
+  const { searchParams, origin } = request.nextUrl;
+  const code = searchParams.get("code");
+  const next = searchParams.get("next") ?? "/admin";
 
-  if (!supabase || !code) {
-    return NextResponse.redirect(
-      new URL(`/admin/login?error=oauth-callback-invalid&next=${encodeURIComponent(next)}`, url),
-    );
+  if (code) {
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
 
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-  if (error) {
-    return NextResponse.redirect(
-      new URL(`/admin/login?error=oauth-callback-failed&next=${encodeURIComponent(next)}`, url),
-    );
-  }
-
-  return NextResponse.redirect(new URL(next, url));
+  return NextResponse.redirect(`${origin}/admin/login?error=callback-failed`);
 }

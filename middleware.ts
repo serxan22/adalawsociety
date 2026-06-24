@@ -1,81 +1,63 @@
+import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
-import { getSupabaseConfig } from "@/lib/supabase/config";
-
-const publicAdminPaths = new Set(["/admin/login"]);
-
-function redirectToLogin(request: NextRequest, reason?: string) {
-  const loginUrl = request.nextUrl.clone();
-  loginUrl.pathname = "/admin/login";
-  loginUrl.searchParams.set("next", request.nextUrl.pathname);
-
-  if (reason) {
-    loginUrl.searchParams.set("error", reason);
-  }
-
-  return NextResponse.redirect(loginUrl);
-}
+import { getSupabaseProjectUrl } from "@/lib/supabase/server";
 
 export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
 
-  if (!pathname.startsWith("/admin") || publicAdminPaths.has(pathname)) {
+  // Only protect /admin routes; skip /admin/login and /auth/*.
+  if (pathname.startsWith("/admin/login") || pathname.startsWith("/auth/")) {
     return NextResponse.next();
   }
 
-  const config = getSupabaseConfig();
-
-  if (!config) {
-    return redirectToLogin(request, "supabase-not-configured");
-  }
-
-  const response = NextResponse.next({
-    request,
-  });
-
-  const supabase = createServerClient(config.url, config.anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
+  if (pathname.startsWith("/admin")) {
+    const response = NextResponse.next();
+    const supabase = createServerClient(
+      getSupabaseProjectUrl(),
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              response.cookies.set(name, value, options);
+            });
+          },
+        },
       },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          request.cookies.set(name, value);
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
+    );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const email = user?.email?.toLowerCase();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (!email) {
-    return redirectToLogin(request, "login-required");
+    if (!user) {
+      const loginUrl = new URL("/admin/login", request.url);
+      loginUrl.searchParams.set("next", pathname);
+      loginUrl.searchParams.set("error", "login-required");
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const { data: adminRow } = await supabase
+      .from("admins")
+      .select("role")
+      .eq("email", user.email!)
+      .single();
+
+    if (!adminRow) {
+      const loginUrl = new URL("/admin/login", request.url);
+      loginUrl.searchParams.set("error", "not-authorized");
+      return NextResponse.redirect(loginUrl);
+    }
+
+    return response;
   }
 
-  const { data: admin } = await supabase
-    .from("admins")
-    .select("role")
-    .eq("email", email)
-    .maybeSingle<{ role: string }>();
-
-  if (!admin) {
-    return redirectToLogin(request, "admin-access-required");
-  }
-
-  if (pathname.startsWith("/admin/users") && admin.role !== "superadmin") {
-    const adminUrl = request.nextUrl.clone();
-    adminUrl.pathname = "/admin";
-    adminUrl.searchParams.set("error", "superadmin-required");
-    return NextResponse.redirect(adminUrl);
-  }
-
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/auth/:path*"],
 };

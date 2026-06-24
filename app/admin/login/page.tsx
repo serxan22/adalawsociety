@@ -1,24 +1,92 @@
-export default function AdminLoginPage({
+type LoginSearchParams = {
+  error?: string;
+  next?: string;
+};
+
+export default async function AdminLoginPage({
   searchParams,
 }: {
-  searchParams: { error?: string; next?: string };
+  searchParams: Promise<LoginSearchParams>;
 }) {
-  const next = searchParams.next ?? '/admin';
+  const params = await searchParams;
+  const next = params.next ?? "/admin";
+  const errorMsg =
+    params.error === "not-authorized"
+      ? "Your account does not have admin access."
+      : params.error
+        ? "Login required. Please sign in."
+        : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950">
-      <div className="bg-gray-900 p-10 rounded-2xl shadow-xl flex flex-col items-center gap-6 w-full max-w-sm">
-        <h1 className="text-white text-2xl font-semibold tracking-tight">ALS Admin</h1>
-        {searchParams.error && (
-          <p className="text-red-400 text-sm">Access denied. Admin only.</p>
+    <main
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#0a0a0f",
+      }}
+    >
+      <div
+        style={{
+          background: "#111118",
+          border: "1px solid #222",
+          borderRadius: "16px",
+          padding: "48px 40px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "24px",
+          width: "100%",
+          maxWidth: "360px",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <p
+            style={{
+              color: "#888",
+              fontSize: "13px",
+              marginBottom: "8px",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
+          >
+            ADA Law Society
+          </p>
+          <h1 style={{ color: "#fff", fontSize: "22px", fontWeight: 600, margin: 0 }}>
+            Admin Panel
+          </h1>
+        </div>
+
+        {errorMsg && (
+          <p style={{ color: "#f87171", fontSize: "14px", textAlign: "center", margin: 0 }}>
+            {errorMsg}
+          </p>
         )}
-        
-          href={`/auth/sign-in?next=${encodeURIComponent(next)}`}
-          className="w-full bg-white text-gray-900 font-medium py-3 px-4 rounded-xl text-center hover:bg-gray-100 transition"
+
+        <a
+          href={"/auth/sign-in?next=" + encodeURIComponent(next)}
+          style={{
+            display: "block",
+            width: "100%",
+            background: "#fff",
+            color: "#111",
+            fontWeight: 600,
+            fontSize: "15px",
+            padding: "12px 0",
+            borderRadius: "10px",
+            textAlign: "center",
+            textDecoration: "none",
+            boxSizing: "border-box",
+          }}
         >
           Sign in with Google
         </a>
+
+        <p style={{ color: "#555", fontSize: "12px", textAlign: "center", margin: 0 }}>
+          Only authorized ALS admins can access this panel.
+        </p>
       </div>
-    </div>
+    </main>
   );
 }
