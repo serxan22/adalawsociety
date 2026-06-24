@@ -6,8 +6,8 @@ import { canManageAdmins } from "@/lib/admin/permissions";
 import { cn } from "@/lib/utils";
 
 const navItems: Array<{ label: string; href: string; active: string; icon: any; superOnly: boolean }> = [
-  { label: "Overview", href: "/admin", active: "overview", icon: LayoutDashboard },
-  { label: "Content", href: "/admin/content", active: "content", icon: FilePenLine },
+  { label: "Overview", href: "/admin", active: "overview", icon: LayoutDashboard, superOnly: false },
+  { label: "Content", href: "/admin/content", active: "content", icon: FilePenLine, superOnly: false },
   { label: "Admins", href: "/admin/users", active: "users", icon: UsersRound, superOnly: true },
 ] as const;
 
