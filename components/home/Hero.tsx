@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Badge } from "@/components/ui/badge";
+import { EditableText } from "@/components/cms/EditableText";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 export function Hero() {
@@ -34,7 +35,7 @@ export function Hero() {
             ADA Law Society
           </p>
           <h1 className="mt-4 text-balance text-5xl font-black leading-[0.98] tracking-normal text-white md:text-7xl">
-            {t.home.title}
+            {t.home.title}<EditableText contentKey="hero.title" fallback="" />
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-white/84 md:text-xl">
             {t.home.subtitle}

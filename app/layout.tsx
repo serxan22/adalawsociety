@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { ContentProvider } from "@/lib/content/ContentContext";
+import { getAdminSession, canManageAdmins } from "@/lib/admin/auth";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { Footer } from "@/components/site/Footer";
@@ -21,11 +23,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const session = await getAdminSession();
+  const isSuperAdmin = session ? canManageAdmins(session.role) : false;
+
   return (
     <html lang="en">
       <body className="flex min-h-screen flex-col">
@@ -33,7 +38,9 @@ export default function RootLayout({
           <LenisProvider />
           <ScrollProgress />
           <Header />
+          <ContentProvider isSuperAdmin={isSuperAdmin}>
           <main className="flex-1">{children}</main>
+        </ContentProvider>
           <Footer />
         </LanguageProvider>
       </body>
