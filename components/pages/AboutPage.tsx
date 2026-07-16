@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
-import { FallbackImage } from "@/components/ui/FallbackImage";
+import { EditableImage } from "@/components/cms/EditableImage";
+import { EditableText } from "@/components/cms/EditableText";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const timeline = [
@@ -63,16 +64,24 @@ export function AboutPage() {
         <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
         <div className="container-wide grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
           <Reveal>
-            <p className="text-sm font-semibold uppercase text-white/75">{t.about.eyebrow}</p>
-            <h1 className="mt-4 text-4xl font-bold leading-tight md:text-6xl">{t.about.title}</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/[0.76]">{t.about.intro}</p>
+            <p className="text-sm font-semibold uppercase text-white/75">
+              <EditableText contentKey="about.eyebrow" fallback={t.about.eyebrow} tag="span" />
+            </p>
+            <h1 className="mt-4 text-4xl font-bold leading-tight md:text-6xl">
+              <EditableText contentKey="about.title" fallback={t.about.title} tag="span" />
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/[0.76]">
+              <EditableText contentKey="about.body" fallback={t.about.intro} tag="span" />
+            </p>
           </Reveal>
           <Reveal delay={0.08}>
-            <FallbackImage
-              src="/images/placeholders/about-page.jpg"
+            <EditableImage
+              contentKey="about.image"
+              fallback="/images/placeholders/about-page.jpg"
               alt="ADA Law Society community"
-              label="ADA Law Society"
-              className="aspect-[4/3] border-white/10 shadow-2xl shadow-black/20"
+              width={800}
+              height={600}
+              className="aspect-[4/3] rounded-lg border border-white/10 object-cover shadow-2xl shadow-black/20"
             />
           </Reveal>
         </div>
@@ -81,9 +90,21 @@ export function AboutPage() {
       <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12 md:py-14">
         <div className="container-wide grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <SectionHeading
-            eyebrow="Our Story"
-            title="Founded in 2019 to make legal education more active, practical, and collaborative"
-            text="ALS gives law students a serious student-led platform for legal writing, advocacy, debate, research, professional development, and dialogue with the wider university community."
+            eyebrow={<EditableText contentKey="about.story.eyebrow" fallback="Our Story" tag="span" />}
+            title={
+              <EditableText
+                contentKey="about.story.title"
+                fallback="Founded in 2019 to make legal education more active, practical, and collaborative"
+                tag="span"
+              />
+            }
+            text={
+              <EditableText
+                contentKey="about.story.text"
+                fallback="ALS gives law students a serious student-led platform for legal writing, advocacy, debate, research, professional development, and dialogue with the wider university community."
+                tag="span"
+              />
+            }
             className="[&_h2]:text-white [&_p]:text-white/[0.78]"
           />
           <div className="grid gap-4">
@@ -110,17 +131,19 @@ export function AboutPage() {
       <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-12 md:py-14">
         <div className="container-wide grid gap-5 md:grid-cols-3">
           {[
-            { title: t.about.missionTitle, text: t.about.mission },
-            { title: t.about.visionTitle, text: t.about.vision },
-            { title: t.about.historyTitle, text: t.about.history },
+            { key: "about.mission", title: t.about.missionTitle, text: t.about.mission },
+            { key: "about.vision", title: t.about.visionTitle, text: t.about.vision },
+            { key: "about.history", title: t.about.historyTitle, text: t.about.history },
           ].map((item, index) => (
-            <Reveal key={item.title} delay={index * 0.04}>
+            <Reveal key={item.key} delay={index * 0.04}>
               <article className="h-full rounded-lg border border-white bg-white p-6 shadow-lg shadow-als-blue/10">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-als-red/10 text-als-red">
                   <Calendar className="h-5 w-5" />
                 </div>
                 <h2 className="mt-5 text-xl font-bold text-als-blue">{item.title}</h2>
-                <p className="mt-3 text-sm leading-7 text-als-muted">{item.text}</p>
+                <p className="mt-3 text-sm leading-7 text-als-muted">
+                  <EditableText contentKey={item.key} fallback={item.text} tag="span" />
+                </p>
               </article>
             </Reveal>
           ))}
@@ -181,8 +204,11 @@ export function AboutPage() {
                 <p className="text-sm font-semibold uppercase text-als-red">{t.about.joinTitle}</p>
                 <h2 className="mt-2 text-3xl font-bold text-als-blue">{t.about.cta}</h2>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-als-muted">
-                  Contact ALS about membership, collaborations, legal writing, academic events,
-                  debate, moot court training, or professional development opportunities.
+                  <EditableText
+                    contentKey="about.cta.text"
+                    fallback="Contact ALS about membership, collaborations, legal writing, academic events, debate, moot court training, or professional development opportunities."
+                    tag="span"
+                  />
                 </p>
               </div>
               <MagneticButton href="/contact">

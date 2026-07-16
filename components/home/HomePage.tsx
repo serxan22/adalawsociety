@@ -19,6 +19,8 @@ import { useI18n } from "@/components/providers/LanguageProvider";
 import { MarqueeLine } from "@/components/site/MarqueeLine";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { SocialIcon } from "@/components/site/SocialIcon";
+import { EditableText } from "@/components/cms/EditableText";
+import { EditableImage } from "@/components/cms/EditableImage";
 import { FallbackImage } from "@/components/ui/FallbackImage";
 import { Badge } from "@/components/ui/badge";
 import { competitions } from "@/data/competitions";
@@ -50,11 +52,13 @@ export function HomePage() {
         <div className="container-wide grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
             <div className="relative">
-              <FallbackImage
-                src="/images/placeholders/about-als.jpg"
+              <EditableImage
+                contentKey="home.about.image"
+                fallback="/images/placeholders/about-als.jpg"
                 alt="ADA Law Society students at an academic event"
-                label="ADA Law Society"
-                className="aspect-[4/3] border-0 shadow-2xl shadow-als-blue/[0.12]"
+                width={800}
+                height={600}
+                className="aspect-[4/3] rounded-lg border-0 object-cover shadow-2xl shadow-als-blue/[0.12]"
               />
               <div className="absolute -bottom-5 left-5 right-5 rounded-lg border border-als-line bg-white p-4 shadow-xl">
                 <div className="flex items-center gap-3">
@@ -71,8 +75,8 @@ export function HomePage() {
           </Reveal>
           <SectionHeading
             eyebrow={t.about.eyebrow}
-            title={t.home.aboutTitle}
-            text={t.home.aboutText}
+            title={<EditableText contentKey="home.about.title" fallback={t.home.aboutTitle} tag="span" />}
+            text={<EditableText contentKey="home.about.text" fallback={t.home.aboutText} tag="span" />}
             className="[&_h2]:text-white [&_p]:text-white/[0.78]"
           />
         </div>
@@ -91,12 +95,18 @@ export function HomePage() {
                     <Lightbulb className="h-6 w-6" aria-hidden="true" />
                   </div>
                   <h2 className="mt-6 text-3xl font-bold leading-tight md:text-4xl">
-                    By Students, For Future Lawyers
+                    <EditableText
+                      contentKey="home.students.title"
+                      fallback="By Students, For Future Lawyers"
+                      tag="span"
+                    />
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-white/[0.76] md:text-base">
-                    ALS is built around the idea that legal education becomes stronger when
-                    students create serious spaces for discussion, writing, advocacy, and
-                    professional growth.
+                    <EditableText
+                      contentKey="home.students.text"
+                      fallback="ALS is built around the idea that legal education becomes stronger when students create serious spaces for discussion, writing, advocacy, and professional growth."
+                      tag="span"
+                    />
                   </p>
                 </div>
               </div>

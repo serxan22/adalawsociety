@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <PolicyPage
+      policyKey="privacy"
       title="Privacy Policy"
       intro="This first version uses local mock interactions and is prepared for a future backend integration."
       sections={[

@@ -32,9 +32,9 @@ export function SectionHeading({
   className,
   headingLevel = "h2",
 }: {
-  eyebrow?: string;
-  title: string;
-  text?: string;
+  eyebrow?: ReactNode;
+  title: ReactNode;
+  text?: ReactNode;
   align?: "left" | "center";
   className?: string;
   headingLevel?: "h1" | "h2";

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, History, UsersRound } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import { Badge } from "@/components/ui/badge";
+import { EditableText } from "@/components/cms/EditableText";
 import { earlyTeamPeriods, teamArchiveYears, getTeamYear } from "@/data/team";
 
 export function TeamArchivePage() {
@@ -18,11 +19,18 @@ export function TeamArchivePage() {
               ALS Team
             </Badge>
             <h1 className="mt-6 text-balance text-4xl font-black leading-tight md:text-6xl">
-              ADA Law Society Team Archive
+              <EditableText
+                contentKey="team.archive.title"
+                fallback="ADA Law Society Team Archive"
+                tag="span"
+              />
             </h1>
             <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/78 md:text-lg">
-              A public record of ALS leadership periods, early board members, and recent
-              student-led committees.
+              <EditableText
+                contentKey="team.archive.intro"
+                fallback="A public record of ALS leadership periods, early board members, and recent student-led committees."
+                tag="span"
+              />
             </p>
           </Reveal>
         </div>
@@ -32,13 +40,17 @@ export function TeamArchivePage() {
         <div className="container-wide">
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-white/70">
-              Early Leadership Records
+              <EditableText contentKey="team.archive.early.eyebrow" fallback="Early Leadership Records" tag="span" />
             </p>
             <h2 className="mt-3 text-3xl font-black text-white md:text-4xl">
-              ALS Team 2019-2023
+              <EditableText contentKey="team.archive.early.title" fallback="ALS Team 2019-2023" tag="span" />
             </h2>
             <p className="mt-4 text-sm leading-7 text-white/74 md:text-base">
-              Names and roles below are listed exactly from the provided ALS team records.
+              <EditableText
+                contentKey="team.archive.early.text"
+                fallback="Names and roles below are listed exactly from the provided ALS team records."
+                tag="span"
+              />
             </p>
           </Reveal>
 
@@ -89,10 +101,10 @@ export function TeamArchivePage() {
         <div className="container-wide">
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-white/70">
-              Recent Leadership Gallery
+              <EditableText contentKey="team.archive.recent.eyebrow" fallback="Recent Leadership Gallery" tag="span" />
             </p>
             <h2 className="mt-3 text-3xl font-black text-white md:text-4xl">
-              Browse Recent Team Years
+              <EditableText contentKey="team.archive.recent.title" fallback="Browse Recent Team Years" tag="span" />
             </h2>
           </Reveal>
           <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-3">

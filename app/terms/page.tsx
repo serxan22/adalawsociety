@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <PolicyPage
+      policyKey="terms"
       title="Terms and Community Guidelines"
       intro="ALS website spaces should support academic seriousness, respectful discussion, and responsible student publishing."
       sections={[

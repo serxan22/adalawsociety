@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { SocialIcon } from "@/components/site/SocialIcon";
+import { EditableText } from "@/components/cms/EditableText";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,8 +29,8 @@ export function ContactPage() {
         <div className="container-wide relative">
           <SectionHeading
             eyebrow={t.contact.eyebrow}
-            title={t.contact.title}
-            text={t.contact.intro}
+            title={<EditableText contentKey="contact.title" fallback={t.contact.title} tag="span" />}
+            text={<EditableText contentKey="contact.intro" fallback={t.contact.intro} tag="span" />}
             headingLevel="h1"
             className="[&_h1]:text-white [&_p]:text-white/[0.76]"
           />
@@ -48,7 +49,7 @@ export function ContactPage() {
                     href="mailto:lawsociety@ada.edu.az"
                     className="text-sm text-als-muted transition hover:text-als-red"
                   >
-                    lawsociety@ada.edu.az
+                    <EditableText contentKey="contact.email" fallback="lawsociety@ada.edu.az" tag="span" />
                   </a>
                 </div>
               </div>
@@ -56,7 +57,9 @@ export function ContactPage() {
                 <MapPin className="mt-1 h-5 w-5 text-als-red" />
                 <div>
                   <h2 className="font-bold text-als-blue">Location</h2>
-                  <p className="text-sm text-als-muted">{t.contact.location}</p>
+                  <p className="text-sm text-als-muted">
+                    <EditableText contentKey="contact.location" fallback={t.contact.location} tag="span" />
+                  </p>
                 </div>
               </div>
               <div className="border-t border-als-line pt-5">

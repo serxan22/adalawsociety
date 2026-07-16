@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <PolicyPage
+      policyKey="blog"
       title="Blog Policy"
       intro="The ALS Blog is a student-edited platform for careful legal writing, research summaries, citations, and respectful discussion."
       sections={[

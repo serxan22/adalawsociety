@@ -17,6 +17,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal } from "@/components/site/Reveal";
+import { EditableText } from "@/components/cms/EditableText";
 import { articleCategories, articles, type ArticleCategory } from "@/data/articles";
 import { currentUser } from "@/data/current-user";
 import { canCreateContent } from "@/lib/auth/roles";
@@ -106,10 +107,10 @@ export function BlogListingPage() {
                   {t.blog.eyebrow}
                 </p>
                 <h1 className="mt-5 text-4xl font-black leading-[1.02] tracking-normal text-white md:text-6xl">
-                  {t.blog.title}
+                  <EditableText contentKey="blog.title" fallback={t.blog.title} tag="span" />
                 </h1>
                 <p className="mt-5 max-w-2xl text-base leading-8 text-white/[0.76] md:text-lg">
-                  {t.blog.intro}
+                  <EditableText contentKey="blog.intro" fallback={t.blog.intro} tag="span" />
                 </p>
                 {canCreate ? (
                   <div className="mt-8 flex flex-wrap items-center gap-3">

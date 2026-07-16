@@ -16,6 +16,7 @@ import Link from "next/link";
 import { NewsCard } from "@/components/news/NewsCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
+import { EditableText } from "@/components/cms/EditableText";
 import { currentUser } from "@/data/current-user";
 import { newsCategories, newsItems, type NewsCategory } from "@/data/news";
 import { canCreateContent } from "@/lib/auth/roles";
@@ -87,8 +88,8 @@ export function NewsListingPage() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <SectionHeading
               eyebrow={t.news.eyebrow}
-              title={t.news.title}
-              text={t.news.intro}
+              title={<EditableText contentKey="news.title" fallback={t.news.title} tag="span" />}
+              text={<EditableText contentKey="news.intro" fallback={t.news.intro} tag="span" />}
               headingLevel="h1"
               className="[&_h1]:text-4xl [&_h1]:font-black [&_h1]:tracking-normal [&_h1]:text-white md:[&_h1]:text-6xl [&_p]:max-w-2xl [&_p]:text-white/[0.76]"
             />
