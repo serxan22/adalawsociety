@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { NewsCard } from "@/components/news/NewsCard";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { newsItems } from "@/data/news";
 
 export function FeaturedNews() {
@@ -15,8 +16,8 @@ export function FeaturedNews() {
       <div className="container-wide">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeading
-            title={t.common.latestNews}
-            text={t.news.intro}
+            title={<EditableI18nText contentKey="home.featuredNews.title" value={t.common.latestNews} />}
+            text={<EditableI18nText contentKey="home.featuredNews.text" value={t.news.intro} />}
             className="[&_h2]:text-white [&_p]:text-white/[0.78]"
           />
           <Reveal>
@@ -24,7 +25,7 @@ export function FeaturedNews() {
               href="/news"
               className="inline-flex items-center gap-2 text-sm font-semibold text-white/90 transition hover:gap-3 hover:text-white"
             >
-              {t.nav.news}
+              <EditableI18nText contentKey="home.featuredNews.cta" value={t.nav.news} />
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Reveal>

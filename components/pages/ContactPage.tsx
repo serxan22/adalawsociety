@@ -7,6 +7,7 @@ import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { SocialIcon } from "@/components/site/SocialIcon";
 import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,7 +29,7 @@ export function ContactPage() {
         <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
         <div className="container-wide relative">
           <SectionHeading
-            eyebrow={t.contact.eyebrow}
+            eyebrow={<EditableI18nText contentKey="contact.eyebrow" value={t.contact.eyebrow} />}
             title={<EditableText contentKey="contact.title" fallback={t.contact.title} tag="span" />}
             text={<EditableText contentKey="contact.intro" fallback={t.contact.intro} tag="span" />}
             headingLevel="h1"
@@ -44,7 +45,9 @@ export function ContactPage() {
               <div className="flex gap-3">
                 <Mail className="mt-1 h-5 w-5 text-als-red" />
                 <div>
-                  <h2 className="font-bold text-als-blue">Email</h2>
+                  <h2 className="font-bold text-als-blue">
+                    <EditableText contentKey="contact.emailLabel" fallback="Email" tag="span" />
+                  </h2>
                   <a
                     href="mailto:lawsociety@ada.edu.az"
                     className="text-sm text-als-muted transition hover:text-als-red"
@@ -56,14 +59,18 @@ export function ContactPage() {
               <div className="flex gap-3">
                 <MapPin className="mt-1 h-5 w-5 text-als-red" />
                 <div>
-                  <h2 className="font-bold text-als-blue">Location</h2>
+                  <h2 className="font-bold text-als-blue">
+                    <EditableText contentKey="contact.locationLabel" fallback="Location" tag="span" />
+                  </h2>
                   <p className="text-sm text-als-muted">
                     <EditableText contentKey="contact.location" fallback={t.contact.location} tag="span" />
                   </p>
                 </div>
               </div>
               <div className="border-t border-als-line pt-5">
-                <h2 className="font-bold text-als-blue">Social media</h2>
+                <h2 className="font-bold text-als-blue">
+                  <EditableText contentKey="contact.socialLabel" fallback="Social media" tag="span" />
+                </h2>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {socials.map((social) => {
                     return social.href ? (
@@ -84,7 +91,9 @@ export function ContactPage() {
                       >
                         <SocialIcon name={social.name} />
                         {social.name}
-                        <span className="text-xs font-bold text-als-red">Link pending</span>
+                        <span className="text-xs font-bold text-als-red">
+                          <EditableText contentKey="contact.linkPending" fallback="Link pending" tag="span" />
+                        </span>
                       </span>
                     );
                   })}
@@ -97,30 +106,42 @@ export function ContactPage() {
             <form onSubmit={submit} className="rounded-lg border border-als-line bg-white p-6 shadow-sm">
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="space-y-2">
-                  <span className="text-sm font-semibold text-als-blue">{t.common.name}</span>
+                  <span className="text-sm font-semibold text-als-blue">
+                    <EditableI18nText contentKey="contact.form.name" value={t.common.name} />
+                  </span>
                   <Input name="name" required />
                 </label>
                 <label className="space-y-2">
-                  <span className="text-sm font-semibold text-als-blue">{t.common.email}</span>
+                  <span className="text-sm font-semibold text-als-blue">
+                    <EditableI18nText contentKey="contact.form.email" value={t.common.email} />
+                  </span>
                   <Input name="email" type="email" required />
                 </label>
               </div>
               <label className="mt-4 block space-y-2">
-                <span className="text-sm font-semibold text-als-blue">{t.common.subject}</span>
+                <span className="text-sm font-semibold text-als-blue">
+                  <EditableI18nText contentKey="contact.form.subject" value={t.common.subject} />
+                </span>
                 <Input name="subject" required />
               </label>
               <label className="mt-4 block space-y-2">
-                <span className="text-sm font-semibold text-als-blue">{t.common.message}</span>
+                <span className="text-sm font-semibold text-als-blue">
+                  <EditableI18nText contentKey="contact.form.message" value={t.common.message} />
+                </span>
                 <Textarea name="message" required />
               </label>
               <div className="mt-5 flex flex-wrap items-center gap-4">
                 <Button type="submit" className="gap-2">
                   <Send className="h-4 w-4" />
-                  {t.contact.send}
+                  <EditableI18nText contentKey="contact.form.send" value={t.contact.send} />
                 </Button>
                 {sent ? (
                   <p className="text-sm font-semibold text-als-red">
-                    Your message is ready for a future backend connection.
+                    <EditableText
+                      contentKey="contact.form.sentMessage"
+                      fallback="Your message is ready for a future backend connection."
+                      tag="span"
+                    />
                   </p>
                 ) : null}
               </div>

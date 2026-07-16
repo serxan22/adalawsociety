@@ -20,6 +20,7 @@ import { MarqueeLine } from "@/components/site/MarqueeLine";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { SocialIcon } from "@/components/site/SocialIcon";
 import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { EditableImage } from "@/components/cms/EditableImage";
 import { FallbackImage } from "@/components/ui/FallbackImage";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +31,7 @@ import { teamYears } from "@/data/team";
 export function HomePage() {
   const { t } = useI18n();
   const currentTeam = teamYears.find((team) => team.year === "2025-2026") || teamYears[0];
-  const marqueeItems = [
+  const marqueeWords = [
     "Moot Court",
     "Legal Writing",
     "Debate",
@@ -41,6 +42,9 @@ export function HomePage() {
     "Your Gateway to the Legal World",
     "ADA Law Society",
   ];
+  const marqueeItems = marqueeWords.map((word, index) => (
+    <EditableText key={index} contentKey={`home.marquee.${index}`} fallback={word} tag="span" />
+  ));
 
   return (
     <>
@@ -66,8 +70,12 @@ export function HomePage() {
                     <ShieldCheck className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-als-blue">Established September 2019</p>
-                    <p className="text-xs text-als-muted">Student-led legal community</p>
+                    <p className="text-sm font-semibold text-als-blue">
+                      <EditableText contentKey="home.about.badge.title" fallback="Established September 2019" tag="span" />
+                    </p>
+                    <p className="text-xs text-als-muted">
+                      <EditableText contentKey="home.about.badge.text" fallback="Student-led legal community" tag="span" />
+                    </p>
                   </div>
                 </div>
               </div>
@@ -113,21 +121,25 @@ export function HomePage() {
               <div className="grid gap-4 p-6 md:grid-cols-2 md:p-8">
                 {[
                   {
+                    key: "home.feature.classroom",
                     title: "Beyond the classroom",
                     text: "Extra-curricular legal work helps students apply legal concepts to practical formats.",
                     icon: PenLine,
                   },
                   {
+                    key: "home.feature.rigorous",
                     title: "Rigorous but collaborative",
                     text: "The society encourages disciplined preparation while keeping participation peer-led and welcoming.",
                     icon: Handshake,
                   },
                   {
+                    key: "home.feature.connected",
                     title: "Connected to ADA's learning culture",
                     text: "ALS aligns with ADA's emphasis on applied knowledge, teamwork, debate, and real-world problem solving.",
                     icon: Brain,
                   },
                   {
+                    key: "home.feature.curiosity",
                     title: "Open to legal curiosity",
                     text: "Events can interest law students and students from other majors who want to understand legal issues.",
                     icon: UsersRound,
@@ -135,10 +147,14 @@ export function HomePage() {
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
-                    <article key={item.title} className="rounded-lg border border-white/80 bg-white/95 p-5 shadow-sm">
+                    <article key={item.key} className="rounded-lg border border-white/80 bg-white/95 p-5 shadow-sm">
                       <Icon className="h-5 w-5 text-als-red" aria-hidden="true" />
-                      <h3 className="mt-4 font-bold text-als-blue">{item.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-als-muted">{item.text}</p>
+                      <h3 className="mt-4 font-bold text-als-blue">
+                        <EditableText contentKey={`${item.key}.title`} fallback={item.title} tag="span" />
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-als-muted">
+                        <EditableText contentKey={`${item.key}.text`} fallback={item.text} tag="span" />
+                      </p>
                     </article>
                   );
                 })}
@@ -155,9 +171,9 @@ export function HomePage() {
         <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
         <div className="container-wide">
           <SectionHeading
-            eyebrow={t.competitions.eyebrow}
-            title={t.home.competitionsTitle}
-            text={t.home.competitionsText}
+            eyebrow={<EditableI18nText contentKey="home.competitions.eyebrow" value={t.competitions.eyebrow} />}
+            title={<EditableI18nText contentKey="home.competitions.title" value={t.home.competitionsTitle} />}
+            text={<EditableI18nText contentKey="home.competitions.text" value={t.home.competitionsText} />}
             align="center"
             className="[&_h2]:text-white [&_p]:text-white/[0.72]"
           />
@@ -179,7 +195,7 @@ export function HomePage() {
                     <h3 className="mt-4 text-2xl font-bold">{competition.title}</h3>
                     <p className="mt-3 text-sm leading-6 text-white/[0.72]">{competition.intro}</p>
                     <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/85 transition group-hover:gap-3 group-hover:text-white">
-                      {t.common.explore}
+                      <EditableI18nText contentKey="home.competitions.cta" value={t.common.explore} />
                       <ArrowRight className="h-4 w-4" />
                     </span>
                   </div>
@@ -194,8 +210,8 @@ export function HomePage() {
         <div className="container-wide">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <SectionHeading
-              title={t.home.teamTitle}
-              text={t.home.teamText}
+              title={<EditableI18nText contentKey="home.team.title" value={t.home.teamTitle} />}
+              text={<EditableI18nText contentKey="home.team.text" value={t.home.teamText} />}
               className="[&_h2]:text-white [&_p]:text-white/[0.78]"
             />
             <Reveal>
@@ -203,7 +219,7 @@ export function HomePage() {
                 href="/team/2025-2026"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-white/90 transition hover:gap-3 hover:text-white"
               >
-                {t.nav.team}
+                <EditableI18nText contentKey="home.team.cta" value={t.nav.team} />
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Reveal>
@@ -233,8 +249,8 @@ export function HomePage() {
         <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
         <div className="container-wide">
           <SectionHeading
-            title={t.home.momentsTitle}
-            text={t.home.momentsText}
+            title={<EditableI18nText contentKey="home.moments.title" value={t.home.momentsTitle} />}
+            text={<EditableI18nText contentKey="home.moments.text" value={t.home.momentsText} />}
             align="center"
             className="[&_h2]:text-white [&_p]:text-white/[0.74]"
           />
@@ -263,9 +279,11 @@ export function HomePage() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-als-red">
                     <MessageSquareText className="h-6 w-6" />
                   </div>
-                  <h2 className="mt-5 text-3xl font-bold md:text-4xl">{t.home.socialTitle}</h2>
+                  <h2 className="mt-5 text-3xl font-bold md:text-4xl">
+                    <EditableI18nText contentKey="home.social.title" value={t.home.socialTitle} />
+                  </h2>
                   <p className="mt-3 max-w-2xl text-sm leading-7 text-white/[0.72] md:text-base">
-                    {t.home.socialText}
+                    <EditableI18nText contentKey="home.social.text" value={t.home.socialText} />
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">

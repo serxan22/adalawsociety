@@ -18,6 +18,7 @@ import { ArticleCard } from "@/components/blog/ArticleCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal } from "@/components/site/Reveal";
 import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { articleCategories, articles, type ArticleCategory } from "@/data/articles";
 import { currentUser } from "@/data/current-user";
 import { canCreateContent } from "@/lib/auth/roles";
@@ -104,7 +105,7 @@ export function BlogListingPage() {
             <Reveal>
               <div className="max-w-3xl">
                 <p className="text-sm font-bold uppercase tracking-[0.14em] text-white/78">
-                  {t.blog.eyebrow}
+                  <EditableI18nText contentKey="blog.eyebrow" value={t.blog.eyebrow} />
                 </p>
                 <h1 className="mt-5 text-4xl font-black leading-[1.02] tracking-normal text-white md:text-6xl">
                   <EditableText contentKey="blog.title" fallback={t.blog.title} tag="span" />
@@ -119,7 +120,7 @@ export function BlogListingPage() {
                       className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-red px-5 text-sm font-semibold text-white shadow-lg shadow-als-red/15 transition hover:-translate-y-0.5 hover:bg-[#96384d]"
                     >
                       <Plus className="h-4 w-4" aria-hidden="true" />
-                      Write Article
+                      <EditableText contentKey="blog.writeButton" fallback="Write Article" tag="span" />
                     </Link>
                   </div>
                 ) : null}
@@ -131,10 +132,10 @@ export function BlogListingPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-als-muted">
-                      {t.blog.editorDesk}
+                      <EditableI18nText contentKey="blog.editorDesk" value={t.blog.editorDesk} />
                     </p>
                     <h2 className="mt-2 text-2xl font-black text-als-blue">
-                      {t.blog.writingForClarity}
+                      <EditableI18nText contentKey="blog.writingForClarity" value={t.blog.writingForClarity} />
                     </h2>
                   </div>
                   <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-als-red/10 text-als-red">
@@ -142,13 +143,13 @@ export function BlogListingPage() {
                   </div>
                 </div>
                 <div className="mt-6 grid gap-3">
-                  {writingStandards.map((standard) => (
+                  {writingStandards.map((standard, index) => (
                     <div
                       key={standard}
                       className="flex items-center gap-3 rounded-2xl border border-als-line/80 bg-[#fbfcfe] px-4 py-3 text-sm font-semibold text-als-blue"
                     >
                       <CheckCircle2 className="h-4 w-4 shrink-0 text-als-red" aria-hidden="true" />
-                      {standard}
+                      <EditableI18nText contentKey={`blog.standards.${index}`} value={standard} />
                     </div>
                   ))}
                 </div>
@@ -164,10 +165,10 @@ export function BlogListingPage() {
             <div className="grid gap-4 lg:grid-cols-[0.78fr_1.22fr] lg:items-stretch">
               <div className="rounded-2xl border border-als-line bg-[#fbfcfe] p-5 shadow-sm">
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-red">
-                  {t.blog.authorDocumentsTitle}
+                  <EditableI18nText contentKey="blog.authorDocumentsTitle" value={t.blog.authorDocumentsTitle} />
                 </p>
                 <p className="mt-2 text-sm leading-6 text-als-muted">
-                  {t.blog.authorDocumentsText}
+                  <EditableI18nText contentKey="blog.authorDocumentsText" value={t.blog.authorDocumentsText} />
                 </p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -180,10 +181,10 @@ export function BlogListingPage() {
                   </span>
                   <span>
                     <span className="block text-sm font-black text-als-blue">
-                      {t.blog.blogPolicy}
+                      <EditableI18nText contentKey="blog.blogPolicy" value={t.blog.blogPolicy} />
                     </span>
                     <span className="mt-1 block text-sm leading-6 text-als-muted">
-                      {t.blog.blogPolicyText}
+                      <EditableI18nText contentKey="blog.blogPolicyText" value={t.blog.blogPolicyText} />
                     </span>
                   </span>
                 </Link>
@@ -193,10 +194,10 @@ export function BlogListingPage() {
                   </span>
                   <span>
                     <span className="block text-sm font-black text-als-blue">
-                      {t.blog.submissionGuidelines}
+                      <EditableI18nText contentKey="blog.submissionGuidelines" value={t.blog.submissionGuidelines} />
                     </span>
                     <span className="mt-1 block text-sm leading-6">
-                      {t.blog.documentComingSoon}
+                      <EditableI18nText contentKey="blog.documentComingSoon" value={t.blog.documentComingSoon} />
                     </span>
                   </span>
                 </div>
@@ -212,7 +213,7 @@ export function BlogListingPage() {
             <div className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center">
               <div className="inline-flex shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-white/75">
                 <Library className="h-4 w-4 text-als-red" aria-hidden="true" />
-                {t.blog.browseInsights}
+                <EditableI18nText contentKey="blog.browseInsights" value={t.blog.browseInsights} />
               </div>
 
               <div className="-mx-1 flex min-w-0 flex-1 gap-2 overflow-x-auto px-1 pb-1 lg:pb-0">
@@ -222,7 +223,7 @@ export function BlogListingPage() {
                     active={category === item}
                     onClick={() => setCategory(item)}
                   >
-                    {item === "All" ? t.common.all : item}
+                    {item === "All" ? <EditableI18nText contentKey="blog.filterAll" value={t.common.all} /> : item}
                   </FilterPill>
                 ))}
               </div>
@@ -263,7 +264,9 @@ export function BlogListingPage() {
                     onClick={() => setSearchOpen(true)}
                   >
                     <Search className="h-4 w-4" aria-hidden="true" />
-                    <span className={cn(searchExpanded && "hidden")}>{t.blog.searchBlogs}</span>
+                    <span className={cn(searchExpanded && "hidden")}>
+                      <EditableI18nText contentKey="blog.searchBlogs" value={t.blog.searchBlogs} />
+                    </span>
                   </button>
                   <AnimatePresence>
                     {searchExpanded ? (
@@ -319,15 +322,20 @@ export function BlogListingPage() {
               <div className="mt-14 flex flex-col gap-3 border-t border-white/20 pt-10 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">
-                    {t.blog.blogIndex}
+                    <EditableI18nText contentKey="blog.blogIndex" value={t.blog.blogIndex} />
                   </p>
                   <h2 className="mt-2 text-3xl font-black text-white">
-                    {t.blog.latestBlogs}
+                    <EditableI18nText contentKey="blog.latestBlogs" value={t.blog.latestBlogs} />
                   </h2>
                 </div>
                 <p className="text-sm font-semibold text-white/70">
                   {filteredArticles.length}{" "}
-                  {filteredArticles.length === 1 ? t.blog.singleBlog : t.blog.blogs} {t.blog.inView}
+                  {filteredArticles.length === 1 ? (
+                    <EditableI18nText contentKey="blog.singleBlog" value={t.blog.singleBlog} />
+                  ) : (
+                    <EditableI18nText contentKey="blog.blogs" value={t.blog.blogs} />
+                  )}{" "}
+                  <EditableI18nText contentKey="blog.inView" value={t.blog.inView} />
                 </p>
               </div>
 
@@ -355,10 +363,10 @@ export function BlogListingPage() {
                 >
                   <PenLine className="mx-auto h-7 w-7 text-als-red" aria-hidden="true" />
                   <p className="mt-3 text-sm font-semibold text-als-blue">
-                    {t.blog.onlyOneMatchTitle}
+                    <EditableI18nText contentKey="blog.onlyOneMatchTitle" value={t.blog.onlyOneMatchTitle} />
                   </p>
                   <p className="mt-1 text-sm text-als-muted">
-                    {t.blog.onlyOneMatchText}
+                    <EditableI18nText contentKey="blog.onlyOneMatchText" value={t.blog.onlyOneMatchText} />
                   </p>
                 </motion.div>
               )}
@@ -373,16 +381,18 @@ export function BlogListingPage() {
               <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-als-red/10 text-als-red">
                 <FileText className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h3 className="mt-5 text-xl font-bold text-als-blue">{t.common.noResults}</h3>
+              <h3 className="mt-5 text-xl font-bold text-als-blue">
+                <EditableI18nText contentKey="blog.noResultsTitle" value={t.common.noResults} />
+              </h3>
               <p className="mt-2 text-sm leading-6 text-als-muted">
-                {t.blog.noResultsText}
+                <EditableI18nText contentKey="blog.noResultsText" value={t.blog.noResultsText} />
               </p>
               <button
                 type="button"
                 onClick={clearSearch}
                 className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-blue px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-als-ink"
               >
-                {t.blog.resetLibrary}
+                <EditableI18nText contentKey="blog.resetLibrary" value={t.blog.resetLibrary} />
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </button>
             </motion.div>

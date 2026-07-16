@@ -14,6 +14,7 @@ import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal } from "@/components/site/Reveal";
 import { TeamCard } from "@/components/team/TeamCard";
 import { Badge } from "@/components/ui/badge";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import type { TeamGroup, TeamMember, TeamYear } from "@/data/team";
 import { getTeamYear, teamArchiveYears } from "@/data/team";
 import { cn } from "@/lib/utils";
@@ -65,30 +66,35 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
     : team.members;
 
   const memberSectionTemplates: Array<{
+    key: string;
     title: string;
     description: string;
     groups: TeamGroup[];
     icon: ReactNode;
   }> = [
     {
+      key: "board",
       title: t.team.boardGroupTitle,
       description: t.team.boardGroupDescription,
       groups: ["Board"],
       icon: <UsersRound className="h-5 w-5" aria-hidden="true" />,
     },
     {
+      key: "eventCommittee",
       title: t.team.eventCommitteeGroupTitle,
       description: t.team.eventCommitteeGroupDescription,
       groups: ["Event Committee"],
       icon: <CalendarDays className="h-5 w-5" aria-hidden="true" />,
     },
     {
+      key: "marketingCommittee",
       title: t.team.marketingCommitteeGroupTitle,
       description: t.team.marketingCommitteeGroupDescription,
       groups: ["Marketing Committee"],
       icon: <Megaphone className="h-5 w-5" aria-hidden="true" />,
     },
     {
+      key: "blogCommittee",
       title: t.team.blogCommitteeGroupTitle,
       description: t.team.blogCommitteeGroupDescription,
       groups: ["Blog Committee"],
@@ -104,6 +110,13 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
       ),
     }))
     .filter((section) => section.members.length > 0);
+
+  const sectionCopyKeys: Record<string, string> = {
+    board: "team.year.board",
+    eventCommittee: "team.year.eventCommittee",
+    marketingCommittee: "team.year.marketingCommittee",
+    blogCommittee: "team.year.blogCommittee",
+  };
 
   return (
     <>
@@ -122,7 +135,7 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
           <Reveal className="mx-auto max-w-5xl">
             <Badge variant="light" className="mx-auto gap-2 px-4 py-2">
               <Archive className="h-4 w-4" aria-hidden="true" />
-              {t.team.leadershipArchive}
+              <EditableI18nText contentKey="team.year.leadershipArchive" value={t.team.leadershipArchive} />
             </Badge>
             <h1 className="mx-auto mt-6 max-w-4xl text-balance text-4xl font-black leading-[1.02] tracking-normal text-white md:text-6xl">
               {team.title}
@@ -186,8 +199,10 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
           <div className="mx-auto max-w-7xl space-y-8">
             {memberSections.map((section) => (
               <RoleSection
-                key={section.title}
+                key={section.key}
+                titleKey={`${sectionCopyKeys[section.key]}.title`}
                 title={section.title}
+                descriptionKey={`${sectionCopyKeys[section.key]}.description`}
                 description={section.description}
                 icon={section.icon}
                 members={section.members}
@@ -201,12 +216,16 @@ export function TeamYearPage({ team }: { team: TeamYear }) {
 }
 
 function RoleSection({
+  titleKey,
   title,
+  descriptionKey,
   description,
   icon,
   members,
 }: {
+  titleKey: string;
   title: string;
+  descriptionKey: string;
   description: string;
   icon: ReactNode;
   members: TeamMember[];
@@ -223,8 +242,12 @@ function RoleSection({
         <div className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-white/15 bg-[#3F6076]/70 text-white shadow-sm">
           {icon}
         </div>
-        <h3 className="mt-4 text-2xl font-black text-white md:text-3xl">{title}</h3>
-        <p className="mt-3 text-sm leading-7 text-white/72">{description}</p>
+        <h3 className="mt-4 text-2xl font-black text-white md:text-3xl">
+          <EditableI18nText contentKey={titleKey} value={title} />
+        </h3>
+        <p className="mt-3 text-sm leading-7 text-white/72">
+          <EditableI18nText contentKey={descriptionKey} value={description} />
+        </p>
       </motion.div>
 
       <div className={cn("mt-7 grid gap-5", memberGridClass(members.length))}>

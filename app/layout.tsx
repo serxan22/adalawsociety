@@ -39,9 +39,9 @@ export default async function RootLayout({
           <ScrollProgress />
           <Header />
           <ContentProvider isSuperAdmin={isSuperAdmin}>
-          <main className="flex-1">{children}</main>
-        </ContentProvider>
-          <Footer />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </ContentProvider>
         </LanguageProvider>
       </body>
     </html>

@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { useI18n } from "@/components/providers/LanguageProvider";
+import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import type { NewsItem } from "@/data/news";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -56,13 +58,13 @@ function NewsThumbnail({
                 <Scale className="h-5 w-5" aria-hidden="true" />
               </div>
               <span className="rounded-full border border-als-blue/10 bg-white/80 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-als-blue">
-                ALS
+                <EditableText contentKey="news.card.placeholderBadge" fallback="ALS" tag="span" />
               </span>
             </div>
             <div>
               <p className="text-xs font-semibold text-als-muted">{item.category}</p>
               <p className="mt-1 max-w-48 text-sm font-bold leading-5 text-als-blue">
-                ADA Law Society Update
+                <EditableText contentKey="news.card.placeholderTitle" fallback="ADA Law Society Update" tag="span" />
               </p>
             </div>
           </div>
@@ -94,7 +96,7 @@ export function NewsCard({
               </span>
             </div>
             <p className="mt-8 text-xs font-bold uppercase tracking-[0.18em] text-als-red">
-              Featured update
+              <EditableText contentKey="news.card.featuredLabel" fallback="Featured update" tag="span" />
             </p>
             <h2 className="mt-3 max-w-3xl text-2xl font-black leading-tight text-als-blue md:text-4xl">
               {item.title}
@@ -104,7 +106,7 @@ export function NewsCard({
               href={`/news/${item.slug}`}
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-als-blue px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-als-blue/15 transition hover:-translate-y-0.5 hover:bg-als-ink"
             >
-              Read full update
+              <EditableText contentKey="news.card.readFullUpdate" fallback="Read full update" tag="span" />
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
@@ -138,7 +140,7 @@ export function NewsCard({
             href={`/news/${item.slug}`}
             className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-als-red transition group-hover:gap-3"
           >
-            Read full update
+            <EditableText contentKey="news.card.readFullUpdate" fallback="Read full update" tag="span" />
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
@@ -167,7 +169,7 @@ export function NewsCard({
           href={`/news/${item.slug}`}
           className="inline-flex items-center gap-2 text-sm font-semibold text-als-red transition group-hover:gap-3"
         >
-          {t.common.readMore}
+          <EditableI18nText contentKey="news.card.readMore" value={t.common.readMore} />
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </div>

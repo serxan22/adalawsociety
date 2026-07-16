@@ -7,6 +7,8 @@ import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { Badge } from "@/components/ui/badge";
 import { FallbackImage } from "@/components/ui/FallbackImage";
+import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import type { NewsItem } from "@/data/news";
 import { formatDate } from "@/lib/format";
 
@@ -31,7 +33,7 @@ export function NewsDetailPage({
                 className="inline-flex items-center gap-2 text-sm font-semibold text-white/[0.72] transition hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {t.common.backToNews}
+                <EditableI18nText contentKey="news.detail.backLink" value={t.common.backToNews} />
               </Link>
               <div className="mt-8 max-w-4xl">
                 <Badge variant="light">{item.category}</Badge>
@@ -62,13 +64,19 @@ export function NewsDetailPage({
             ))}
             {item.sourceUrl ? (
               <p className="rounded-lg border border-als-line bg-als-blue-soft p-4 text-sm leading-6 text-als-muted">
-                <span className="font-semibold text-als-blue">Public source: </span>
+                <span className="font-semibold text-als-blue">
+                  <EditableText contentKey="news.detail.sourceLabel" fallback="Public source: " tag="span" />
+                </span>
                 <Link
                   href={item.sourceUrl}
                   target="_blank"
                   className="font-semibold text-als-red hover:text-als-blue"
                 >
-                  ADA Law Society public news page
+                  <EditableText
+                    contentKey="news.detail.sourceLinkText"
+                    fallback="ADA Law Society public news page"
+                    tag="span"
+                  />
                 </Link>
               </p>
             ) : null}
@@ -80,7 +88,7 @@ export function NewsDetailPage({
         <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
           <div className="container-wide">
             <SectionHeading
-              title={t.common.relatedNews}
+              title={<EditableI18nText contentKey="news.detail.relatedTitle" value={t.common.relatedNews} />}
               className="[&_h2]:text-white [&_p]:text-white/[0.74]"
             />
             <div className="mt-8 grid gap-5 md:grid-cols-3">

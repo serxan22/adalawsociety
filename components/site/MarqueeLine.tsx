@@ -1,7 +1,8 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type MarqueeLineProps = {
-  items: string[];
+  items: ReactNode[];
   className?: string;
 };
 
@@ -20,7 +21,7 @@ export function MarqueeLine({ items, className }: MarqueeLineProps) {
       <div className="marquee-mask">
         <div className="marquee-line-track flex w-max items-center gap-5 whitespace-nowrap">
           {loopItems.map((item, index) => (
-            <span key={`${item}-${index}`} className="inline-flex items-center gap-5">
+            <span key={index} className="inline-flex items-center gap-5">
               <span className="text-xs font-black uppercase tracking-[0.22em] text-white/88 md:text-sm">
                 {item}
               </span>

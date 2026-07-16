@@ -6,6 +6,8 @@ import { useI18n } from "@/components/providers/LanguageProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { cn } from "@/lib/utils";
 
 type Comment = {
@@ -121,9 +123,16 @@ export function CommentSection() {
     <section className="rounded-lg border border-als-line bg-white p-5 shadow-sm md:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold uppercase text-als-red">{t.blog.comments}</p>
+          <p className="text-sm font-semibold uppercase text-als-red">
+            <EditableI18nText contentKey="blog.comments.eyebrow" value={t.blog.comments} />
+          </p>
           <h2 className="mt-2 text-2xl font-bold text-als-blue">
-            {totalComments} {totalComments === 1 ? "comment" : "comments"}
+            {totalComments}{" "}
+            {totalComments === 1 ? (
+              <EditableText contentKey="blog.comments.singular" fallback="comment" tag="span" />
+            ) : (
+              <EditableText contentKey="blog.comments.plural" fallback="comments" tag="span" />
+            )}
           </h2>
         </div>
         <MessageSquare className="h-8 w-8 text-als-red" aria-hidden="true" />
@@ -149,14 +158,14 @@ export function CommentSection() {
         />
         <Button type="submit" className="gap-2">
           <Send className="h-4 w-4" />
-          {t.common.submit}
+          <EditableI18nText contentKey="blog.comments.submitButton" value={t.common.submit} />
         </Button>
       </form>
 
       <div className="mt-8 space-y-5">
         {comments.length === 0 ? (
           <div className="rounded-lg border border-dashed border-als-line p-6 text-center text-sm text-als-muted">
-            {t.blog.emptyComments}
+            <EditableI18nText contentKey="blog.comments.emptyState" value={t.blog.emptyComments} />
           </div>
         ) : (
           comments.map((comment) => (
@@ -181,7 +190,7 @@ export function CommentSection() {
                     onSelect={(name) => setReplyText((current) => insertMention(current, name))}
                   />
                   <Button type="button" size="sm" onClick={() => addReply(comment.id)}>
-                    {t.blog.reply}
+                    <EditableI18nText contentKey="blog.comments.replyButton" value={t.blog.reply} />
                   </Button>
                 </div>
               ) : null}
@@ -247,7 +256,7 @@ function CommentBody({
             onClick={onReply}
             className="inline-flex h-8 items-center rounded-full border border-als-line px-3 text-xs font-semibold text-als-muted transition hover:text-als-red"
           >
-            {t.blog.reply}
+            <EditableI18nText contentKey="blog.comments.replyButton" value={t.blog.reply} />
           </button>
         ) : null}
       </div>

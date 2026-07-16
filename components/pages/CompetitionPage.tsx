@@ -4,7 +4,9 @@ import { CalendarDays, CheckCircle2, FileText, Trophy } from "lucide-react";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { Badge } from "@/components/ui/badge";
-import { FallbackImage } from "@/components/ui/FallbackImage";
+import { EditableImage } from "@/components/cms/EditableImage";
+import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import type { Competition } from "@/data/competitions";
 import { formatDate } from "@/lib/format";
 
@@ -21,20 +23,24 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
         <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
         <div className="container-wide relative grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
           <Reveal>
-            <Badge variant="light">{t.competitions.eyebrow}</Badge>
+            <Badge variant="light">
+              <EditableI18nText contentKey="competitions.eyebrow" value={t.competitions.eyebrow} />
+            </Badge>
             <h1 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
-              {localizedTitle}
+              <EditableI18nText contentKey={`competitions.${competition.slug}.title`} value={localizedTitle} />
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/[0.76]">
-              {localizedIntro}
+              <EditableI18nText contentKey={`competitions.${competition.slug}.intro`} value={localizedIntro} />
             </p>
           </Reveal>
           <Reveal delay={0.08}>
-            <FallbackImage
-              src={competition.image}
+            <EditableImage
+              contentKey={`competitions.${competition.slug}.image`}
+              fallback={competition.image}
               alt={competition.title}
-              label={competition.label}
-              className="aspect-[4/3] border-white/10 shadow-2xl shadow-black/20"
+              width={800}
+              height={600}
+              className="aspect-[4/3] rounded-lg border border-white/10 object-cover shadow-2xl shadow-black/20"
             />
           </Reveal>
         </div>
@@ -59,7 +65,7 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
         <div className="container-wide grid gap-10 lg:grid-cols-[1fr_1fr]">
           <div>
             <SectionHeading
-              title={t.competitions.upcoming}
+              title={<EditableI18nText contentKey="competitions.upcoming" value={t.competitions.upcoming} />}
               className="[&_h2]:text-white [&_p]:text-white/[0.74]"
             />
             <div className="mt-8 grid gap-4">
@@ -83,11 +89,18 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
                   <article className="rounded-lg border border-dashed border-als-line bg-white p-6 shadow-sm">
                     <CalendarDays className="h-5 w-5 text-als-red" />
                     <h3 className="mt-4 text-xl font-bold text-als-blue">
-                      No verified upcoming events listed yet
+                      <EditableText
+                        contentKey="competitions.noEventsTitle"
+                        fallback="No verified upcoming events listed yet"
+                        tag="span"
+                      />
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-als-muted">
-                      Add upcoming debate or moot court dates here only after ALS confirms them
-                      through its official channels.
+                      <EditableText
+                        contentKey="competitions.noEventsText"
+                        fallback="Add upcoming debate or moot court dates here only after ALS confirms them through its official channels."
+                        tag="span"
+                      />
                     </p>
                   </article>
                 </Reveal>
@@ -97,7 +110,7 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
 
           <div>
             <SectionHeading
-              title={t.competitions.highlights}
+              title={<EditableI18nText contentKey="competitions.highlights" value={t.competitions.highlights} />}
               className="[&_h2]:text-white [&_p]:text-white/[0.74]"
             />
             <div className="mt-8 grid gap-4">
@@ -118,8 +131,8 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
         <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
         <div className="container-wide">
           <SectionHeading
-            title={t.competitions.format}
-            text={t.competitions.rulesIntro}
+            title={<EditableI18nText contentKey="competitions.format" value={t.competitions.format} />}
+            text={<EditableI18nText contentKey="competitions.rulesIntro" value={t.competitions.rulesIntro} />}
             align="center"
             className="[&_h2]:text-white [&_p]:text-white/[0.72]"
           />
@@ -136,7 +149,9 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
             </div>
             <Reveal delay={0.12}>
               <DocumentCard
+                titleKey="competitions.viewRules"
                 title={t.competitions.viewRules}
+                textKey="competitions.documentComingSoon"
                 text={t.competitions.documentComingSoon}
               />
             </Reveal>
@@ -150,18 +165,20 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
             <div className="grid gap-5 rounded-2xl border border-white bg-white p-6 shadow-sm md:grid-cols-[1fr_auto] md:items-center">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-red">
-                  {t.competitions.draftExampleEyebrow}
+                  <EditableI18nText contentKey="competitions.draftExampleEyebrow" value={t.competitions.draftExampleEyebrow} />
                 </p>
                 <h2 className="mt-2 text-2xl font-black text-als-blue">
-                  {t.competitions.draftExampleTitle}
+                  <EditableI18nText contentKey="competitions.draftExampleTitle" value={t.competitions.draftExampleTitle} />
                 </h2>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-als-muted">
-                  {t.competitions.draftExampleText}
+                  <EditableI18nText contentKey="competitions.draftExampleText" value={t.competitions.draftExampleText} />
                 </p>
               </div>
               <div className="md:w-72">
                 <DocumentCard
+                  titleKey="competitions.viewExample"
                   title={t.competitions.viewExample}
+                  textKey="competitions.documentComingSoon"
                   text={t.competitions.documentComingSoon}
                   light
                 />
@@ -176,7 +193,9 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
           <div className="container-wide">
             <Reveal>
               <div className="rounded-lg border border-als-line bg-white p-6 text-sm leading-7 text-als-muted">
-                <span className="font-semibold text-als-blue">Verification note: </span>
+                <span className="font-semibold text-als-blue">
+                  <EditableText contentKey="competitions.verificationNoteLabel" fallback="Verification note: " tag="span" />
+                </span>
                 {competition.cultureNote}
               </div>
             </Reveal>
@@ -188,11 +207,15 @@ export function CompetitionPage({ competition }: { competition: Competition }) {
 }
 
 function DocumentCard({
+  titleKey,
   title,
+  textKey,
   text,
   light = false,
 }: {
+  titleKey: string;
   title: string;
+  textKey: string;
   text: string;
   light?: boolean;
 }) {
@@ -214,9 +237,11 @@ function DocumentCard({
         <FileText className="h-5 w-5" aria-hidden="true" />
       </div>
       <h3 className={light ? "mt-4 font-black text-als-blue" : "mt-4 font-black text-white"}>
-        {title}
+        <EditableI18nText contentKey={titleKey} value={title} />
       </h3>
-      <p className="mt-2 text-sm leading-6">{text}</p>
+      <p className="mt-2 text-sm leading-6">
+        <EditableI18nText contentKey={textKey} value={text} />
+      </p>
       <button
         type="button"
         disabled
@@ -226,7 +251,7 @@ function DocumentCard({
             : "mt-4 inline-flex h-10 items-center rounded-full border border-white/15 bg-white/[0.06] px-4 text-xs font-bold text-white/60"
         }
       >
-        {text}
+        <EditableI18nText contentKey={textKey} value={text} />
       </button>
     </div>
   );

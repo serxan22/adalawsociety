@@ -10,6 +10,8 @@ import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { Badge } from "@/components/ui/badge";
 import { FallbackImage } from "@/components/ui/FallbackImage";
+import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import type { Article } from "@/data/articles";
 import { formatCount, formatDate } from "@/lib/format";
 
@@ -36,7 +38,7 @@ export function BlogDetailPage({
                 className="inline-flex items-center gap-2 text-sm font-semibold text-white/[0.72] transition hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {t.common.backToBlog}
+                <EditableI18nText contentKey="blog.detail.backLink" value={t.common.backToBlog} />
               </Link>
               <div className="mt-8 max-w-4xl">
                 <div className="flex flex-wrap gap-2">
@@ -79,7 +81,9 @@ export function BlogDetailPage({
             <div className="space-y-8">
               <Reveal>
                 <section className="rounded-lg border border-als-line bg-als-blue-soft p-6">
-                  <p className="text-sm font-semibold uppercase text-als-red">{t.blog.summary}</p>
+                  <p className="text-sm font-semibold uppercase text-als-red">
+                    <EditableI18nText contentKey="blog.detail.summaryLabel" value={t.blog.summary} />
+                  </p>
                   <p className="mt-3 text-lg leading-8 text-als-blue">{article.summary}</p>
                 </section>
               </Reveal>
@@ -91,7 +95,9 @@ export function BlogDetailPage({
               </div>
 
               <section className="rounded-lg border border-als-line bg-white p-6 shadow-sm">
-                <h2 className="text-2xl font-bold text-als-blue">{t.blog.citations}</h2>
+                <h2 className="text-2xl font-bold text-als-blue">
+                  <EditableI18nText contentKey="blog.detail.citationsLabel" value={t.blog.citations} />
+                </h2>
                 <ol className="mt-5 space-y-4">
                   {article.citations.map((citation, index) => (
                     <li key={`${citation.label}-${index}`} className="text-sm leading-6 text-als-muted">
@@ -103,7 +109,7 @@ export function BlogDetailPage({
                           target="_blank"
                           className="ml-2 font-semibold text-als-red hover:text-als-blue"
                         >
-                          Source
+                          <EditableText contentKey="blog.detail.sourceLinkText" fallback="Source" tag="span" />
                         </Link>
                       ) : null}
                     </li>
@@ -154,7 +160,7 @@ export function BlogDetailPage({
         <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
           <div className="container-wide">
             <SectionHeading
-              title={t.common.relatedArticles}
+              title={<EditableI18nText contentKey="blog.detail.relatedTitle" value={t.common.relatedArticles} />}
               className="[&_h2]:text-white [&_p]:text-white/[0.74]"
             />
             <div className="mt-8 grid gap-5 lg:grid-cols-3">

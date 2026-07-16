@@ -17,6 +17,7 @@ import { NewsCard } from "@/components/news/NewsCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { currentUser } from "@/data/current-user";
 import { newsCategories, newsItems, type NewsCategory } from "@/data/news";
 import { canCreateContent } from "@/lib/auth/roles";
@@ -87,7 +88,7 @@ export function NewsListingPage() {
         <div className="container-wide relative">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <SectionHeading
-              eyebrow={t.news.eyebrow}
+              eyebrow={<EditableI18nText contentKey="news.eyebrow" value={t.news.eyebrow} />}
               title={<EditableText contentKey="news.title" fallback={t.news.title} tag="span" />}
               text={<EditableText contentKey="news.intro" fallback={t.news.intro} tag="span" />}
               headingLevel="h1"
@@ -103,7 +104,7 @@ export function NewsListingPage() {
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-red px-5 text-sm font-semibold text-white shadow-lg shadow-als-red/15 transition hover:-translate-y-0.5 hover:bg-[#96384d]"
                 >
                   <Plus className="h-4 w-4" aria-hidden="true" />
-                  Create News
+                  <EditableText contentKey="news.createButton" fallback="Create News" tag="span" />
                 </Link>
               ) : null}
               <motion.div
@@ -160,7 +161,7 @@ export function NewsListingPage() {
             <div className="mt-9 flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/12 p-3 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between">
               <div className="inline-flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-white/75">
                 <SlidersHorizontal className="h-4 w-4 text-als-red" aria-hidden="true" />
-                Filter updates
+                <EditableText contentKey="news.filterLabel" fallback="Filter updates" tag="span" />
               </div>
               <div className="flex flex-wrap gap-2">
                 {(["All", ...newsCategories] as CategoryFilter[]).map((item) => {
@@ -180,7 +181,7 @@ export function NewsListingPage() {
                           : "border-als-line bg-white text-als-blue shadow-sm hover:border-als-red/30 hover:bg-als-red/5 hover:text-als-red",
                       )}
                     >
-                      {item === "All" ? t.common.all : item}
+                      {item === "All" ? <EditableI18nText contentKey="news.filterAll" value={t.common.all} /> : item}
                     </motion.button>
                   );
                 })}
@@ -210,15 +211,25 @@ export function NewsListingPage() {
                       <Newspaper className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-als-muted">
-                      News feed
+                      <EditableText contentKey="news.feedLabel" fallback="News feed" tag="span" />
                     </p>
                     <p className="mt-2 text-3xl font-black text-als-blue">
                       {filteredNews.length}
                     </p>
                     <p className="mt-2 text-sm leading-6 text-als-muted">
-                      {query || category !== "All"
-                        ? "Matching public updates in the current view."
-                        : "Verified public ALS updates currently listed."}
+                      {query || category !== "All" ? (
+                        <EditableText
+                          contentKey="news.feedFilteredCaption"
+                          fallback="Matching public updates in the current view."
+                          tag="span"
+                        />
+                      ) : (
+                        <EditableText
+                          contentKey="news.feedCaption"
+                          fallback="Verified public ALS updates currently listed."
+                          tag="span"
+                        />
+                      )}
                     </p>
                   </div>
                 </aside>
@@ -247,10 +258,18 @@ export function NewsListingPage() {
                   >
                     <Sparkles className="mx-auto h-7 w-7 text-als-red" aria-hidden="true" />
                     <p className="mt-3 text-sm font-semibold text-als-blue">
-                      Only one update matches this view.
+                      <EditableText
+                        contentKey="news.singleMatchTitle"
+                        fallback="Only one update matches this view."
+                        tag="span"
+                      />
                     </p>
                     <p className="mt-1 text-sm text-als-muted">
-                      Adjust the filters or search to explore more ALS updates.
+                      <EditableText
+                        contentKey="news.singleMatchText"
+                        fallback="Adjust the filters or search to explore more ALS updates."
+                        tag="span"
+                      />
                     </p>
                   </motion.div>
                 )}
@@ -266,16 +285,22 @@ export function NewsListingPage() {
               <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-als-red/10 text-als-red">
                 <FileText className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h3 className="mt-5 text-xl font-bold text-als-blue">{t.common.noResults}</h3>
+              <h3 className="mt-5 text-xl font-bold text-als-blue">
+                <EditableI18nText contentKey="news.noResultsTitle" value={t.common.noResults} />
+              </h3>
               <p className="mt-2 text-sm leading-6 text-als-muted">
-                Try another category or clear the search field to return to the full newsroom.
+                <EditableText
+                  contentKey="news.noResultsText"
+                  fallback="Try another category or clear the search field to return to the full newsroom."
+                  tag="span"
+                />
               </p>
               <button
                 type="button"
                 onClick={clearSearch}
                 className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-blue px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-als-ink"
               >
-                Reset newsroom
+                <EditableText contentKey="news.resetButton" fallback="Reset newsroom" tag="span" />
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </button>
             </motion.div>

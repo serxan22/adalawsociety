@@ -5,6 +5,8 @@ import { Mail, MapPin } from "lucide-react";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Logo } from "@/components/site/Logo";
 import { SocialIcon } from "@/components/site/SocialIcon";
+import { EditableText } from "@/components/cms/EditableText";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { socials } from "@/data/socials";
 
 export function Footer() {
@@ -12,18 +14,18 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   const quickLinks = [
-    { label: t.nav.about, href: "/about" },
-    { label: t.nav.news, href: "/news" },
-    { label: t.nav.blog, href: "/blog" },
-    { label: t.nav.team, href: "/team/2025-2026" },
-    { label: t.nav.competitions, href: "/competitions/debate" },
-    { label: t.nav.contact, href: "/contact" },
+    { key: "footer.link.about", label: t.nav.about, href: "/about" },
+    { key: "footer.link.news", label: t.nav.news, href: "/news" },
+    { key: "footer.link.blog", label: t.nav.blog, href: "/blog" },
+    { key: "footer.link.team", label: t.nav.team, href: "/team/2025-2026" },
+    { key: "footer.link.competitions", label: t.nav.competitions, href: "/competitions/debate" },
+    { key: "footer.link.contact", label: t.nav.contact, href: "/contact" },
   ];
 
   const policyLinks = [
-    { label: "Blog Policy", href: "/blog-policy" },
-    { label: "Privacy Policy", href: "/privacy-policy" },
-    { label: "Terms", href: "/terms" },
+    { key: "footer.link.blogPolicy", label: "Blog Policy", href: "/blog-policy" },
+    { key: "footer.link.privacyPolicy", label: "Privacy Policy", href: "/privacy-policy" },
+    { key: "footer.link.terms", label: "Terms", href: "/terms" },
   ];
 
   return (
@@ -35,8 +37,12 @@ export function Footer() {
               markClassName="border-white/15 bg-white"
               textClassName="text-white"
             />
-            <p className="text-sm font-semibold text-white/80">Your Gateway to the Legal World</p>
-            <p className="max-w-md text-sm leading-7 text-white/[0.72]">{t.footer.description}</p>
+            <p className="text-sm font-semibold text-white/80">
+              <EditableText contentKey="footer.tagline" fallback="Your Gateway to the Legal World" tag="span" />
+            </p>
+            <p className="max-w-md text-sm leading-7 text-white/[0.72]">
+              <EditableI18nText contentKey="footer.description" value={t.footer.description} />
+            </p>
             <div className="flex flex-wrap gap-3">
               {socials.map((social) => {
                 return social.href ? (
@@ -64,7 +70,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold uppercase text-white/[0.55]">{t.footer.quickLinks}</h2>
+            <h2 className="text-sm font-semibold uppercase text-white/[0.55]">
+              <EditableI18nText contentKey="footer.quickLinks" value={t.footer.quickLinks} />
+            </h2>
             <div className="mt-4 grid gap-3">
               {quickLinks.map((link) => (
                 <Link
@@ -72,14 +80,16 @@ export function Footer() {
                   href={link.href}
                   className="text-sm text-white/[0.76] transition hover:text-white"
                 >
-                  {link.label}
+                  <EditableI18nText contentKey={link.key} value={link.label} />
                 </Link>
               ))}
             </div>
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold uppercase text-white/[0.55]">{t.footer.policies}</h2>
+            <h2 className="text-sm font-semibold uppercase text-white/[0.55]">
+              <EditableI18nText contentKey="footer.policies" value={t.footer.policies} />
+            </h2>
             <div className="mt-4 grid gap-3">
               {policyLinks.map((link) => (
                 <Link
@@ -87,7 +97,7 @@ export function Footer() {
                   href={link.href}
                   className="text-sm text-white/[0.76] transition hover:text-white"
                 >
-                  {link.label}
+                  <EditableText contentKey={link.key} fallback={link.label} tag="span" />
                 </Link>
               ))}
             </div>
@@ -97,7 +107,7 @@ export function Footer() {
             <div className="flex gap-3">
               <Mail className="mt-0.5 h-4 w-4 text-white/70" />
               <a href="mailto:lawsociety@ada.edu.az" className="hover:text-white">
-                lawsociety@ada.edu.az
+                <EditableText contentKey="footer.email" fallback="lawsociety@ada.edu.az" tag="span" />
               </a>
             </div>
             <div className="flex gap-3">
@@ -107,21 +117,25 @@ export function Footer() {
                 target="_blank"
                 className="hover:text-white"
               >
-                @adalawsociety
+                <EditableText contentKey="footer.instagram" fallback="@adalawsociety" tag="span" />
               </a>
             </div>
             <div className="flex gap-3">
               <MapPin className="mt-0.5 h-4 w-4 text-white/70" />
-              <span>ADA University, Baku, Azerbaijan</span>
+              <span>
+                <EditableText contentKey="footer.location" fallback="ADA University, Baku, Azerbaijan" tag="span" />
+              </span>
             </div>
           </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/[0.55] md:flex-row md:items-center md:justify-between">
           <p>
-            © {year} ADA Law Society. {t.footer.copyright}
+            © {year} ADA Law Society. <EditableI18nText contentKey="footer.copyright" value={t.footer.copyright} />
           </p>
-          <p>Established September 2019</p>
+          <p>
+            <EditableText contentKey="footer.established" fallback="Established September 2019" tag="span" />
+          </p>
         </div>
       </div>
     </footer>

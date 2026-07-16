@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { articles } from "@/data/articles";
 
 export function FeaturedBlog() {
@@ -16,8 +17,8 @@ export function FeaturedBlog() {
       <div className="container-wide relative">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeading
-            title={t.common.latestArticles}
-            text={t.blog.intro}
+            title={<EditableI18nText contentKey="home.featuredBlog.title" value={t.common.latestArticles} />}
+            text={<EditableI18nText contentKey="home.featuredBlog.text" value={t.blog.intro} />}
             className="[&_h2]:text-white [&_p]:text-white/[0.74]"
           />
           <Reveal>
@@ -25,7 +26,7 @@ export function FeaturedBlog() {
               href="/blog"
               className="inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:gap-3 hover:text-white/80"
             >
-              {t.nav.blog}
+              <EditableI18nText contentKey="home.featuredBlog.cta" value={t.nav.blog} />
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Reveal>

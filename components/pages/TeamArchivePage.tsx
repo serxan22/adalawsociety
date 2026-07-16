@@ -16,7 +16,7 @@ export function TeamArchivePage() {
           <Reveal className="mx-auto max-w-4xl">
             <Badge variant="light" className="mx-auto gap-2">
               <UsersRound className="h-4 w-4" aria-hidden="true" />
-              ALS Team
+              <EditableText contentKey="team.archive.badge" fallback="ALS Team" tag="span" />
             </Badge>
             <h1 className="mt-6 text-balance text-4xl font-black leading-tight md:text-6xl">
               <EditableText

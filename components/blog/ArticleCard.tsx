@@ -17,6 +17,7 @@ import { useState, type ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { useI18n } from "@/components/providers/LanguageProvider";
+import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import type { Article } from "@/data/articles";
 import { formatCount, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -76,7 +77,7 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
             ))}
           </div>
           <p className="mt-8 text-xs font-bold uppercase tracking-[0.18em] text-als-red">
-            {t.blog.featuredBlog}
+            <EditableI18nText contentKey="blog.card.featuredLabel" value={t.blog.featuredBlog} />
           </p>
           <h2 className="mt-3 max-w-3xl text-3xl font-black leading-tight text-als-blue md:text-5xl">
             {article.title}
@@ -101,7 +102,7 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
               href={`/blog/${article.slug}`}
               className="inline-flex items-center gap-2 rounded-full bg-als-blue px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-als-blue/15 transition hover:-translate-y-0.5 hover:bg-als-ink"
             >
-              {t.blog.readBlog}
+              <EditableI18nText contentKey="blog.card.readBlog" value={t.blog.readBlog} />
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <ActionButton
@@ -121,14 +122,14 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
           </div>
           <div className="mt-8 rounded-2xl border border-als-line bg-[#fbfcfe] p-5">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-als-muted">
-              {t.blog.abstract}
+              <EditableI18nText contentKey="blog.card.abstractLabel" value={t.blog.abstract} />
             </p>
             <p className="mt-3 max-w-4xl text-sm leading-7 text-als-blue/80">
               {article.summary}
             </p>
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-als-line bg-white px-3 py-1 text-xs font-bold text-als-muted">
               <Quote className="h-3.5 w-3.5 text-als-red" aria-hidden="true" />
-              {article.citations.length} {t.blog.citations}
+              {article.citations.length} <EditableI18nText contentKey="blog.card.citationsLabel" value={t.blog.citations} />
             </div>
           </div>
         </div>
@@ -173,7 +174,7 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
               href={`/blog/${article.slug}`}
               className="inline-flex h-10 items-center gap-2 rounded-full border border-als-line bg-white px-4 text-sm font-bold text-als-red transition hover:border-als-red/35 hover:bg-als-red/5"
             >
-              {t.blog.readBlog}
+              <EditableI18nText contentKey="blog.card.readBlog" value={t.blog.readBlog} />
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <div className="flex items-center gap-2">
@@ -233,7 +234,7 @@ export function ArticleCard({ article, variant = "card" }: ArticleCardProps) {
             href={`/blog/${article.slug}`}
             className="inline-flex items-center gap-2 text-sm font-semibold text-als-red transition hover:gap-3 hover:text-als-blue"
           >
-            {t.common.readMore}
+            <EditableI18nText contentKey="blog.card.readMore" value={t.common.readMore} />
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
           <div className="flex items-center gap-2">
