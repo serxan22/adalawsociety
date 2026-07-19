@@ -247,3 +247,31 @@ values
   ('team.year.blogCommittee.title', 'Blog Committee', 'text'),
   ('team.year.blogCommittee.description', 'Students supporting ALS legal writing through editing, review, and editorial coordination.', 'text')
 on conflict (key) do nothing;
+
+-- Pass 3: Gallery page
+insert into public.content (key, value, type)
+values
+  ('gallery.eyebrow', 'ALS Moments', 'text'),
+  ('gallery.title', 'Gallery', 'text'),
+  ('gallery.intro', 'A living record of debates, moot courts, talks, and community moments from ADA Law Society.', 'text'),
+  ('gallery.image.1', '/images/placeholders/gallery-1.jpg', 'image'),
+  ('gallery.image.2', '/images/placeholders/gallery-2.jpg', 'image'),
+  ('gallery.image.3', '/images/placeholders/gallery-3.jpg', 'image'),
+  ('gallery.image.4', '/images/placeholders/gallery-4.jpg', 'image'),
+  ('gallery.image.5', '/images/placeholders/event-1.jpg', 'image'),
+  ('gallery.image.6', '/images/placeholders/event-2.jpg', 'image'),
+  ('gallery.image.7', '/images/placeholders/event-3.jpg', 'image'),
+  ('gallery.image.8', '/images/placeholders/event-4.jpg', 'image'),
+  ('gallery.image.9', '/images/placeholders/event-5.jpg', 'image'),
+  ('gallery.image.10', '/images/placeholders/event-6.jpg', 'image'),
+  ('gallery.caption.1', 'Moot Court Finals Night', 'text'),
+  ('gallery.caption.2', 'Legal Talks Series', 'text'),
+  ('gallery.caption.3', 'Debate Championship', 'text'),
+  ('gallery.caption.4', 'Academic Excursion', 'text'),
+  ('gallery.caption.5', 'Orientation Week', 'text'),
+  ('gallery.caption.6', 'Blog Editorial Meeting', 'text'),
+  ('gallery.caption.7', 'Guest Lecture', 'text'),
+  ('gallery.caption.8', 'Team Building Retreat', 'text'),
+  ('gallery.caption.9', 'Networking Night', 'text'),
+  ('gallery.caption.10', 'Graduation Ceremony', 'text')
+on conflict (key) do nothing;

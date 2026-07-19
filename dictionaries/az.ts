@@ -7,6 +7,7 @@ export const az = {
     news: "Xəbərlər",
     team: "ALS Komandası",
     blog: "Bloq",
+    gallery: "Qalereya",
     competitions: "Yarışlar",
     contact: "Əlaqə",
     contactUs: "Bizimlə əlaqə",

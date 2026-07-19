@@ -34,6 +34,7 @@ export function Header() {
     { label: t.nav.about, href: "/about" },
     { label: t.nav.news, href: "/news" },
     { label: t.nav.blog, href: "/blog" },
+    { label: t.nav.gallery, href: "/gallery" },
   ];
 
   const translatedTeamItems = teamItems.map((item) => ({

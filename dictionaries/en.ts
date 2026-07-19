@@ -5,6 +5,7 @@ export const en = {
     news: "News",
     team: "ALS Team",
     blog: "Blog",
+    gallery: "Gallery",
     competitions: "Competitions",
     contact: "Contact",
     contactUs: "Contact Us",

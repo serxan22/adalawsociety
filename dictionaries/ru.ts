@@ -7,6 +7,7 @@ export const ru = {
     news: "Новости",
     team: "Команда ALS",
     blog: "Блог",
+    gallery: "Галерея",
     competitions: "Соревнования",
     contact: "Контакты",
     contactUs: "Связаться",
