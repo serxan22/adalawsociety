@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { RichTextRenderer } from "@/components/cms/RichTextRenderer";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import { NewsCard } from "@/components/news/NewsCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
@@ -59,7 +60,8 @@ export function NewsDetailPage({
             />
           </Reveal>
           <div className="mx-auto mt-10 max-w-3xl space-y-6 rounded-2xl border border-white/70 bg-white/95 p-6 text-lg leading-8 text-als-blue/[0.82] shadow-xl shadow-black/10 md:p-8">
-            {item.content.map((paragraph) => (
+            {item.author && <div className="border-b border-als-line pb-4 text-sm"><strong>{item.author.name}</strong>{item.author.bio && <p>{item.author.bio}</p>}</div>}
+            {item.richContent ? <RichTextRenderer document={item.richContent}/> : item.content.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
             {item.sourceUrl ? (

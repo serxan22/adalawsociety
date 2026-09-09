@@ -1,5 +1,8 @@
 "use client";
 
+import { usePublishedContent, type PublishedResult } from "@/components/cms/usePublishedContent";
+import { ContentPagination } from "@/components/cms/ContentPagination";
+
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
   ArrowRight,
@@ -11,16 +14,14 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { NewsCard } from "@/components/news/NewsCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { EditableText } from "@/components/cms/EditableText";
 import { EditableI18nText } from "@/components/cms/EditableI18nText";
-import { currentUser } from "@/data/current-user";
-import { newsCategories, newsItems, type NewsCategory } from "@/data/news";
-import { canCreateContent } from "@/lib/auth/roles";
+import type { NewsItem, NewsCategory } from "@/data/news";
 import { cn } from "@/lib/utils";
 
 type CategoryFilter = "All" | NewsCategory;
@@ -44,27 +45,15 @@ const itemVariants: Variants = {
   },
 };
 
-export function NewsListingPage() {
+export function NewsListingPage({ initial, canCreateNews = false }: { initial: PublishedResult<NewsItem>; canCreateNews?: boolean }) {
   const { t } = useI18n();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("All");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchPreview, setSearchPreview] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const canCreateNews = currentUser.authenticated && canCreateContent(currentUser.role);
-
-  const filteredNews = useMemo(() => {
-    const normalized = query.toLowerCase().trim();
-    return newsItems.filter((item) => {
-      const matchesCategory = category === "All" || item.category === category;
-      const matchesQuery =
-        !normalized ||
-        [item.title, item.excerpt, item.category].some((value) =>
-          value.toLowerCase().includes(normalized),
-        );
-      return matchesCategory && matchesQuery;
-    });
-  }, [category, query]);
+  const listing = usePublishedContent("news", initial, query, category);
+  const filteredNews = listing.posts;
 
   const [leadNews, ...newsFeed] = filteredNews;
   const searchExpanded = searchOpen || searchPreview || query.length > 0;
@@ -100,7 +89,7 @@ export function NewsListingPage() {
             >
               {canCreateNews ? (
                 <Link
-                  href="/dashboard/news/new"
+                  href="/admin/news/new"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-red px-5 text-sm font-semibold text-white shadow-lg shadow-als-red/15 transition hover:-translate-y-0.5 hover:bg-[#96384d]"
                 >
                   <Plus className="h-4 w-4" aria-hidden="true" />
@@ -164,7 +153,7 @@ export function NewsListingPage() {
                 <EditableText contentKey="news.filterLabel" fallback="Filter updates" tag="span" />
               </div>
               <div className="flex flex-wrap gap-2">
-                {(["All", ...newsCategories] as CategoryFilter[]).map((item) => {
+                {(["All", ...listing.categories] as CategoryFilter[]).map((item) => {
                   const active = category === item;
 
                   return (
@@ -193,6 +182,8 @@ export function NewsListingPage() {
 
       <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-20 pt-12 md:pb-24 md:pt-16">
         <div className="container-wide">
+          {listing.error && <p role="alert" className="mb-5 text-sm text-white">{listing.error}</p>}
+          <div aria-busy={listing.loading} className={listing.loading ? "opacity-60" : ""}>
           {filteredNews.length > 0 && leadNews ? (
             <>
               <motion.div
@@ -305,6 +296,8 @@ export function NewsListingPage() {
               </button>
             </motion.div>
           )}
+          </div>
+          <ContentPagination page={listing.page} total={listing.total} pageSize={listing.pageSize} onChange={listing.setPage}/>
         </div>
       </section>
     </>

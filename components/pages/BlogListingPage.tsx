@@ -1,5 +1,8 @@
 "use client";
 
+import { usePublishedContent, type PublishedResult } from "@/components/cms/usePublishedContent";
+import { ContentPagination } from "@/components/cms/ContentPagination";
+
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
   ArrowRight,
@@ -13,15 +16,13 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal } from "@/components/site/Reveal";
 import { EditableText } from "@/components/cms/EditableText";
 import { EditableI18nText } from "@/components/cms/EditableI18nText";
-import { articleCategories, articles, type ArticleCategory } from "@/data/articles";
-import { currentUser } from "@/data/current-user";
-import { canCreateContent } from "@/lib/auth/roles";
+import type { Article, ArticleCategory } from "@/data/articles";
 import { cn } from "@/lib/utils";
 
 type CategoryFilter = "All" | ArticleCategory;
@@ -45,7 +46,7 @@ const itemVariants: Variants = {
   },
 };
 
-export function BlogListingPage() {
+export function BlogListingPage({ initial, canCreate = false }: { initial: PublishedResult<Article>; canCreate?: boolean }) {
   const { t } = useI18n();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<CategoryFilter>("All");
@@ -54,32 +55,10 @@ export function BlogListingPage() {
   const [searchPreview, setSearchPreview] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const authors = useMemo(
-    () => ["All", ...Array.from(new Set(articles.map((article) => article.author.name)))],
-    [],
-  );
-  const canCreate = currentUser.authenticated && canCreateContent(currentUser.role);
+  const listing = usePublishedContent("blog", initial, query, category, author);
+  const authors = ["All", ...listing.authors];
   const writingStandards = t.blog.writingStandards;
-
-  const filteredArticles = useMemo(() => {
-    const normalized = query.toLowerCase().trim();
-    return articles.filter((article) => {
-      const matchesCategory = category === "All" || article.category === category;
-      const matchesAuthor = author === "All" || article.author.name === author;
-      const matchesQuery =
-        !normalized ||
-        [
-          article.title,
-          article.excerpt,
-          article.summary,
-          article.category,
-          article.author.name,
-          ...article.tags,
-        ].some((value) => value.toLowerCase().includes(normalized));
-
-      return matchesCategory && matchesAuthor && matchesQuery;
-    });
-  }, [author, category, query]);
+  const filteredArticles = listing.posts;
 
   const [featuredArticle, ...articleIndex] = filteredArticles;
   const searchExpanded = searchOpen || searchPreview || query.length > 0;
@@ -116,7 +95,7 @@ export function BlogListingPage() {
                 {canCreate ? (
                   <div className="mt-8 flex flex-wrap items-center gap-3">
                     <Link
-                      href="/dashboard/articles/new"
+                      href="/admin/blog/new"
                       className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-red px-5 text-sm font-semibold text-white shadow-lg shadow-als-red/15 transition hover:-translate-y-0.5 hover:bg-[#96384d]"
                     >
                       <Plus className="h-4 w-4" aria-hidden="true" />
@@ -217,7 +196,7 @@ export function BlogListingPage() {
               </div>
 
               <div className="-mx-1 flex min-w-0 flex-1 gap-2 overflow-x-auto px-1 pb-1 lg:pb-0">
-                {(["All", ...articleCategories] as CategoryFilter[]).map((item) => (
+                {(["All", ...listing.categories] as CategoryFilter[]).map((item) => (
                   <FilterPill
                     key={item}
                     active={category === item}
@@ -306,6 +285,8 @@ export function BlogListingPage() {
 
       <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-20 pt-12 md:pb-24 md:pt-16">
         <div className="container-wide">
+          {listing.error && <p role="alert" className="mb-5 text-sm text-white">{listing.error}</p>}
+          <div aria-busy={listing.loading} className={listing.loading ? "opacity-60" : ""}>
           {filteredArticles.length > 0 && featuredArticle ? (
             <>
               <div>
@@ -397,6 +378,8 @@ export function BlogListingPage() {
               </button>
             </motion.div>
           )}
+          </div>
+          <ContentPagination page={listing.page} total={listing.total} pageSize={listing.pageSize} onChange={listing.setPage}/>
         </div>
       </section>
     </>

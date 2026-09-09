@@ -1,4 +1,5 @@
-export type ArticleCategory = "Legal Education" | "Human Rights" | "Research" | "Student Advocacy";
+import type { RichTextDocument } from "@/lib/cms/types";
+export type ArticleCategory = string;
 
 export type Citation = {
   label: string;
@@ -7,9 +8,13 @@ export type Citation = {
 };
 
 export type Article = {
+  id?: string;
+  richContent?: RichTextDocument;
   slug: string;
   title: string;
   author: {
+    bio?: string;
+    socialLinks?: Record<string,string>;
     name: string;
     role: string;
     image: string;

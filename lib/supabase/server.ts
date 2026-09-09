@@ -18,7 +18,10 @@ export async function createSupabaseServerClient(response?: NextResponse) {
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
             if (response) { response.cookies.set(name, value, options); }
-            else { cookieStore.set(name, value, options); }
+            else {
+              // Server Components cannot write cookies; route handlers refresh them.
+              try { cookieStore.set(name, value, options); } catch {}
+            }
           });
         },
       },

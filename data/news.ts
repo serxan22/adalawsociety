@@ -1,6 +1,10 @@
-export type NewsCategory = "Events" | "Announcements" | "Achievements" | "Collaborations";
+import type { RichTextDocument } from "@/lib/cms/types";
+export type NewsCategory = string;
 
 export type NewsItem = {
+  id?: string;
+  richContent?: RichTextDocument;
+  author?: {name:string;image:string;bio:string};
   slug: string;
   title: string;
   category: NewsCategory;

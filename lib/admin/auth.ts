@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export type AdminRole = "admin" | "superadmin";
 
 export interface AdminSession {
+  userId: string;
   email: string;
   role: AdminRole;
 }
@@ -26,9 +27,10 @@ export async function getAdminSession(): Promise<AdminSession | null> {
       .eq("email", user.email)
       .single<AdminRoleRow>();
 
-    if (!adminRow) return null;
+    if (!adminRow || !canManageEditorialContent(adminRow.role)) return null;
 
     return {
+      userId: user.id,
       email: user.email,
       role: adminRow.role,
     };
@@ -39,4 +41,9 @@ export async function getAdminSession(): Promise<AdminSession | null> {
 
 export function canManageAdmins(role: AdminRole) {
   return role === "superadmin";
+}
+
+/** Both allowlisted ALS roles may operate the editorial CMS. */
+export function canManageEditorialContent(role: AdminRole) {
+  return role === "admin" || role === "superadmin";
 }

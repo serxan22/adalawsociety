@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { getSupabaseProjectUrl } from "@/lib/supabase/server";
+import { getSupabaseProjectUrl } from "@/lib/supabase/url";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
       .eq("email", user.email!)
       .single();
 
-    if (!adminRow) {
+    if (!adminRow || !["admin", "superadmin"].includes(adminRow.role)) {
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("error", "not-authorized");
       return NextResponse.redirect(loginUrl);

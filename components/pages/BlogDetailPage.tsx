@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { RichTextRenderer } from "@/components/cms/RichTextRenderer";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, Bookmark, CalendarDays, Heart, UserRound } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -18,9 +19,11 @@ import { formatCount, formatDate } from "@/lib/format";
 export function BlogDetailPage({
   article,
   related,
+  preview = false,
 }: {
   article: Article;
   related: Article[];
+  preview?: boolean;
 }) {
   const { t } = useI18n();
   const [liked, setLiked] = useState(false);
@@ -89,7 +92,7 @@ export function BlogDetailPage({
               </Reveal>
 
               <div className="space-y-6 text-lg leading-8 text-als-blue/[0.82]">
-                {article.content.map((paragraph) => (
+                {article.richContent ? <RichTextRenderer document={article.richContent}/> : article.content.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
@@ -117,7 +120,7 @@ export function BlogDetailPage({
                 </ol>
               </section>
 
-              <CommentSection />
+              {!preview && <CommentSection />}
             </div>
 
             <aside className="lg:sticky lg:top-28 lg:self-start">
@@ -134,6 +137,8 @@ export function BlogDetailPage({
                     <p className="text-sm text-als-muted">{article.author.role}</p>
                   </div>
                 </div>
+                {article.author.bio && <p className="mt-4 text-sm leading-6 text-als-muted">{article.author.bio}</p>}
+                {article.author.socialLinks && <div className="mt-3 flex flex-wrap gap-2">{Object.entries(article.author.socialLinks).map(([label,url])=><a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-als-red">{label}</a>)}</div>}
                 <div className="mt-5 grid grid-cols-2 gap-2">
                   <DetailAction
                     active={liked}
