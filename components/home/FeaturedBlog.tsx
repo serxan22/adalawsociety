@@ -6,10 +6,11 @@ import { ArticleCard } from "@/components/blog/ArticleCard";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { EditableI18nText } from "@/components/cms/EditableI18nText";
-import { articles } from "@/data/articles";
+import type { Article } from "@/data/articles";
 
-export function FeaturedBlog() {
+export function FeaturedBlog({ items }: { items: Article[] }) {
   const { t } = useI18n();
+  if (items.length === 0) return null;
 
   return (
     <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
@@ -32,7 +33,7 @@ export function FeaturedBlog() {
           </Reveal>
         </div>
         <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {articles.slice(0, 3).map((article, index) => (
+          {items.slice(0, 3).map((article, index) => (
             <Reveal key={article.slug} delay={index * 0.05}>
               <ArticleCard article={article} />
             </Reveal>

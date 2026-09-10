@@ -10,15 +10,15 @@ export default function Page() {
     <PolicyPage
       policyKey="privacy"
       title="Privacy Policy"
-      intro="This first version uses local mock interactions and is prepared for a future backend integration."
+      intro="This policy explains how ADA Law Society handles information submitted through this website."
       sections={[
         {
           heading: "Data collection",
-          body: "The current website does not send contact forms, likes, saves, or comments to a database. These interactions are local UI states prepared for future integration.",
+	          body: "The website stores an interface-language preference in the visitor's browser. Messages sent through the contact page are opened in the visitor's own email application.",
         },
         {
-          heading: "Future integrations",
-          body: "If ALS connects the site to a CMS, Supabase, Firebase, or another service, this policy should be updated to explain what data is collected, why it is collected, and how long it is retained.",
+	          heading: "Editorial administration",
+	          body: "Authorized administrators use a protected content-management service. Authentication and editorial records are processed only for operating and securing the website.",
         },
         {
           heading: "Contact",

@@ -6,10 +6,11 @@ import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { NewsCard } from "@/components/news/NewsCard";
 import { EditableI18nText } from "@/components/cms/EditableI18nText";
-import { newsItems } from "@/data/news";
+import type { NewsItem } from "@/data/news";
 
-export function FeaturedNews() {
+export function FeaturedNews({ items }: { items: NewsItem[] }) {
   const { t } = useI18n();
+  if (items.length === 0) return null;
 
   return (
     <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
@@ -31,7 +32,7 @@ export function FeaturedNews() {
           </Reveal>
         </div>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {newsItems.slice(0, 3).map((item, index) => (
+          {items.slice(0, 3).map((item, index) => (
             <Reveal key={item.slug} delay={index * 0.05}>
               <NewsCard item={item} />
             </Reveal>

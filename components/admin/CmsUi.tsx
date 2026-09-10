@@ -23,21 +23,21 @@ export async function cmsFetch<T>(url:string,init?:RequestInit):Promise<T> {
 }
 export function LoadingRows(){return <div role="status" aria-label="Loading content" className="grid gap-3">{[0,1,2].map(n=><div key={n} className="h-20 animate-pulse rounded-lg bg-als-blue-light"/>)}</div>;}
 export function MediaField({value,onChange,label="Featured image"}:{value:string;onChange:(url:string)=>void;label?:string}) {
-  const [busy,setBusy]=useState(false);const [error,setError]=useState("");const input=useRef<HTMLInputElement>(null);
+  const [busy,setBusy]=useState(false);const [error,setError]=useState("");const [failed,setFailed]=useState("");const input=useRef<HTMLInputElement>(null);
   async function upload(file?:File) {
     if(!file)return;
     if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5242880){setError("Choose a JPEG, PNG or WebP image up to 5 MB.");return;}
     setBusy(true);setError("");
     const form=new FormData();form.set("file",file);
-    try{const result=await cmsFetch<{url:string}>("/api/admin/editorial/media/upload",{method:"POST",body:form});onChange(result.url);}
+    try{const result=await cmsFetch<{url:string}>("/api/admin/editorial/media/upload",{method:"POST",body:form});setFailed("");onChange(result.url);}
     catch(e){setError((e as Error).message);}finally{setBusy(false);if(input.current)input.current.value="";}
   }
   return <div className="space-y-3"><p className="text-sm font-semibold">{label}</p>
     <div className="grid aspect-[16/7] place-items-center overflow-hidden rounded-lg border border-dashed border-als-line bg-als-blue-soft">
-      {value ? <img src={value} alt={label+" preview"} className="h-full w-full object-contain"/>:<ImageIcon className="text-als-muted" size={26}/>}
+	      {value&&failed!==value ? <img src={value} alt={label+" preview"} onError={()=>setFailed(value)} className="h-full w-full object-contain"/>:<div className="grid gap-2 text-center text-xs text-als-muted"><ImageIcon className="mx-auto" size={26}/>{value?"Preview unavailable":"No image selected"}</div>}
     </div>
     <div className="flex gap-2"><Button type="button" variant="secondary" size="sm" onClick={()=>input.current?.click()} disabled={busy}><Upload size={14}/>{busy?"Uploading...":value?"Replace":"Upload"}</Button>
-    {value && <Button type="button" variant="ghost" size="icon" onClick={()=>onChange("")} aria-label="Remove image"><Trash2 size={15}/></Button>}</div>
+	    {value && <Button type="button" variant="ghost" size="icon" onClick={()=>{setFailed("");onChange("");}} aria-label="Remove image"><Trash2 size={15}/></Button>}</div>
     <input ref={input} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={e=>void upload(e.target.files?.[0])}/>
     {error && <Notice error>{error}</Notice>}
   </div>;

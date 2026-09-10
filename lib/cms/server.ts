@@ -12,7 +12,8 @@ export class CmsError extends Error {
   constructor(message: string, public status = 400) { super(message); }
 }
 export function databaseError(error: { code?: string; message?: string }) {
-  if (["42P01", "42703", "PGRST205", "PGRST200", "PGRST202", "PGRST204"].includes(error.code ?? "")) return new CmsError("The editorial database migration has not been applied yet. Run 003_editorial_cms.sql in Supabase.", 503);
+  if (["42P01", "42703", "PGRST205", "PGRST200", "PGRST202", "PGRST204"].includes(error.code ?? "")) return new CmsError("A required editorial database migration has not been applied yet.", 503);
+	if (error.code === "PGRST116") return new CmsError("Record not found.", 404);
   if (error.code === "23505") return new CmsError("That slug or profile is already in use.", 409);
   if (error.code === "23503") return new CmsError("This author, category or tag is missing or still used by a post.", 409);
   if (error.code === "40001") return new CmsError("Another editor changed this post. Reload before saving.", 409);

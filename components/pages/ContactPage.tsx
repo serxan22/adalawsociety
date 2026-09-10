@@ -19,8 +19,11 @@ export function ContactPage() {
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const values = new FormData(event.currentTarget);
+    const subject = String(values.get("subject") ?? "");
+    const body = `Name: ${String(values.get("name") ?? "")}\nEmail: ${String(values.get("email") ?? "")}\n\n${String(values.get("message") ?? "")}`;
+    window.location.href = `mailto:lawsociety@ada.edu.az?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSent(true);
-    event.currentTarget.reset();
   };
 
   return (
@@ -72,31 +75,19 @@ export function ContactPage() {
                   <EditableText contentKey="contact.socialLabel" fallback="Social media" tag="span" />
                 </h2>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  {socials.map((social) => {
-                    return social.href ? (
-                      <Link
-                        key={social.name}
-                        href={social.href}
-                        target="_blank"
-                        className="inline-flex h-10 items-center gap-2 rounded-full border border-als-line px-4 text-sm font-semibold text-als-blue transition hover:-translate-y-0.5 hover:border-als-red hover:bg-als-red/5 hover:text-als-red"
-                      >
-                        <SocialIcon name={social.name} />
-                        {social.handle ?? social.name}
-                      </Link>
-                    ) : (
-                      <span
-                        key={social.name}
-                        title={`${social.name} link pending`}
-                        className="inline-flex h-10 cursor-default items-center gap-2 rounded-full border border-dashed border-als-line px-4 text-sm font-semibold text-als-muted transition hover:-translate-y-0.5 hover:border-als-red/30 hover:text-als-blue"
-                      >
-                        <SocialIcon name={social.name} />
-                        {social.name}
-                        <span className="text-xs font-bold text-als-red">
-                          <EditableText contentKey="contact.linkPending" fallback="Link pending" tag="span" />
-                        </span>
-                      </span>
-                    );
-                  })}
+                  {socials.map((social) => (
+                    <Link
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${social.name}${social.handle ? ` ${social.handle}` : ""}`}
+                      className="inline-flex h-10 items-center gap-2 rounded-full border border-als-line px-4 text-sm font-semibold text-als-blue transition hover:-translate-y-0.5 hover:border-als-red hover:bg-als-red/5 hover:text-als-red"
+                    >
+                      <SocialIcon name={social.name} />
+                      {social.handle ?? social.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
@@ -133,13 +124,13 @@ export function ContactPage() {
               <div className="mt-5 flex flex-wrap items-center gap-4">
                 <Button type="submit" className="gap-2">
                   <Send className="h-4 w-4" />
-                  <EditableI18nText contentKey="contact.form.send" value={t.contact.send} />
+                  <EditableText contentKey="contact.form.send" fallback={t.publication.openEmail} tag="span" />
                 </Button>
                 {sent ? (
                   <p className="text-sm font-semibold text-als-red">
                     <EditableText
                       contentKey="contact.form.sentMessage"
-                      fallback="Your message is ready for a future backend connection."
+                      fallback={t.publication.emailNote}
                       tag="span"
                     />
                   </p>

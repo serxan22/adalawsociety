@@ -2,11 +2,6 @@ export type TeamYearId = "2023-2024" | "2024-2025" | "2025-2026";
 
 export type TeamGroup = "Board" | "Event Committee" | "Marketing Committee" | "Blog Committee";
 
-export type TeamHighlight = {
-  title: string;
-  text: string;
-};
-
 export type TeamMember = {
   id: string;
   name: string;
@@ -25,12 +20,11 @@ export type TeamYear = {
   year: TeamYearId;
   title: string;
   intro: string;
-  yearStory: string;
-  highlights: TeamHighlight[];
   members: TeamMember[];
 };
 
 export type TeamPeriodMember = {
+	  id: string;
   role: string;
   name: string;
 };
@@ -54,24 +48,24 @@ export const earlyTeamPeriods: TeamPeriod[] = [
   {
     period: "2019-2022",
     title: "ALS Team 2019-2022",
-    description: "Founding-era ALS leadership records provided for the public team archive.",
+    description: "Founding-era leadership of ADA Law Society.",
     members: [
-      { role: "President", name: "Elgun Ganizada" },
-      { role: "Vice President", name: "Anvar Yagubov" },
-      { role: "Vice President", name: "Aykhan Dadashov" },
+	      { id: "2019-2022-elgun-ganizada-president", role: "President", name: "Elgun Ganizada" },
+	      { id: "2019-2022-anvar-yagubov-vice-president", role: "Vice President", name: "Anvar Yagubov" },
+	      { id: "2019-2022-aykhan-dadashov-vice-president", role: "Vice President", name: "Aykhan Dadashov" },
     ],
   },
   {
     period: "2022/2023",
     title: "ALS Team 2022/2023",
-    description: "Early ALS leadership and event planning records provided for the public team archive.",
+    description: "ALS leadership and event-planning team for the 2022/2023 term.",
     members: [
-      { role: "President", name: "Elgun Ganizada" },
-      { role: "Vice President", name: "Anvar Yagubov" },
-      { role: "Vice President", name: "Aykhan Dadashov" },
-      { role: "Event Planner", name: "Afsan Kazimov" },
-      { role: "Event Planner", name: "Jala Nabiyeva" },
-      { role: "Event Planner", name: "Nilgun Mammadli" },
+	      { id: "2022-2023-elgun-ganizada-president", role: "President", name: "Elgun Ganizada" },
+	      { id: "2022-2023-anvar-yagubov-vice-president", role: "Vice President", name: "Anvar Yagubov" },
+	      { id: "2022-2023-aykhan-dadashov-vice-president", role: "Vice President", name: "Aykhan Dadashov" },
+	      { id: "2022-2023-afsan-kazimov-event-planner", role: "Event Planner", name: "Afsan Kazimov" },
+	      { id: "2022-2023-jala-nabiyeva-event-planner", role: "Event Planner", name: "Jala Nabiyeva" },
+	      { id: "2022-2023-nilgun-mammadli-event-planner", role: "Event Planner", name: "Nilgun Mammadli" },
     ],
   },
 ];
@@ -295,26 +289,6 @@ export const teamYears: TeamYear[] = [
     title: "ALS Team 2025-2026",
     intro:
       "Meet the current ALS student leaders coordinating board work, events, marketing, and blog activity for the 2025-2026 term.",
-    yearStory:
-      "The 2025-2026 team represents the current ALS leadership structure, with named board members and committees supporting events, moot court and debate activity, marketing, web presence, interviewing, and legal writing.",
-    highlights: [
-      {
-        title: "Focus of the term",
-        text: "Current leadership for the 2025-2026 ALS term across board, event, marketing, and blog committees.",
-      },
-      {
-        title: "Team structure",
-        text: "Board, Event Committee, Marketing Committee, and Blog Committee with roles provided by ALS.",
-      },
-      {
-        title: "Main activity areas",
-        text: "Event planning, moot court and debate support, legal writing, marketing, design, interviewing, web, finance, and administration.",
-      },
-      {
-        title: "Archive note",
-        text: "Names and roles are provided. Photos and personal profile links can be added after official confirmation.",
-      },
-    ],
     members: makeMembers("2025-2026", team2025Members),
   },
   {
@@ -322,26 +296,6 @@ export const teamYears: TeamYear[] = [
     title: "ALS Team 2024-2025",
     intro:
       "A previous leadership archive for the ALS board and committees serving during the 2024-2025 term.",
-    yearStory:
-      "The 2024-2025 archive preserves the provided ALS leadership and committee structure for the previous term, keeping the public record clear while leaving photos and profile links ready for future official additions.",
-    highlights: [
-      {
-        title: "Focus of the term",
-        text: "Previous leadership archive for ALS board, event, marketing, and blog committee roles.",
-      },
-      {
-        title: "Team structure",
-        text: "Board, Event Committee, Marketing Committee, and Blog Committee organized as an official archive.",
-      },
-      {
-        title: "Main activity areas",
-        text: "Events, debate activity, logistics, marketing, design, interviewing, blog editing, finance, and administration.",
-      },
-      {
-        title: "Archive note",
-        text: "Names and roles are provided. Photos and personal profile links can be added after official confirmation.",
-      },
-    ],
     members: makeMembers("2024-2025", team2024Members),
   },
   {
@@ -349,26 +303,6 @@ export const teamYears: TeamYear[] = [
     title: "ALS Team 2023-2024",
     intro:
       "A leadership archive for the ALS board and student committees serving during the 2023-2024 term.",
-    yearStory:
-      "The 2023-2024 archive records the provided ALS leadership, marketing and design, blog editorial, and events roles for the term while keeping photos and profile links ready for future official additions.",
-    highlights: [
-      {
-        title: "Focus of the term",
-        text: "Previous leadership archive for ALS board, marketing and design, blog editorial, and events roles.",
-      },
-      {
-        title: "Team structure",
-        text: "Board leadership supported by marketing and design, blog editorial, and events contributors.",
-      },
-      {
-        title: "Main activity areas",
-        text: "Leadership, administration, marketing, design, blog editing, editorial support, events, and student community work.",
-      },
-      {
-        title: "Archive note",
-        text: "Names and roles are provided. Photos and personal profile links can be added after official confirmation.",
-      },
-    ],
     members: makeMembers("2023-2024", team2023Members),
   },
 ];

@@ -6,7 +6,6 @@ import { ContentPagination } from "@/components/cms/ContentPagination";
 
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
-  ArrowRight,
   CheckCircle2,
   FileText,
   Library,

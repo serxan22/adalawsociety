@@ -23,12 +23,16 @@ import { EditableText } from "@/components/cms/EditableText";
 import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import { EditableImage } from "@/components/cms/EditableImage";
 import { FallbackImage } from "@/components/ui/FallbackImage";
+import { MemberAvatar } from "@/components/team/MemberAvatar";
+import type { Article } from "@/data/articles";
+import type { NewsItem } from "@/data/news";
+import type { GalleryItem } from "@/lib/cms/gallery-types";
 import { Badge } from "@/components/ui/badge";
 import { competitions } from "@/data/competitions";
 import { socials } from "@/data/socials";
 import { teamYears } from "@/data/team";
 
-export function HomePage() {
+export function HomePage({ featuredArticles, featuredNews, galleryItems }: { featuredArticles: Article[]; featuredNews: NewsItem[]; galleryItems: GalleryItem[] }) {
   const { t } = useI18n();
   const currentTeam = teamYears.find((team) => team.year === "2025-2026") || teamYears[0];
   const marqueeWords = [
@@ -164,8 +168,8 @@ export function HomePage() {
         </div>
       </section>
 
-      <FeaturedNews />
-      <FeaturedBlog />
+      <FeaturedNews items={featuredNews} />
+      <FeaturedBlog items={featuredArticles} />
 
       <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
         <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
@@ -228,12 +232,7 @@ export function HomePage() {
             {currentTeam.members.slice(0, 4).map((member, index) => (
               <Reveal key={`${member.role}-${index}`} delay={index * 0.05}>
                 <article className="overflow-hidden rounded-lg border border-als-line bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-als-blue/10">
-                  <FallbackImage
-                    src={member.image}
-                    alt={member.name}
-                    label={member.role}
-                    className="h-56 rounded-none border-0"
-                  />
+                  <MemberAvatar id={member.id} name={member.name} image={member.image} />
                   <div className="p-4">
                     <h3 className="font-bold text-als-blue">{member.name}</h3>
                     <p className="mt-1 text-sm font-semibold text-als-red">{member.role}</p>
@@ -245,29 +244,25 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
-        <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
-        <div className="container-wide">
-          <SectionHeading
-            title={<EditableI18nText contentKey="home.moments.title" value={t.home.momentsTitle} />}
-            text={<EditableI18nText contentKey="home.moments.text" value={t.home.momentsText} />}
-            align="center"
-            className="[&_h2]:text-white [&_p]:text-white/[0.74]"
-          />
-          <div className="mt-12 grid gap-4 md:grid-cols-4">
-            {["gallery-1", "gallery-2", "gallery-3", "gallery-4"].map((name, index) => (
-              <Reveal key={name} delay={index * 0.04}>
-                <FallbackImage
-                  src={`/images/placeholders/${name}.jpg`}
-                  alt={`ALS event moment ${index + 1}`}
-                  label="ALS Moments"
-                  className={index % 2 === 0 ? "aspect-[4/5]" : "aspect-[4/3]"}
-                />
-              </Reveal>
-            ))}
+      {galleryItems.length > 0 && (
+        <section className="section-y relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] text-white">
+          <div className="absolute inset-0 hero-grid opacity-[0.12]" aria-hidden="true" />
+          <div className="container-wide">
+            <SectionHeading title={<EditableI18nText contentKey="home.moments.title" value={t.home.momentsTitle} />} text={<EditableI18nText contentKey="home.moments.text" value={t.home.momentsText} />} align="center" className="[&_h2]:text-white [&_p]:text-white/[0.74]" />
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {galleryItems.slice(0,4).map((item,index) => (
+                <Reveal key={item.id} delay={index * 0.04}>
+                  <Link href="/gallery" className="block overflow-hidden rounded-lg border border-white/15 bg-white/5 transition hover:-translate-y-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={item.image_url} alt={item.alt_text || t.publication.imageAlt} className="aspect-[4/3] w-full object-cover" />
+                    {item.caption && <span className="block px-4 py-3 text-sm font-semibold text-white">{item.caption}</span>}
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-16">
         <div className="container-wide">
@@ -287,28 +282,18 @@ export function HomePage() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  {socials.map((social) => {
-                    return social.href ? (
-                      <Link
-                        key={social.name}
-                        href={social.href}
-                        target="_blank"
-                        className="inline-flex h-12 items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-als-red hover:bg-als-red"
-                      >
-                        <SocialIcon name={social.name} />
-                        {social.handle ?? social.name}
-                      </Link>
-                    ) : (
-                      <span
-                        key={social.name}
-                        title={`${social.name} link pending`}
-                        className="inline-flex h-12 cursor-default items-center gap-2 rounded-full border border-dashed border-white/15 bg-white/[0.04] px-5 text-sm font-semibold text-white/65 transition hover:-translate-y-0.5 hover:border-white/30 hover:text-white"
-                      >
-                        <SocialIcon name={social.name} />
-                        {social.name}
-                      </span>
-                    );
-                  })}
+                  {socials.map((social) => (
+                    <Link
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex h-12 items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-als-red hover:bg-als-red"
+                    >
+                      <SocialIcon name={social.name} />
+                      {social.handle ?? social.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>

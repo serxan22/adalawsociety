@@ -19,16 +19,7 @@ type Comment = {
   replies: Comment[];
 };
 
-const initialComments: Comment[] = [
-  {
-    id: 1,
-    author: "Student Contributor",
-    text: "The summary-first workflow makes the argument much easier to evaluate before the article grows too long.",
-    likes: 4,
-    liked: false,
-    replies: [],
-  },
-];
+const initialComments: Comment[] = [];
 
 export function CommentSection() {
   const { t } = useI18n();

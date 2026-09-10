@@ -1,34 +1,12 @@
-import { redirect } from "next/navigation";
-import { getAdminSession } from "@/lib/admin/auth";
-
-export const dynamic = "force-dynamic";
-
-export default async function AdminContentPage() {
-  const session = await getAdminSession();
-  if (!session) redirect("/admin/login?error=login-required");
-
-  return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#0a0a0f",
-        color: "#fff",
-        padding: "48px 32px",
-      }}
-    >
-      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-        <a href="/admin" style={{ color: "#888", fontSize: "14px", textDecoration: "none" }}>
-          ← Back
-        </a>
-        <h1 style={{ fontSize: "26px", fontWeight: 700, margin: "16px 0 12px" }}>
-          Edit Content
-        </h1>
-        <p style={{ color: "#888", lineHeight: 1.7, maxWidth: "620px" }}>
-          You are signed in as {session.email}. This protected page is ready for the future
-          content editor. Public page editing should save changes through server actions or API
-          routes that check this admin session before writing to Supabase.
-        </p>
-      </div>
-    </main>
-  );
+import Link from "next/link";
+import {ExternalLink} from "lucide-react";
+import {CmsShell} from "@/components/admin/CmsShell";
+import {buttonVariants} from "@/components/ui/button";
+import {requireCmsPage} from "@/lib/cms/server";
+import {canManageAdmins} from "@/lib/admin/auth";
+import {redirect} from "next/navigation";
+export const dynamic="force-dynamic";
+export default async function AdminContentPage(){
+ const session=await requireCmsPage();if(!canManageAdmins(session.role))redirect("/admin?error=not-authorized");
+ return <CmsShell title="Site content" active="/admin/content"><div className="max-w-2xl rounded-lg border border-als-line bg-white p-6 shadow-sm"><h2 className="text-lg font-bold text-als-ink">Inline page content</h2><p className="mt-3 text-sm leading-7 text-als-muted">Open the public website and use the pencil control to edit approved page copy and images. Blog, News, Gallery, and ALS Team media are managed from their dedicated sections.</p><Link href="/" className={buttonVariants({className:"mt-5"})}><ExternalLink size={16}/>Open website editor</Link></div></CmsShell>;
 }

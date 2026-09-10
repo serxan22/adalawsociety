@@ -1,273 +1,70 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- Gallery files come from permission-checked media routes. */
+import {Camera,ChevronLeft,ChevronRight,ImageOff,X,ZoomIn} from "lucide-react";
+import {AnimatePresence,motion} from "framer-motion";
+import {useCallback,useEffect,useRef,useState} from "react";
+import {useI18n} from "@/components/providers/LanguageProvider";
+import {Reveal} from "@/components/site/Reveal";
+import {Badge} from "@/components/ui/badge";
+import {PublicLibraryState} from "@/components/cms/PublicLibraryState";
+import type {GalleryItem,GalleryResult} from "@/lib/cms/gallery-types";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { Camera, ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
-import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
-import { Reveal } from "@/components/site/Reveal";
-import { Badge } from "@/components/ui/badge";
-import { EditableImage } from "@/components/cms/EditableImage";
-import { EditableText } from "@/components/cms/EditableText";
-import { useContent } from "@/lib/content/ContentContext";
-import { cn } from "@/lib/utils";
-
-const ASPECTS = ["aspect-[3/4]", "aspect-square", "aspect-[4/5]", "aspect-[2/3]", "aspect-[5/4]"];
-
-const galleryImages = [
-  {
-    key: "gallery.image.1",
-    fallback: "/images/placeholders/gallery-1.jpg",
-    captionKey: "gallery.caption.1",
-    caption: "Moot Court Finals Night",
-  },
-  {
-    key: "gallery.image.2",
-    fallback: "/images/placeholders/gallery-2.jpg",
-    captionKey: "gallery.caption.2",
-    caption: "Legal Talks Series",
-  },
-  {
-    key: "gallery.image.3",
-    fallback: "/images/placeholders/gallery-3.jpg",
-    captionKey: "gallery.caption.3",
-    caption: "Debate Championship",
-  },
-  {
-    key: "gallery.image.4",
-    fallback: "/images/placeholders/gallery-4.jpg",
-    captionKey: "gallery.caption.4",
-    caption: "Academic Excursion",
-  },
-  {
-    key: "gallery.image.5",
-    fallback: "/images/placeholders/event-1.jpg",
-    captionKey: "gallery.caption.5",
-    caption: "Orientation Week",
-  },
-  {
-    key: "gallery.image.6",
-    fallback: "/images/placeholders/event-2.jpg",
-    captionKey: "gallery.caption.6",
-    caption: "Blog Editorial Meeting",
-  },
-  {
-    key: "gallery.image.7",
-    fallback: "/images/placeholders/event-3.jpg",
-    captionKey: "gallery.caption.7",
-    caption: "Guest Lecture",
-  },
-  {
-    key: "gallery.image.8",
-    fallback: "/images/placeholders/event-4.jpg",
-    captionKey: "gallery.caption.8",
-    caption: "Team Building Retreat",
-  },
-  {
-    key: "gallery.image.9",
-    fallback: "/images/placeholders/event-5.jpg",
-    captionKey: "gallery.caption.9",
-    caption: "Networking Night",
-  },
-  {
-    key: "gallery.image.10",
-    fallback: "/images/placeholders/event-6.jpg",
-    captionKey: "gallery.caption.10",
-    caption: "Graduation Ceremony",
-  },
-] as const;
-
-export function GalleryPage() {
-  const { editMode, isSuperAdmin, getValue } = useContent();
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const editing = editMode && isSuperAdmin;
-
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
-  const showPrev = useCallback(
-    () =>
-      setLightboxIndex((current) =>
-        current === null ? null : (current - 1 + galleryImages.length) % galleryImages.length,
-      ),
-    [],
-  );
-  const showNext = useCallback(
-    () => setLightboxIndex((current) => (current === null ? null : (current + 1) % galleryImages.length)),
-    [],
-  );
-
-  useEffect(() => {
-    if (lightboxIndex === null) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeLightbox();
-      if (event.key === "ArrowLeft") showPrev();
-      if (event.key === "ArrowRight") showNext();
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [lightboxIndex, closeLightbox, showPrev, showNext]);
-
-  const activeImage = lightboxIndex === null ? null : galleryImages[lightboxIndex];
-
-  return (
-    <>
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-18 text-white md:py-22">
-        <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true" />
-        <div className="container-wide relative text-center">
-          <Reveal className="mx-auto max-w-4xl">
-            <Badge variant="light" className="mx-auto gap-2">
-              <Camera className="h-4 w-4" aria-hidden="true" />
-              <EditableText contentKey="gallery.eyebrow" fallback="ALS Moments" tag="span" />
-            </Badge>
-            <h1 className="mt-6 text-balance text-4xl font-black leading-tight md:text-6xl">
-              <EditableText contentKey="gallery.title" fallback="Gallery" tag="span" />
-            </h1>
-            <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/78 md:text-lg">
-              <EditableText
-                contentKey="gallery.intro"
-                fallback="A living record of debates, moot courts, talks, and community moments from ADA Law Society."
-                tag="span"
-              />
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="section-y bg-gradient-to-br from-[#3F6076] to-[#2F4C60]">
-        <div className="container-wide">
-          <div className="columns-1 gap-5 sm:columns-2 lg:columns-3 xl:columns-4">
-            {galleryImages.map((item, index) => (
-              <Reveal key={item.key} delay={index * 0.05} className="mb-5 break-inside-avoid">
-                <div
-                  className={cn(
-                    "group relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] shadow-[0_18px_50px_rgba(16,24,40,0.14)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_26px_70px_rgba(16,24,40,0.22)]",
-                    ASPECTS[index % ASPECTS.length],
-                    !editing && "cursor-zoom-in",
-                  )}
-                  onClick={!editing ? () => setLightboxIndex(index) : undefined}
-                  role={!editing ? "button" : undefined}
-                  tabIndex={!editing ? 0 : undefined}
-                  onKeyDown={
-                    !editing
-                      ? (event) => {
-                          if (event.key === "Enter" || event.key === " ") {
-                            event.preventDefault();
-                            setLightboxIndex(index);
-                          }
-                        }
-                      : undefined
-                  }
-                >
-                  <EditableImage
-                    contentKey={item.key}
-                    fallback={item.fallback}
-                    alt={item.caption}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="transition duration-500 group-hover:scale-105"
-                  />
-                  {!editing ? (
-                    <>
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 transition duration-300 group-hover:opacity-100" />
-                      <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-3 p-4 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                        <p className="text-sm font-bold text-white">
-                          <EditableText contentKey={item.captionKey} fallback={item.caption} tag="span" />
-                        </p>
-                      </div>
-                      <div className="pointer-events-none absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full border border-white/25 bg-black/30 text-white opacity-0 backdrop-blur transition duration-300 group-hover:opacity-100">
-                        <ZoomIn className="h-4 w-4" aria-hidden="true" />
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <AnimatePresence>
-        {activeImage ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/92 backdrop-blur-sm"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Gallery image viewer"
-            onClick={closeLightbox}
-          >
-            <button
-              type="button"
-              onClick={closeLightbox}
-              aria-label="Close"
-              className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-white/40 hover:bg-white/20"
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-            </button>
-
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                showPrev();
-              }}
-              aria-label="Previous image"
-              className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-white/40 hover:bg-white/20 md:left-6"
-            >
-              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-            </button>
-
-            <motion.div
-              key={lightboxIndex}
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-              className="relative mx-14 flex max-h-[80vh] w-full max-w-4xl flex-col items-center gap-4 md:mx-24"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="relative h-[65vh] w-full overflow-hidden rounded-lg border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
-                <Image
-                  src={getValue(activeImage.key, activeImage.fallback)}
-                  alt={activeImage.caption}
-                  fill
-                  style={{ objectFit: "contain" }}
-                  sizes="(max-width: 768px) 90vw, 70vw"
-                />
-              </div>
-              <div className="flex items-center gap-3 text-center">
-                <p className="text-sm font-semibold text-white/85">
-                  <EditableText contentKey={activeImage.captionKey} fallback={activeImage.caption} tag="span" />
-                </p>
-                <span className="h-1 w-1 rounded-full bg-white/40" aria-hidden="true" />
-                <p className="text-xs font-medium text-white/50">
-                  {lightboxIndex! + 1} / {galleryImages.length}
-                </p>
-              </div>
-            </motion.div>
-
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                showNext();
-              }}
-              aria-label="Next image"
-              className="absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-white/40 hover:bg-white/20 md:right-6"
-            >
-              <ChevronRight className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-    </>
-  );
+export function GalleryPage({initial}:{initial:GalleryResult}){
+ const {t}=useI18n();const copy=t.publication;
+ const [active,setActive]=useState<number|null>(null);const [failed,setFailed]=useState<Set<string>>(new Set());
+ const close=useCallback(()=>setActive(null),[]);
+ const previous=useCallback(()=>setActive(i=>i===null?null:(i-1+initial.items.length)%initial.items.length),[initial.items.length]);
+ const next=useCallback(()=>setActive(i=>i===null?null:(i+1)%initial.items.length),[initial.items.length]);
+ const markFailed=(id:string)=>setFailed(current=>new Set(current).add(id));
+ return <>
+  <section className="relative overflow-hidden bg-gradient-to-br from-[#3F6076] to-[#2F4C60] py-16 text-white md:py-20">
+   <div className="absolute inset-0 hero-grid opacity-[0.14]" aria-hidden="true"/>
+   <div className="container-wide relative text-center"><Reveal className="mx-auto max-w-4xl">
+    <Badge variant="light" className="mx-auto gap-2"><Camera size={16}/>{copy.gallery}</Badge>
+    <h1 className="mt-6 text-4xl font-black md:text-6xl">{copy.gallery}</h1>
+    <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/80 md:text-lg">{copy.galleryIntro}</p>
+   </Reveal></div>
+  </section>
+  <section className="min-h-[28rem] bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-20 pt-6">
+   <div className="container-wide">
+    {initial.items.length===0?<PublicLibraryState kind="gallery" unavailable={initial.unavailable}/>:
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+     {initial.items.map((item,index)=><Reveal key={item.id} delay={Math.min(index,8)*0.04}>
+      <button type="button" onClick={()=>setActive(index)} aria-label={copy.viewImage+(item.caption?": "+item.caption:"")} className="group block w-full overflow-hidden rounded-lg border border-white/15 bg-white/5 text-left shadow-lg transition hover:-translate-y-1 hover:border-white/30">
+       <span className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-[#2F4C60]">
+        {!failed.has(item.id)?<img src={item.image_url} alt={item.alt_text||copy.imageAlt} onError={()=>markFailed(item.id)} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" loading="lazy"/>:
+        <span className="grid gap-2 text-center text-sm text-white/70"><ImageOff className="mx-auto"/>{copy.imageError}</span>}
+        <span className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-black/40 text-white opacity-0 backdrop-blur transition group-hover:opacity-100"><ZoomIn size={17}/></span>
+       </span>
+       {item.caption&&<span className="block px-4 py-3 text-sm font-semibold text-white">{item.caption}</span>}
+      </button>
+     </Reveal>)}
+    </div>}
+   </div>
+  </section>
+  <AnimatePresence>{active!==null&&initial.items[active]&&<Lightbox item={initial.items[active]} position={active} total={initial.items.length} failed={failed.has(initial.items[active].id)} onFail={()=>markFailed(initial.items[active].id)} onClose={close} onPrevious={previous} onNext={next}/>}</AnimatePresence>
+ </>;
+}
+function Lightbox({item,position,total,failed,onFail,onClose,onPrevious,onNext}:{item:GalleryItem;position:number;total:number;failed:boolean;onFail:()=>void;onClose:()=>void;onPrevious:()=>void;onNext:()=>void}){
+ const {t}=useI18n();const c=t.publication;const dialog=useRef<HTMLDialogElement>(null);const closeButton=useRef<HTMLButtonElement>(null);
+	 useEffect(()=>{
+	  const previousFocus=document.activeElement as HTMLElement|null;const element=dialog.current;element?.showModal();closeButton.current?.focus();
+  const key=(event:KeyboardEvent)=>{if(event.key==="ArrowLeft")onPrevious();if(event.key==="ArrowRight")onNext();};
+  document.addEventListener("keydown",key);document.body.style.overflow="hidden";
+	  return()=>{document.removeEventListener("keydown",key);document.body.style.overflow="";element?.close();previousFocus?.focus();};
+ },[onNext,onPrevious]);
+ return <dialog ref={dialog} aria-label={c.gallery} onCancel={event=>{event.preventDefault();onClose();}} onClick={event=>{if(event.target===event.currentTarget)onClose();}} className="fixed inset-0 m-auto h-dvh w-screen max-w-none overflow-hidden bg-black/90 p-0 text-white backdrop:bg-black/90">
+  <motion.div initial={{opacity:0,scale:.98}} animate={{opacity:1,scale:1}} exit={{opacity:0,scale:.98}} className="flex h-full flex-col p-3 sm:p-6" onClick={event=>event.stopPropagation()}>
+   <div className="flex items-center justify-between gap-4 pb-3">
+    <p className="truncate text-sm font-semibold">{item.caption||c.imageAlt} <span className="ml-2 text-white/55">{position+1} / {total}</span></p>
+    <button ref={closeButton} type="button" onClick={onClose} aria-label={c.close} className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 bg-white/10 hover:bg-white/20"><X/></button>
+   </div>
+   <div className="relative min-h-0 flex-1">
+    {failed?<div className="grid h-full place-items-center text-center text-white/70"><div><ImageOff className="mx-auto mb-3"/><p>{c.imageError}</p></div></div>:
+    <img src={item.image_url} alt={item.alt_text||c.imageAlt} onError={onFail} className="h-full w-full object-contain"/>}
+    {total>1&&<><button type="button" onClick={onPrevious} aria-label={c.previous} className="absolute left-1 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-black/45 hover:bg-black/70 sm:left-3"><ChevronLeft/></button>
+    <button type="button" onClick={onNext} aria-label={c.next} className="absolute right-1 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-black/45 hover:bg-black/70 sm:right-3"><ChevronRight/></button></>}
+   </div>
+  </motion.div>
+ </dialog>;
 }

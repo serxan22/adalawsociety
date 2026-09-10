@@ -44,28 +44,18 @@ export function Footer() {
               <EditableI18nText contentKey="footer.description" value={t.footer.description} />
             </p>
             <div className="flex flex-wrap gap-3">
-              {socials.map((social) => {
-                return social.href ? (
-                  <Link
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    aria-label={`${social.name}${social.handle ? ` ${social.handle}` : ""}`}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.08] text-white transition hover:-translate-y-0.5 hover:border-als-red hover:bg-als-red"
-                  >
-                    <SocialIcon name={social.name} />
-                  </Link>
-                ) : (
-                  <span
-                    key={social.name}
-                    aria-label={`${social.name} link pending`}
-                    title={`${social.name} link pending`}
-                    className="flex h-10 w-10 cursor-default items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/55 transition hover:-translate-y-0.5 hover:border-white/25 hover:text-white/80"
-                  >
-                    <SocialIcon name={social.name} />
-                  </span>
-                );
-              })}
+              {socials.map((social) => (
+                <Link
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${social.name}${social.handle ? ` ${social.handle}` : ""}`}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.08] text-white transition hover:-translate-y-0.5 hover:border-als-red hover:bg-als-red"
+                >
+                  <SocialIcon name={social.name} />
+                </Link>
+              ))}
             </div>
           </div>
 

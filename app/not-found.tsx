@@ -7,8 +7,7 @@ export default function NotFound() {
         <p className="text-sm font-semibold uppercase text-als-red">404</p>
         <h1 className="mt-4 text-4xl font-bold text-white">Page not found</h1>
         <p className="mx-auto mt-4 max-w-xl text-white/75">
-          The page you are looking for may have moved, or the mock data entry has not been
-          created yet.
+          The page you are looking for may have moved or is no longer available.
         </p>
         <Link
           href="/"

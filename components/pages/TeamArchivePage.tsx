@@ -5,6 +5,7 @@ import { ArrowRight, History, UsersRound } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import { Badge } from "@/components/ui/badge";
 import { EditableText } from "@/components/cms/EditableText";
+import { MemberAvatar } from "@/components/team/MemberAvatar";
 import { earlyTeamPeriods, teamArchiveYears, getTeamYear } from "@/data/team";
 
 export function TeamArchivePage() {
@@ -48,7 +49,7 @@ export function TeamArchivePage() {
             <p className="mt-4 text-sm leading-7 text-white/74 md:text-base">
               <EditableText
                 contentKey="team.archive.early.text"
-                fallback="Names and roles below are listed exactly from the provided ALS team records."
+	                fallback="Explore the society's early leadership periods and the students who served in each role."
                 tag="span"
               />
             </p>
@@ -81,8 +82,9 @@ export function TeamArchivePage() {
                     {period.members.map((member) => (
                       <div
                         key={`${period.period}-${member.role}-${member.name}`}
-                        className="grid gap-1 px-6 py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-5"
+	                        className="grid grid-cols-[3.5rem_minmax(0,1fr)] items-center gap-4 px-6 py-4 sm:grid-cols-[3.5rem_11rem_minmax(0,1fr)] sm:gap-5"
                       >
+	                      <MemberAvatar id={member.id} name={member.name} compact />
                         <span className="text-xs font-black uppercase tracking-[0.14em] text-als-muted">
                           {member.role}
                         </span>

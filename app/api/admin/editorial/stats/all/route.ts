@@ -18,6 +18,17 @@ export async function GET() {
       published.push(...(results[4].data??[]).map(r=>normalizePost(r as unknown as Record<string,unknown>,kind)));
     }
     totals.total=totals.published+totals.draft+totals.unpublished;
-    return cmsResponse({totals,recent:recent.sort((a,b)=>b.created_at.localeCompare(a.created_at)).slice(0,5),published:published.sort((a,b)=>(b.published_at??"").localeCompare(a.published_at??"")).slice(0,5)});
+    const extra=await Promise.all([
+      db.from("authors").select("id",{count:"exact",head:true}),
+      db.from("gallery_items").select("id",{count:"exact",head:true}),
+      db.from("team_member_photos").select("member_key",{count:"exact",head:true}),
+    ]);
+    const optionalCount=(result:typeof extra[number])=>{
+      if(!result.error)return result.count??0;
+      if(["42P01","PGRST205"].includes(result.error.code??""))return 0;
+      throw databaseError(result.error);
+    };
+    const assets={authors:optionalCount(extra[0]),gallery:optionalCount(extra[1]),teamPhotos:optionalCount(extra[2])};
+    return cmsResponse({totals,assets,recent:recent.sort((a,b)=>b.created_at.localeCompare(a.created_at)).slice(0,5),published:published.sort((a,b)=>(b.published_at??"").localeCompare(a.published_at??"")).slice(0,5)});
   }catch(e){return cmsFailure(e);}
 }

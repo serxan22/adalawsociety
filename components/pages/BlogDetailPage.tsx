@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { RichTextRenderer } from "@/components/cms/RichTextRenderer";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, Bookmark, CalendarDays, Heart, UserRound } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { ArrowLeft, CalendarDays, UserRound } from "lucide-react";
 import { ArticleCard } from "@/components/blog/ArticleCard";
-import { CommentSection } from "@/components/blog/CommentSection";
 import { useI18n } from "@/components/providers/LanguageProvider";
 import { Reveal, SectionHeading } from "@/components/site/Reveal";
 import { Badge } from "@/components/ui/badge";
@@ -14,21 +11,14 @@ import { FallbackImage } from "@/components/ui/FallbackImage";
 import { EditableText } from "@/components/cms/EditableText";
 import { EditableI18nText } from "@/components/cms/EditableI18nText";
 import type { Article } from "@/data/articles";
-import { formatCount, formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 
-export function BlogDetailPage({
-  article,
-  related,
-  preview = false,
-}: {
+export function BlogDetailPage({ article, related }: {
   article: Article;
   related: Article[];
   preview?: boolean;
 }) {
   const { t } = useI18n();
-  const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
-
   return (
     <>
       <article className="bg-als-blue-dark">
@@ -120,7 +110,6 @@ export function BlogDetailPage({
                 </ol>
               </section>
 
-              {!preview && <CommentSection />}
             </div>
 
             <aside className="lg:sticky lg:top-28 lg:self-start">
@@ -139,22 +128,7 @@ export function BlogDetailPage({
                 </div>
                 {article.author.bio && <p className="mt-4 text-sm leading-6 text-als-muted">{article.author.bio}</p>}
                 {article.author.socialLinks && <div className="mt-3 flex flex-wrap gap-2">{Object.entries(article.author.socialLinks).map(([label,url])=><a key={label} href={url} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-als-red">{label}</a>)}</div>}
-                <div className="mt-5 grid grid-cols-2 gap-2">
-                  <DetailAction
-                    active={liked}
-                    label={t.blog.like}
-                    count={article.likes + (liked ? 1 : 0)}
-                    onClick={() => setLiked((value) => !value)}
-                    icon={<Heart className="h-4 w-4" fill={liked ? "currentColor" : "none"} />}
-                  />
-                  <DetailAction
-                    active={saved}
-                    label={saved ? t.blog.saved : t.blog.save}
-                    count={article.saves + (saved ? 1 : 0)}
-                    onClick={() => setSaved((value) => !value)}
-                    icon={<Bookmark className="h-4 w-4" fill={saved ? "currentColor" : "none"} />}
-                  />
-                </div>
+
               </div>
             </aside>
           </div>
@@ -177,43 +151,5 @@ export function BlogDetailPage({
         </section>
       ) : null}
     </>
-  );
-}
-
-function DetailAction({
-  active,
-  label,
-  count,
-  icon,
-  onClick,
-}: {
-  active: boolean;
-  label: string;
-  count: number;
-  icon: ReactNode;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="relative inline-flex h-11 items-center justify-center gap-2 rounded-full border border-als-line px-4 text-sm font-semibold text-als-blue transition hover:border-als-red/40"
-    >
-      <AnimatePresence>
-        {active ? (
-          <motion.span
-            aria-hidden="true"
-            initial={{ scale: 0.5, opacity: 0.5 }}
-            animate={{ scale: 1.7, opacity: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="absolute inset-0 rounded-full bg-als-red/20"
-          />
-        ) : null}
-      </AnimatePresence>
-      <span className={active ? "text-als-red" : "text-als-muted"}>{icon}</span>
-      <span className="sr-only">{label}</span>
-      <span>{formatCount(count)}</span>
-    </button>
   );
 }

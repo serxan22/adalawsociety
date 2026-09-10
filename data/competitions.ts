@@ -14,7 +14,6 @@ export type Competition = {
   }>;
   highlights: string[];
   format: string[];
-  cultureNote?: string;
 };
 
 export const competitions: Competition[] = [
@@ -67,8 +66,6 @@ export const competitions: Competition[] = [
       "Written memorials are reviewed for legal structure, citation, and clarity.",
       "Oral rounds simulate judicial questioning and reward direct, disciplined answers.",
     ],
-    cultureNote:
-      "This page describes moot court as an ALS activity area and ADA Law learning format. It does not claim ALS organized any specific external moot competition unless a verified source is added.",
   },
 ];
 

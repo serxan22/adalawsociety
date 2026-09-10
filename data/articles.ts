@@ -22,22 +22,12 @@ export type Article = {
   date: string;
   category: ArticleCategory;
   tags: string[];
-  readingTime: number;
   summary: string;
   excerpt: string;
   coverImage: string;
-  likes: number;
-  saves: number;
   citations: Citation[];
   content: string[];
 };
-
-export const articleCategories: ArticleCategory[] = [
-  "Legal Education",
-  "Human Rights",
-  "Research",
-  "Student Advocacy",
-];
 
 // Publications are loaded exclusively from Supabase. Never seed public examples.
 export const articles: Article[] = [];

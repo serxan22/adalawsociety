@@ -6,13 +6,10 @@ import { ContentPagination } from "@/components/cms/ContentPagination";
 
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
-  ArrowRight,
-  FileText,
   Newspaper,
   Plus,
   Search,
   SlidersHorizontal,
-  Sparkles,
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -99,6 +96,7 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
                   <EditableText contentKey="news.createButton" fallback="Create News" tag="span" />
                 </Link>
               ) : null}
+              {(listing.libraryTotal > 0 || filtered) && (
               <motion.div
                 className="group relative flex h-12 max-w-full items-center overflow-hidden rounded-full border border-white/35 bg-white shadow-[0_18px_45px_rgba(16,24,40,0.20)]"
                 initial={false}
@@ -146,9 +144,11 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
                   ) : null}
                 </AnimatePresence>
               </motion.div>
+              )}
             </Reveal>
           </div>
 
+          {(listing.libraryTotal > 0 || filtered) && (
           <Reveal delay={0.1}>
             <div className="mt-9 flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/12 p-3 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between">
               <div className="inline-flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-white/75">
@@ -180,6 +180,7 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
               </div>
             </div>
           </Reveal>
+          )}
         </div>
       </section>
 

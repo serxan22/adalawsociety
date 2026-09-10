@@ -58,13 +58,13 @@ function NewsThumbnail({
                 <Scale className="h-5 w-5" aria-hidden="true" />
               </div>
               <span className="rounded-full border border-als-blue/10 bg-white/80 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-als-blue">
-                <EditableText contentKey="news.card.placeholderBadge" fallback="ALS" tag="span" />
+                <EditableText contentKey="news.card.visualBadge" fallback="ALS" tag="span" />
               </span>
             </div>
             <div>
               <p className="text-xs font-semibold text-als-muted">{item.category}</p>
               <p className="mt-1 max-w-48 text-sm font-bold leading-5 text-als-blue">
-                <EditableText contentKey="news.card.placeholderTitle" fallback="ADA Law Society Update" tag="span" />
+                <EditableText contentKey="news.card.visualTitle" fallback="ADA Law Society Update" tag="span" />
               </p>
             </div>
           </div>

@@ -1,0 +1,1 @@
+import type {Metadata} from "next";import {CmsShell} from "@/components/admin/CmsShell";import {TeamManager} from "@/components/admin/TeamManager";export const dynamic="force-dynamic";export const metadata:Metadata={title:"ALS Team photos",robots:{index:false}};export default function Page(){return <CmsShell title="ALS Team" active="/admin/team"><TeamManager/></CmsShell>;}

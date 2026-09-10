@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { getSupabaseProjectUrl } from "@/lib/supabase/url";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only protect /admin routes; skip /admin/login and /auth/*.
   if (pathname.startsWith("/admin/login") || pathname.startsWith("/auth/")) {
     return NextResponse.next();
   }

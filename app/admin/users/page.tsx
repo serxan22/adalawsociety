@@ -1,11 +1,13 @@
 import { redirect } from "next/navigation";
+import { CmsShell } from "@/components/admin/CmsShell";
 import { getAdminSession, canManageAdmins } from "@/lib/admin/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Admin access", robots: { index: false, follow: false } };
 
 type AdminRow = {
-  id: string;
+  uid: string;
   email: string;
   role: "admin" | "superadmin";
   added_at: string;
@@ -17,63 +19,50 @@ export default async function AdminUsersPage() {
   if (!canManageAdmins(session.role)) redirect("/admin");
 
   const supabase = await createSupabaseServerClient();
-  const { data: admins } = await supabase
+  const { data, error } = await supabase
     .from("admins")
-    .select("*")
+    .select("uid,email,role,added_at")
     .order("added_at", { ascending: true });
-  const adminRows = (admins ?? []) as AdminRow[];
+  const admins = (data ?? []) as AdminRow[];
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#0a0a0f",
-        color: "#fff",
-        padding: "48px 32px",
-      }}
-    >
-      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-        <a href="/admin" style={{ color: "#888", fontSize: "14px", textDecoration: "none" }}>
-          ← Back
-        </a>
-        <h1 style={{ fontSize: "26px", fontWeight: 700, margin: "16px 0 32px" }}>
-          Manage Admins
-        </h1>
-
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
-          <thead>
-            <tr style={{ borderBottom: "1px solid #222", color: "#888" }}>
-              <th style={{ textAlign: "left", padding: "10px 0" }}>Email</th>
-              <th style={{ textAlign: "left", padding: "10px 0" }}>Role</th>
-              <th style={{ textAlign: "left", padding: "10px 0" }}>Added</th>
-            </tr>
-          </thead>
-          <tbody>
-            {adminRows.map((admin) => (
-              <tr key={admin.id} style={{ borderBottom: "1px solid #1a1a1a" }}>
-                <td style={{ padding: "12px 0", color: "#e5e5e5" }}>{admin.email}</td>
-                <td style={{ padding: "12px 0" }}>
-                  <span
-                    style={{
-                      background: admin.role === "superadmin" ? "#2e1065" : "#1e3a5f",
-                      color: admin.role === "superadmin" ? "#a78bfa" : "#60a5fa",
-                      padding: "2px 10px",
-                      borderRadius: "999px",
-                      fontSize: "12px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {admin.role}
-                  </span>
-                </td>
-                <td style={{ padding: "12px 0", color: "#666" }}>
-                  {new Date(admin.added_at).toLocaleDateString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <CmsShell title="Admin access" active="/admin/users">
+      <div className="space-y-5">
+        <p className="max-w-2xl text-sm leading-6 text-als-muted">
+          Accounts in the existing ALS admin allowlist can access the editorial system. Role changes remain restricted to superadmins and database policy checks.
+        </p>
+        {error ? (
+          <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+            The admin allowlist could not be loaded.
+          </p>
+        ) : (
+          <div className="overflow-x-auto rounded-lg border border-als-line bg-white">
+            <table className="w-full min-w-[34rem] text-left text-sm">
+              <thead className="border-b border-als-line bg-als-blue-soft text-xs text-als-muted">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">Email</th>
+                  <th className="px-4 py-3 font-semibold">Role</th>
+                  <th className="px-4 py-3 font-semibold">Added</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-als-line">
+                {admins.map((admin) => (
+                  <tr key={admin.uid}>
+                    <td className="px-4 py-4 font-semibold text-als-ink">{admin.email}</td>
+                    <td className="px-4 py-4">
+                      <span className={admin.role === "superadmin" ? "rounded-md bg-als-red/10 px-2 py-1 text-xs font-semibold text-als-red" : "rounded-md bg-als-blue-light px-2 py-1 text-xs font-semibold text-als-blue-dark"}>
+                        {admin.role}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 text-als-muted">{new Date(admin.added_at).toLocaleDateString("en-GB")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {admins.length === 0 && <p className="p-8 text-center text-sm text-als-muted">No admin accounts were returned.</p>}
+          </div>
+        )}
       </div>
-    </main>
+    </CmsShell>
   );
 }

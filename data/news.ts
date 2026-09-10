@@ -15,12 +15,5 @@ export type NewsItem = {
   sourceUrl?: string;
 };
 
-export const newsCategories: NewsCategory[] = [
-  "Events",
-  "Announcements",
-  "Achievements",
-  "Collaborations",
-];
-
 // Publications are loaded exclusively from Supabase. Never seed public examples.
 export const newsItems: NewsItem[] = [];

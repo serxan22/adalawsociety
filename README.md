@@ -1,167 +1,85 @@
 # ADA Law Society
 
-Professional multilingual website for ADA Law Society, a student-led law society at ADA University.
+Multilingual public website and protected editorial CMS for ADA Law Society at ADA University.
 
-Public facts currently used in the site:
+## Local development
 
-- ADA Law Society was founded in September 2019.
-- It is the first and main student organization for law students at ADA University.
-- It is based at ADA University in Baku.
-- Public handle: `@adalawsociety`.
-- Public email: `lawsociety@ada.edu.az`.
-- Slogan: `Your Gateway to the Legal World`.
+Create `.env.local` with the existing Supabase project credentials:
 
-Do not add achievements, events, members, statistics, or competition results unless they are verified by ALS or a public source.
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
 
-## Tech Stack
-
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- shadcn-style local UI primitives
-- lucide-react icons
-- Framer Motion animations
-- Lenis smooth scrolling
-- Auth and roles ready architecture for future Supabase Auth/RLS
-
-## Run Locally
+The service-role key is used only by server modules and must never be exposed with a `NEXT_PUBLIC_` prefix.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
-
-## Build
+Open `http://localhost:3000`. Production checks:
 
 ```bash
+npm run test:cms
+npx tsc --noEmit
+npm run lint
 npm run build
-npm run start
 ```
 
-## ALS Logo
+## Public content
 
-Place the official PNG logo here:
+News and Blog publications are loaded only from Supabase. The arrays in `data/news.ts` and `data/articles.ts` are intentionally empty and are not fallback publication sources. When the database contains no published records, the public pages show localized empty states and the homepage hides its featured publication sections.
+
+Only records with `status = 'published'` and a non-future `published_at` are public. Draft and unpublished records remain available only to authorized editors. Blog Authors are managed separately from ALS Team members and are never created automatically from the team directory.
+
+The ALS Team identities, year-specific roles, and committee assignments remain in `data/team.ts`. Team profile photos are separate persisted references keyed to each exact historical record.
+
+The only configured public social destination is maintained in `data/socials.ts`. Entries without a genuine URL should not be added.
+
+## Editorial administration
+
+The existing Supabase email/password session and `public.admins` allowlist protect the CMS. Both `admin` and `superadmin` roles may manage editorial content; admin access management remains restricted to `superadmin`.
 
 ```text
-public/images/als-logo.png
+/admin                 Overview
+/admin/blog            Blog publications
+/admin/news            News publications
+/admin/authors         Blog/news authors
+/admin/categories      Categories
+/admin/tags            Tags
+/admin/gallery         Gallery
+/admin/team            ALS Team profile photos
+/admin/users           Admin allowlist (superadmin only)
 ```
 
-The header and footer automatically use that file. If it is missing, the site shows a clean legal-scale fallback mark.
+Server route guards and Supabase RLS enforce authorization. Hiding a button is never treated as a security boundary.
 
-## Replace Images
+## Supabase migrations
 
-Team, event, blog, competition, and gallery images are referenced from:
+Apply migrations in order to the intended Supabase project after reviewing them:
 
-```text
-public/images/placeholders/
-```
+1. `supabase/migrations/003_editorial_cms.sql` installs the editorial schema, validation, RLS, private `editorial-images` storage bucket, and publishing functions. It requires the existing `public.admins` allowlist.
+2. `supabase/migrations/004_gallery_team_media.sql` additively installs persisted Gallery records, year-specific Team photo references, public editorial filter choices, and media visibility checks.
 
-Examples:
+Migration `004` does not delete publications, Gallery files, Team records, or stored media. The repository test suite applies `003` and `004` to an isolated PGlite database and verifies public/draft boundaries and non-admin write blocking.
 
-```text
-public/images/placeholders/event-1.jpg
-public/images/placeholders/blog-1.jpg
-public/images/placeholders/team-placeholder-1.jpg
-```
+`supabase/manual/cleanup_known_demo_content.sql` is a review-only cleanup script. It targets only the exact former example slugs and exact retired inline-content values. Do not run it against production without inspecting the matching rows and approving the operation. It unpublishes matching example posts rather than deleting them and does not target the genuine uploaded HEIC Gallery file.
 
-Missing images do not break the UI. The `FallbackImage` component renders a branded ADA Law Society visual block until real files are added.
+## Gallery and media
 
-## Edit Public Content
+New Gallery images and Team portraits use the private `editorial-images` bucket through authenticated application routes. Uploads are validated as JPEG, PNG, or WebP and limited to 5 MB in both the browser and server handler. Storage paths use generated UUIDs.
 
-Public content is structured for a future CMS or Supabase database:
+The existing genuine HEIC Gallery upload remains in the original public `site-images` bucket. The original file is never removed or rewritten. Because browser HEIC support is inconsistent, `/api/gallery/legacy/[key]` reads that exact stored object and returns an in-memory JPEG preview. Once migration `004` is applied, an editor can add accurate alt text/caption, replace the visible image, reorder it, or unpublish it while the source HEIC remains preserved.
 
-```text
-data/news.ts
-data/articles.ts
-data/team.ts
-data/competitions.ts
-data/socials.ts
-```
+Deleting a Gallery record or Team photo reference intentionally does not immediately delete its storage object, preventing accidental removal of media that may still be referenced elsewhere.
 
-Current news items are based on public ALS listings where possible. Detail text is intentionally cautious and should be replaced with official copy only after ALS confirms it.
+## Branding and translations
 
-Team entries are placeholders. Replace `To be confirmed` only with verified ALS member names, roles, photos, and links.
+The ALS logo is stored at `public/images/als-logo.png`; App Router favicon copies remain at `app/icon.png` and `app/apple-icon.png`.
 
-Blog article examples use placeholder authors. Before publishing real articles, each article must include:
-
-```ts
-summary: string
-citations: Citation[]
-content: string[]
-author
-date
-tags
-category
-```
-
-## Authorization Model
-
-This project currently implements Option B: an Auth & Roles Ready frontend preview.
-
-It does not implement production authentication yet. Do not rely on frontend-only hiding of buttons for real security.
-
-Local role preview lives here:
-
-```text
-data/current-user.ts
-```
-
-Change the mock user to test states:
-
-- `authenticated: false`: login required
-- `role: "public"`: no publishing permission
-- `role: "als_team"`: can create drafts and pending submissions
-- `role: "editor"`: can create and publish
-- `role: "admin"`: can create, publish, and manage future roles
-
-Role helpers live here:
-
-```text
-lib/auth/roles.ts
-```
-
-Helpers:
-
-```ts
-canCreateContent(role)
-canEditContent(userId, authorId, role)
-canPublish(role)
-```
-
-Dashboard preview routes:
-
-```text
-/dashboard
-/dashboard/articles
-/dashboard/news
-/dashboard/articles/new
-/dashboard/news/new
-```
-
-## Recommended Supabase Setup
-
-Future Supabase schema and RLS policies are documented here:
-
-```text
-supabase/migrations/001_roles_content.sql
-```
-
-Recommended production approach:
-
-- Use Supabase Auth for login.
-- Create a `profiles` row for every allowed ALS user.
-- Assign roles only from `public`, `als_team`, `editor`, `admin`.
-- Enforce permissions through Supabase RLS and server-side code.
-- Use server actions or API routes for content mutations.
-- Never trust frontend button visibility as the only permission layer.
-
-Allowed ALS team members should be configured by creating/updating `profiles` rows after identity is verified by ALS leadership.
-
-## Internationalization
-
-Main UI labels and page copy use simple dictionary files:
+Primary UI translations live in:
 
 ```text
 dictionaries/en.ts
@@ -169,47 +87,8 @@ dictionaries/az.ts
 dictionaries/ru.ts
 ```
 
-The language switcher stores the selected language in `localStorage`.
+The selected language is persisted in the browser. Keep equivalent visitor-facing empty and error states in all three dictionaries when adding new public UI.
 
-## Key Routes
+## Deployment
 
-```text
-/
-/about
-/news
-/news/[slug]
-/team/2023-2024
-/team/2024-2025
-/team/2025-2026
-/blog
-/blog/[slug]
-/competitions/debate
-/competitions/moot-court
-/dashboard
-/dashboard/articles
-/dashboard/news
-/dashboard/articles/new
-/dashboard/news/new
-/blog-policy
-/privacy-policy
-/terms
-/contact
-```
-
-## Deploy on Vercel
-
-This project was updated locally only. Deployment was not run.
-
-When ready:
-
-```bash
-npm install
-npm run build
-```
-
-Then import the repository into Vercel and use the default Next.js settings:
-
-- Framework Preset: `Next.js`
-- Build Command: `npm run build`
-- Output Directory: `.next`
-- Install Command: `npm install`
+No deployment is performed by local development commands. Before a release, review pending migrations and environment variables, run all checks above, and deploy through the repository's existing GitHub/Vercel workflow only after explicit approval.
