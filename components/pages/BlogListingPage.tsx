@@ -290,7 +290,7 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
                 >
                   <ArticleCard article={featuredArticle} variant="featured" />
                 </motion.div>
-              </div>}
+              </div>
 
               {articleIndex.length > 0 && <div className="mt-14 flex flex-col gap-3 border-t border-white/20 pt-10 md:flex-row md:items-end md:justify-between">
                 <div>
@@ -310,7 +310,7 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
                   )}{" "}
                   <EditableI18nText contentKey="blog.inView" value={t.blog.inView} />
                 </p>
-              </div>
+              </div>}
 
               {articleIndex.length > 0 ? (
                 <motion.div
