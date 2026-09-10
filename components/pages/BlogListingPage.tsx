@@ -1,6 +1,7 @@
 "use client";
 
 import { usePublishedContent, type PublishedResult } from "@/components/cms/usePublishedContent";
+import { PublicLibraryState } from "@/components/cms/PublicLibraryState";
 import { ContentPagination } from "@/components/cms/ContentPagination";
 
 import { AnimatePresence, motion, type Variants } from "framer-motion";
@@ -58,7 +59,8 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
   const listing = usePublishedContent("blog", initial, query, category, author);
   const authors = ["All", ...listing.authors];
   const writingStandards = t.blog.writingStandards;
-  const filteredArticles = listing.posts;
+  const filteredArticles = listing.unavailable ? [] : listing.posts;
+  const filtered = !!query.trim() || category !== "All" || author !== "All";
 
   const [featuredArticle, ...articleIndex] = filteredArticles;
   const searchExpanded = searchOpen || searchPreview || query.length > 0;
@@ -71,6 +73,8 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
 
   const clearSearch = () => {
     setQuery("");
+    setCategory("All");
+    setAuthor("All");
     setSearchOpen(false);
     setSearchPreview(false);
   };
@@ -150,7 +154,7 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
                   <EditableI18nText contentKey="blog.authorDocumentsText" value={t.blog.authorDocumentsText} />
                 </p>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3">
                 <Link
                   href="/blog-policy"
                   className="group flex h-full items-start gap-4 rounded-2xl border border-als-line bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-als-red/35 hover:bg-als-red/5"
@@ -167,25 +171,14 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
                     </span>
                   </span>
                 </Link>
-                <div className="flex h-full items-start gap-4 rounded-2xl border border-dashed border-als-line bg-[#fbfcfe] p-5 text-als-muted shadow-sm">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-als-red ring-1 ring-als-line">
-                    <FileText className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <span>
-                    <span className="block text-sm font-black text-als-blue">
-                      <EditableI18nText contentKey="blog.submissionGuidelines" value={t.blog.submissionGuidelines} />
-                    </span>
-                    <span className="mt-1 block text-sm leading-6">
-                      <EditableI18nText contentKey="blog.documentComingSoon" value={t.blog.documentComingSoon} />
-                    </span>
-                  </span>
-                </div>
+
               </div>
             </div>
           </Reveal>
         </div>
       </section>
 
+      {(listing.libraryTotal > 0 || filtered) && (
       <section className="border-b border-white/10 bg-[#2F4C60]/70 backdrop-blur-xl">
         <div className="container-wide">
           <Reveal>
@@ -208,7 +201,7 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:shrink-0">
-                <label className="relative">
+                {listing.authors.length > 1 && <label className="relative">
                   <span className="sr-only">{t.common.author}</span>
                   <select
                     value={author}
@@ -225,7 +218,7 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
                     className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-als-red"
                     aria-hidden="true"
                   />
-                </label>
+                </label>}
 
                 <motion.div
                   className="group relative flex h-11 max-w-full items-center overflow-hidden rounded-full border border-als-line bg-[#fbfcfe] shadow-sm"
@@ -281,11 +274,10 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
             </div>
           </Reveal>
         </div>
-      </section>
+      </section>)}
 
       <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-20 pt-12 md:pb-24 md:pt-16">
         <div className="container-wide">
-          {listing.error && <p role="alert" className="mb-5 text-sm text-white">{listing.error}</p>}
           <div aria-busy={listing.loading} className={listing.loading ? "opacity-60" : ""}>
           {filteredArticles.length > 0 && featuredArticle ? (
             <>
@@ -298,9 +290,9 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
                 >
                   <ArticleCard article={featuredArticle} variant="featured" />
                 </motion.div>
-              </div>
+              </div>}
 
-              <div className="mt-14 flex flex-col gap-3 border-t border-white/20 pt-10 md:flex-row md:items-end md:justify-between">
+              {articleIndex.length > 0 && <div className="mt-14 flex flex-col gap-3 border-t border-white/20 pt-10 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">
                     <EditableI18nText contentKey="blog.blogIndex" value={t.blog.blogIndex} />
@@ -334,49 +326,10 @@ export function BlogListingPage({ initial, canCreate = false }: { initial: Publi
                     </motion.div>
                   ))}
                 </motion.div>
-              ) : (
-                <motion.div
-                  variants={itemVariants}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: "-80px" }}
-                  className="mt-7 rounded-3xl border border-dashed border-als-line bg-white p-10 text-center"
-                >
-                  <PenLine className="mx-auto h-7 w-7 text-als-red" aria-hidden="true" />
-                  <p className="mt-3 text-sm font-semibold text-als-blue">
-                    <EditableI18nText contentKey="blog.onlyOneMatchTitle" value={t.blog.onlyOneMatchTitle} />
-                  </p>
-                  <p className="mt-1 text-sm text-als-muted">
-                    <EditableI18nText contentKey="blog.onlyOneMatchText" value={t.blog.onlyOneMatchText} />
-                  </p>
-                </motion.div>
-              )}
+              ) : null}
             </>
           ) : (
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              animate="show"
-              className="mx-auto max-w-xl rounded-3xl border border-dashed border-als-line bg-white p-10 text-center shadow-sm"
-            >
-              <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-als-red/10 text-als-red">
-                <FileText className="h-6 w-6" aria-hidden="true" />
-              </div>
-              <h3 className="mt-5 text-xl font-bold text-als-blue">
-                <EditableI18nText contentKey="blog.noResultsTitle" value={t.common.noResults} />
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-als-muted">
-                <EditableI18nText contentKey="blog.noResultsText" value={t.blog.noResultsText} />
-              </p>
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-blue px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-als-ink"
-              >
-                <EditableI18nText contentKey="blog.resetLibrary" value={t.blog.resetLibrary} />
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </motion.div>
+            <PublicLibraryState kind="blog" filtered={filtered} unavailable={listing.unavailable} onReset={listing.unavailable ? listing.retry : clearSearch}/>
           )}
           </div>
           <ContentPagination page={listing.page} total={listing.total} pageSize={listing.pageSize} onChange={listing.setPage}/>

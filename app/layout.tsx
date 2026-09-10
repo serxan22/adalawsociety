@@ -1,3 +1,4 @@
+import { TeamPhotoProvider } from "@/components/team/TeamPhotoProvider";
 import type { Metadata } from "next";
 import { ContentProvider } from "@/lib/content/ContentContext";
 import { getAdminSession, canManageAdmins } from "@/lib/admin/auth";
@@ -39,7 +40,7 @@ export default async function RootLayout({
           <ScrollProgress />
           <Header />
           <ContentProvider isSuperAdmin={isSuperAdmin}>
-            <main className="flex-1">{children}</main>
+            <TeamPhotoProvider><main className="flex-1">{children}</main></TeamPhotoProvider>
             <Footer />
           </ContentProvider>
         </LanguageProvider>

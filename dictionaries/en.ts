@@ -1,4 +1,31 @@
 export const en = {
+  publication: {
+  "emptyNews": "No news published yet",
+  "emptyBlog": "No articles published yet",
+  "emptyGallery": "No photos published yet",
+  "emptyText": "Updates will appear here when they are published.",
+  "noMatches": "No matching publications",
+  "noMatchesText": "Try a different search or reset the filters.",
+  "reset": "Reset filters",
+  "unavailable": "Content is temporarily unavailable",
+  "unavailableText": "Please try again shortly.",
+  "retry": "Try again",
+  "gallery": "Gallery",
+  "galleryIntro": "Photos from the ADA Law Society community.",
+  "viewImage": "Open image",
+  "close": "Close",
+  "previous": "Previous image",
+  "next": "Next image",
+  "imageError": "This image could not be loaded.",
+  "imageAlt": "ADA Law Society photo",
+  "eventsEmpty": "No upcoming events announced",
+  "eventsText": "Follow @adalawsociety for updates.",
+  "skills": "Skills and learning",
+  "teamIntro": "Meet the student leaders of ADA Law Society.",
+  "openEmail": "Open email app",
+  "emailNote": "Send your message from your email app.",
+  "commentsLocal": "Discussion is not available yet."
+},
   nav: {
     home: "Home",
     about: "About",
@@ -61,8 +88,7 @@ export const en = {
     competitionsText:
       "Debate and moot court programs give students the discipline, structure, and confidence to argue with evidence and integrity.",
     teamTitle: "ALS team directory",
-    teamText:
-      "This section is prepared for verified ALS team information. Placeholder profiles should be replaced only with confirmed member details.",
+    teamText: "Meet the student leaders of ADA Law Society.",
     momentsTitle: "ALS moments",
     momentsText:
       "A living record of events, trainings, discussions, visits, and community work around ADA University.",

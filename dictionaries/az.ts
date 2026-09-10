@@ -1,6 +1,33 @@
 import type { Dictionary } from "./en";
 
 export const az = {
+  publication: {
+  "emptyNews": "Hələ xəbər dərc edilməyib",
+  "emptyBlog": "Hələ məqalə dərc edilməyib",
+  "emptyGallery": "Hələ foto paylaşılmayıb",
+  "emptyText": "Yeni paylaşımlar dərc olunduqca burada görünəcək.",
+  "noMatches": "Uyğun paylaşım tapılmadı",
+  "noMatchesText": "Başqa sözlə axtarın və ya filtrləri sıfırlayın.",
+  "reset": "Filtrləri sıfırla",
+  "unavailable": "Məzmun hazırda əlçatan deyil",
+  "unavailableText": "Bir qədər sonra yenidən cəhd edin.",
+  "retry": "Yenidən cəhd et",
+  "gallery": "Qalereya",
+  "galleryIntro": "ADA Hüquq Cəmiyyətinin icmasından fotolar.",
+  "viewImage": "Şəkli aç",
+  "close": "Bağla",
+  "previous": "Əvvəlki şəkil",
+  "next": "Növbəti şəkil",
+  "imageError": "Şəkli yükləmək mümkün olmadı.",
+  "imageAlt": "ADA Hüquq Cəmiyyətinin fotosu",
+  "eventsEmpty": "Hələ qarşıdakı tədbir elan edilməyib",
+  "eventsText": "Yeniliklər üçün @adalawsociety hesabını izləyin.",
+  "skills": "Bacarıqlar və öyrənmə",
+  "teamIntro": "ADA Hüquq Cəmiyyətinin tələbə liderləri ilə tanış olun.",
+  "openEmail": "E-poçt tətbiqini aç",
+  "emailNote": "Mesajı e-poçt tətbiqinizdən göndərin.",
+  "commentsLocal": "Müzakirə bölməsi hələ açıq deyil."
+},
   nav: {
     home: "Ana səhifə",
     about: "Haqqımızda",
@@ -63,8 +90,7 @@ export const az = {
     competitionsText:
       "Debat və moot court proqramları tələbələrə sübut, struktur və dürüstlük əsasında arqument qurmağı öyrədir.",
     teamTitle: "İcra heyəti ilə tanış olun",
-    teamText:
-      "Cəmiyyət akademik ambisiyanı praktiki liderliklə birləşdirən tələbələr tərəfindən idarə olunur.",
+    teamText: "ADA Hüquq Cəmiyyətinin tələbə liderləri ilə tanış olun.",
     momentsTitle: "ALS anları",
     momentsText:
       "ADA Universiteti ətrafında tədbirlər, təlimlər, müzakirələr, səfərlər və icma işlərinin canlı arxivi.",

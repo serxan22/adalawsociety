@@ -1,29 +1,11 @@
 import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-
+import { publicOverrides } from "@/lib/content/public-overrides";
 export const dynamic = "force-dynamic";
-
-type ContentRow = {
-  key: string;
-  value: string;
-  type: string;
-};
-
 export async function GET() {
-  const supabase = createSupabaseAdminClient();
-  const { data, error } = await supabase.from("content").select("key, value, type");
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  const content = (data as ContentRow[]).reduce<Record<string, { value: string; type: string }>>(
-    (map, row) => {
-      map[row.key] = { value: row.value, type: row.type };
-      return map;
-    },
-    {},
-  );
-
-  return NextResponse.json(content);
+ try {
+  const {data,error}=await createSupabaseAdminClient().from("content").select("key,value,type");
+  if(error)throw error;
+  return NextResponse.json(publicOverrides(data??[]),{headers:{"Cache-Control":"no-store"}});
+ }catch{return NextResponse.json({error:"Content is temporarily unavailable."},{status:503,headers:{"Cache-Control":"no-store"}});}
 }

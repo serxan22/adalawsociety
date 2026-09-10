@@ -1,6 +1,7 @@
 "use client";
 
 import { usePublishedContent, type PublishedResult } from "@/components/cms/usePublishedContent";
+import { PublicLibraryState } from "@/components/cms/PublicLibraryState";
 import { ContentPagination } from "@/components/cms/ContentPagination";
 
 import { AnimatePresence, motion, type Variants } from "framer-motion";
@@ -53,7 +54,8 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
   const [searchPreview, setSearchPreview] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const listing = usePublishedContent("news", initial, query, category);
-  const filteredNews = listing.posts;
+  const filteredNews = listing.unavailable ? [] : listing.posts;
+  const filtered = !!query.trim() || category !== "All";
 
   const [leadNews, ...newsFeed] = filteredNews;
   const searchExpanded = searchOpen || searchPreview || query.length > 0;
@@ -66,6 +68,7 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
 
   const clearSearch = () => {
     setQuery("");
+    setCategory("All");
     setSearchOpen(false);
     setSearchPreview(false);
   };
@@ -182,7 +185,6 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
 
       <section className="bg-gradient-to-br from-[#3F6076] to-[#2F4C60] pb-20 pt-12 md:pb-24 md:pt-16">
         <div className="container-wide">
-          {listing.error && <p role="alert" className="mb-5 text-sm text-white">{listing.error}</p>}
           <div aria-busy={listing.loading} className={listing.loading ? "opacity-60" : ""}>
           {filteredNews.length > 0 && leadNews ? (
             <>
@@ -195,7 +197,7 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
                 <NewsCard item={leadNews} variant="featured" />
               </motion.div>
 
-              <div className="mt-12 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              {newsFeed.length > 0 && (<div className="mt-12 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
                 <aside className="hidden lg:block">
                   <div className="sticky top-28 rounded-2xl border border-als-line bg-white p-5 shadow-sm">
                     <div className="flex h-11 w-11 items-center justify-center rounded-full bg-als-red/10 text-als-red">
@@ -239,62 +241,12 @@ export function NewsListingPage({ initial, canCreateNews = false }: { initial: P
                       </motion.div>
                     ))}
                   </motion.div>
-                ) : (
-                  <motion.div
-                    variants={itemVariants}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: "-80px" }}
-                    className="rounded-2xl border border-dashed border-als-line bg-white p-10 text-center"
-                  >
-                    <Sparkles className="mx-auto h-7 w-7 text-als-red" aria-hidden="true" />
-                    <p className="mt-3 text-sm font-semibold text-als-blue">
-                      <EditableText
-                        contentKey="news.singleMatchTitle"
-                        fallback="Only one update matches this view."
-                        tag="span"
-                      />
-                    </p>
-                    <p className="mt-1 text-sm text-als-muted">
-                      <EditableText
-                        contentKey="news.singleMatchText"
-                        fallback="Adjust the filters or search to explore more ALS updates."
-                        tag="span"
-                      />
-                    </p>
-                  </motion.div>
-                )}
-              </div>
+                ) : null}
+              </div>)}
+
             </>
           ) : (
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              animate="show"
-              className="mx-auto max-w-xl rounded-3xl border border-dashed border-als-line bg-white p-10 text-center shadow-sm"
-            >
-              <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-als-red/10 text-als-red">
-                <FileText className="h-6 w-6" aria-hidden="true" />
-              </div>
-              <h3 className="mt-5 text-xl font-bold text-als-blue">
-                <EditableI18nText contentKey="news.noResultsTitle" value={t.common.noResults} />
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-als-muted">
-                <EditableText
-                  contentKey="news.noResultsText"
-                  fallback="Try another category or clear the search field to return to the full newsroom."
-                  tag="span"
-                />
-              </p>
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-als-blue px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-als-ink"
-              >
-                <EditableText contentKey="news.resetButton" fallback="Reset newsroom" tag="span" />
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </motion.div>
+            <PublicLibraryState kind="news" filtered={filtered} unavailable={listing.unavailable} onReset={listing.unavailable ? listing.retry : clearSearch}/>
           )}
           </div>
           <ContentPagination page={listing.page} total={listing.total} pageSize={listing.pageSize} onChange={listing.setPage}/>

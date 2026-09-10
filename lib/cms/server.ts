@@ -91,10 +91,6 @@ export async function savePost(kind: CmsContentType, id: string | null, input: u
   if (!parsed.success) throw new CmsError(parsed.error.issues.map(i => i.path.join(".") + ": " + i.message).join(" "));
   const post = parsed.data;
   if (kind === "article" && !post.summary?.trim()) throw new CmsError("An author summary is required.");
-  const { articles } = await import("@/data/articles");
-  const { newsItems } = await import("@/data/news");
-  const legacy = kind === "article" ? articles : newsItems;
-  if (legacy.some(p => p.slug === post.slug)) throw new CmsError("This URL belongs to an existing public post. Choose another slug.", 409);
   const data = {
     title: post.title, slug: post.slug, excerpt: post.excerpt, summary: post.summary || post.excerpt,
     content: extractPlainText(post.content), content_json: post.content, citations: post.citations,

@@ -17,12 +17,13 @@ export function ContentProvider({ children, isSuperAdmin }: { children: React.Re
   const [content, setContent] = useState<ContentMap>({});
   const [editMode, setEditMode] = useState(false);
   useEffect(() => {
-    fetch("/api/content").then(r => r.json()).then(setContent).catch(console.error);
+    fetch("/api/content", {cache:"no-store"}).then(r => {if(!r.ok)throw new Error("Unavailable");return r.json();}).then(setContent).catch(() => {});
   }, []);
   const getValue = useCallback((key: string, fallback = "") => content[key]?.value ?? fallback, [content]);
   const updateContent = useCallback(async (key: string, value: string) => {
     const res = await fetch("/api/content/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key, value }) });
-    if (res.ok) setContent(prev => ({ ...prev, [key]: { value, type: prev[key]?.type ?? "text" } }));
+    if (!res.ok) throw new Error("Changes could not be saved. Please try again.");
+    setContent(prev => ({ ...prev, [key]: { value, type: prev[key]?.type ?? "text" } }));
   }, []);
   const uploadImage = useCallback(async (key: string, file: File): Promise<string> => {
     const formData = new FormData();

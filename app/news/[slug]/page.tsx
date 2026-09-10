@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import { notFound } from "next/navigation";
 import { NewsDetailPage } from "@/components/pages/NewsDetailPage";
-import { newsItems } from "@/data/news";
 import { publicPost,publicListing } from "@/lib/cms/public";
 import { toNews } from "@/lib/cms/public-adapter";
 import type { NewsItem } from "@/data/news";
@@ -10,7 +9,7 @@ export const dynamic="force-dynamic";
 type Props={params:Promise<{slug:string}>};
 const resolve=cache(async(slug:string)=>{
   const post=await publicPost("news",slug);
-  return {post,item:post?toNews(post):newsItems.find(item=>item.slug===slug)};
+  return {post,item:post?toNews(post):undefined};
 });
 export async function generateMetadata({params}:Props):Promise<Metadata>{
   const {post,item}=await resolve((await params).slug);
