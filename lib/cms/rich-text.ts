@@ -1,7 +1,7 @@
 import type { RichTextDocument, RichTextNode } from "./types";
 
 const nodes = new Set(["doc", "paragraph", "text", "heading", "bulletList", "orderedList", "listItem", "blockquote", "codeBlock", "hardBreak", "horizontalRule", "image"]);
-const marks = new Set(["bold", "italic", "underline", "link", "code", "strike"]);
+const marks = new Set(["bold", "italic", "underline", "link", "code", "strike", "superscript"]);
 export const emptyRichTextDocument: RichTextDocument = { type: "doc", content: [{ type: "paragraph" }] };
 
 export function safeUrl(value: unknown): value is string {

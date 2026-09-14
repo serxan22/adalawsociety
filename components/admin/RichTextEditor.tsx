@@ -4,7 +4,8 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Bold, Italic, Underline, Link2, Unlink, List, ListOrdered, Quote, Code2, AlignLeft, AlignCenter, AlignRight, Minus, ImagePlus, Undo2, Redo2 } from "lucide-react";
+import Superscript from "@tiptap/extension-superscript";
+import { Bold, Italic, Underline, Superscript as SuperscriptIcon, Link2, Unlink, List, ListOrdered, Quote, Code2, AlignLeft, AlignCenter, AlignRight, Minus, ImagePlus, Undo2, Redo2 } from "lucide-react";
 import { useState } from "react";
 import type { RichTextDocument } from "@/lib/cms/types";
 import { safeUrl } from "@/lib/cms/rich-text";
@@ -18,7 +19,7 @@ export function RichTextEditor({value,onChange}:{value:RichTextDocument;onChange
   const [imageOpen,setImageOpen]=useState(false); const [imageUrl,setImageUrl]=useState("");const [alt,setAlt]=useState("");const [caption,setCaption]=useState("");
   const [linkOpen,setLinkOpen]=useState(false);const [href,setHref]=useState("");const [error,setError]=useState("");
   const editor=useEditor({
-    extensions:[StarterKit.configure({link:{openOnClick:false},heading:{levels:[2,3,4]}}),CaptionImage.configure({allowBase64:false}),TextAlign.configure({types:["heading","paragraph"]}),Placeholder.configure({placeholder:"Write the full article..."})],
+    extensions:[StarterKit.configure({link:{openOnClick:false},heading:{levels:[1,2,3,4,5,6]}}),Superscript,CaptionImage.configure({allowBase64:false}),TextAlign.configure({types:["heading","paragraph"]}),Placeholder.configure({placeholder:"Write the full article..."})],
     content:value,immediatelyRender:false,shouldRerenderOnTransaction:true,
     editorProps:{attributes:{class:"cms-rich-text min-h-80 p-5 focus:outline-none",role:"textbox","aria-label":"Article content","aria-multiline":"true"}},
     onUpdate:({editor})=>onChange(editor.getJSON() as RichTextDocument),
@@ -28,6 +29,7 @@ export function RichTextEditor({value,onChange}:{value:RichTextDocument;onChange
     {label:"Bold",Icon:Bold,active:editor.isActive("bold"),run:()=>editor.chain().focus().toggleBold().run()},
     {label:"Italic",Icon:Italic,active:editor.isActive("italic"),run:()=>editor.chain().focus().toggleItalic().run()},
     {label:"Underline",Icon:Underline,active:editor.isActive("underline"),run:()=>editor.chain().focus().toggleUnderline().run()},
+    {label:"Superscript",Icon:SuperscriptIcon,active:editor.isActive("superscript"),run:()=>editor.chain().focus().toggleSuperscript().run()},
     {label:"Link",Icon:Link2,active:editor.isActive("link"),run:()=>{setHref(editor.getAttributes("link").href??"");setLinkOpen(true);}},
     {label:"Remove link",Icon:Unlink,run:()=>editor.chain().focus().unsetLink().run()},
     {label:"Bullet list",Icon:List,active:editor.isActive("bulletList"),run:()=>editor.chain().focus().toggleBulletList().run()},
@@ -44,8 +46,8 @@ export function RichTextEditor({value,onChange}:{value:RichTextDocument;onChange
   ];
   return <div className="overflow-hidden rounded-lg border border-als-line bg-white">
     <div className="flex flex-wrap items-center gap-1 border-b border-als-line bg-als-blue-soft p-2" role="toolbar" aria-label="Text formatting">
-      <select aria-label="Paragraph style" className="h-8 rounded border border-als-line bg-white px-2 text-sm" value={editor.isActive("heading")?String(editor.getAttributes("heading").level):"paragraph"} onChange={e=>e.target.value==="paragraph"?editor.chain().focus().setParagraph().run():editor.chain().focus().toggleHeading({level:Number(e.target.value) as 2|3|4}).run()}>
-        <option value="paragraph">Paragraph</option><option value="2">Heading 2</option><option value="3">Heading 3</option><option value="4">Heading 4</option>
+      <select aria-label="Paragraph style" className="h-8 rounded border border-als-line bg-white px-2 text-sm" value={editor.isActive("heading")?String(editor.getAttributes("heading").level):"paragraph"} onChange={e=>e.target.value==="paragraph"?editor.chain().focus().setParagraph().run():editor.chain().focus().toggleHeading({level:Number(e.target.value) as 1|2|3|4|5|6}).run()}>
+        <option value="paragraph">Paragraph</option>{[1,2,3,4,5,6].map(level=><option key={level} value={level}>Heading {level}</option>)}
       </select>
       {actions.map(({label,Icon,run,active})=><button type="button" key={label} title={label} aria-label={label} aria-pressed={!!active} onClick={run} className={"grid h-8 w-8 place-items-center rounded hover:bg-als-red/10 "+(active?"bg-als-red/15 text-als-red":"text-als-ink")}><Icon size={16}/></button>)}
     </div><EditorContent editor={editor}/>

@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Operator reports and cached source/build artifacts are not application code.
+    ".cache/**",
+    "reports/**",
+    "supabase/.temp/**",
   ]),
 ]);
 

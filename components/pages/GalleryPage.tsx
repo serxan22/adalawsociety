@@ -49,11 +49,22 @@ function Lightbox({item,position,total,failed,onFail,onClose,onPrevious,onNext}:
  const {t}=useI18n();const c=t.publication;const dialog=useRef<HTMLDialogElement>(null);const closeButton=useRef<HTMLButtonElement>(null);
 	 useEffect(()=>{
 	  const previousFocus=document.activeElement as HTMLElement|null;const element=dialog.current;element?.showModal();closeButton.current?.focus();
-  const key=(event:KeyboardEvent)=>{if(event.key==="ArrowLeft")onPrevious();if(event.key==="ArrowRight")onNext();};
+  const previousOverflow=document.body.style.overflow;
+  const key=(event:KeyboardEvent)=>{
+   if(event.key==="ArrowLeft")onPrevious();if(event.key==="ArrowRight")onNext();
+   if(event.key==="Tab"&&element){
+    const controls=[...element.querySelectorAll<HTMLButtonElement>("button:not([disabled])")];
+    const first=controls[0],last=controls.at(-1);
+    // A one-control native dialog can otherwise tab to the document body.
+    if(event.shiftKey?document.activeElement===first:document.activeElement===last){
+     event.preventDefault();(event.shiftKey?last:first)?.focus();
+    }
+   }
+  };
   document.addEventListener("keydown",key);document.body.style.overflow="hidden";
-	  return()=>{document.removeEventListener("keydown",key);document.body.style.overflow="";element?.close();previousFocus?.focus();};
+	  return()=>{document.removeEventListener("keydown",key);document.body.style.overflow=previousOverflow;element?.close();previousFocus?.focus();};
  },[onNext,onPrevious]);
- return <dialog ref={dialog} aria-label={c.gallery} onCancel={event=>{event.preventDefault();onClose();}} onClick={event=>{if(event.target===event.currentTarget)onClose();}} className="fixed inset-0 m-auto h-dvh w-screen max-w-none overflow-hidden bg-black/90 p-0 text-white backdrop:bg-black/90">
+ return <dialog ref={dialog} aria-label={c.gallery} data-lenis-prevent onCancel={event=>{event.preventDefault();onClose();}} onClick={event=>{if(event.target===event.currentTarget)onClose();}} className="fixed inset-0 m-auto h-dvh w-screen max-w-none overflow-hidden bg-black/90 p-0 text-white backdrop:bg-black/90">
   <motion.div initial={{opacity:0,scale:.98}} animate={{opacity:1,scale:1}} exit={{opacity:0,scale:.98}} className="flex h-full flex-col p-3 sm:p-6" onClick={event=>event.stopPropagation()}>
    <div className="flex items-center justify-between gap-4 pb-3">
     <p className="truncate text-sm font-semibold">{item.caption||c.imageAlt} <span className="ml-2 text-white/55">{position+1} / {total}</span></p>

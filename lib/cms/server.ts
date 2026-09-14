@@ -52,7 +52,7 @@ export function kindFrom(value: string): CmsContentType {
 export function postSelect(kind: CmsContentType, detail = true) {
   const table = tableFor(kind);
   const fields = "id,title,slug,excerpt,summary,cover_image,status,published_at,created_at,updated_at,author_profile_id,category_id,citations";
-  const extra = detail ? ",content,content_json,seo_title,seo_description,seo_keywords,canonical_url,seo_image,updated_by" : "";
+  const extra = detail ? ",content,content_json,seo_title,seo_description,seo_keywords,canonical_url,seo_image,updated_by"+(kind==="article"?",original_language,legacy_source_url":"") : "";
   const tags = kind === "article" ? "article_tags" : "news_tags";
   return fields + extra + ",author:authors!"+table+"_author_profile_id_fkey(id,full_name,avatar_url,bio,position,social_links),category_record:categories!"+table+"_category_id_fkey(id,name,slug,description),tag_links:"+tags+"(tag:tags(id,name,slug))";
 }
@@ -69,6 +69,7 @@ export function normalizePost(row: Record<string, unknown>, kind: CmsContentType
     canonical_url:record.canonical_url??null,seo_image:record.seo_image??null,
     author:record.author??null,category:(row.category_record as CmsPost["category"])??null,
     tags:tags.flatMap(link=>link.tag?[link.tag]:[]),
+    original_language:record.original_language??null,legacy_source_url:record.legacy_source_url??null,
   };
 }
 

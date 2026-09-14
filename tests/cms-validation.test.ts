@@ -6,6 +6,13 @@ import {gallerySchema} from "../lib/cms/gallery-validation";
 import {publicOverrides} from "../lib/content/public-overrides";
 import {articles} from "../data/articles";
 import {newsItems} from "../data/news";
+import {authorSchema, categorySchema} from "../lib/cms/validation";
+test("imported profiles remain editable without fabricated optional information",()=>{
+ const author=authorSchema.parse({full_name:"İnci Açak",bio:null,position:null,avatar_url:null,social_links:{},user_id:null});
+ assert.equal(author.bio,null);assert.equal(author.position,null);
+ assert.equal(authorSchema.parse({full_name:"İnji Achak",bio:"",position:""}).bio,null);
+ assert.equal(categorySchema.parse({name:"Legal Articles",slug:"legal-articles",description:null}).description,null);
+});
 test("CMS validation rejects unsafe URLs and malformed rich text",()=>{
  assert.equal(slugify("Annual Community Meeting 2026"),"annual-community-meeting-2026");
  assert.equal(safeUrl("javascript:alert(1)"),false);

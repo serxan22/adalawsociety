@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local reports, source snapshots, and import checkpoints (never runtime content).
+/.cache/
+/reports/
+/supabase/.temp/

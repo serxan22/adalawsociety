@@ -4,7 +4,7 @@ export type CmsPostStatus = (typeof CMS_POST_STATUSES)[number];
 export type CmsContentType = "article" | "news";
 
 export type RichTextMark = {
-  type: "bold" | "italic" | "underline" | "link" | "code";
+  type: "bold" | "italic" | "underline" | "link" | "code" | "strike" | "superscript";
   attrs?: {
     href?: string;
     target?: string;
@@ -79,6 +79,8 @@ export type CmsPost = {
   author: CmsAuthor | null;
   category: CmsCategory | null;
   tags: CmsTag[];
+  original_language?: string | null;
+  legacy_source_url?: string | null;
 };
 
 export type CmsPostInput = {

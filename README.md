@@ -65,6 +65,33 @@ Apply migrations in order to the intended Supabase project after reviewing them:
 
 Migration `004` does not delete publications, Gallery files, Team records, or stored media. The repository test suite applies `003` and `004` to an isolated PGlite database and verifies public/draft boundaries and non-admin write blocking.
 
+## One-time official Blog archive migration
+
+The public website never scrapes the legacy site at request time. `scripts/migrate-official-blog.ts` is an operator-run migration into the existing `articles`, `authors`, `categories`, and private editorial media architecture.
+
+Review `supabase/migrations/20260914164400_official_blog_archive.sql` before applying it to another environment. It has already been applied to the authorized target project, and its version matches that project's migration history. This additive migration only adds provenance fields and partial unique indexes; it does not change existing content or RLS.
+
+```bash
+npx playwright install chromium
+npm run migrate:blogs -- --dry-run
+npm run migrate:blogs -- --import --target-project lgzdsgsuicyxplclqpux
+npx tsx scripts/verify-official-blog.ts
+```
+
+Both `/en/blogs` and `/az/blogs` are crawled, including rendered/lazy entries and pagination. Locale copies are merged only when their source ID, normalized metadata, and structured body hashes agree. Different source IDs remain separate. Authors use the exact published spelling; similar transliterations are never merged and no Team member is automatically made an Author.
+
+The source has no explicit categories, so imported articles use the neutral **Legal Articles** category. Author biography, position, avatar, tags, and article images stay empty unless explicitly present in the source. Calendar dates are retained on the original day at 00:00 UTC because the source supplies no publication time. Bibliographies remain in the body even when reliably parsed into citations.
+
+Reports are written to `reports/official-blog/`. Reports, source HTML snapshots, resumable checkpoints in `.cache/official-blog/`, and Supabase CLI temporary files are git-ignored and must not be committed. `--resume` reuses that validated source snapshot after an interruption. Every existing legacy ID/URL match is skipped, never overwritten or automatically republished; source drift is reported for manual review. Without `--resume`, source pages are fetched again. Redirect mappings are report-only and are not activated while both websites coexist.
+
+After import, `npx tsx scripts/verify-official-blog.ts` checks the local production build without writing to Supabase. It requires the local import report and validated source snapshots. After an explicitly authorized release, `BLOG_REVIEW_URL=https://adalawsociety-phi.vercel.app npx tsx scripts/verify-official-blog.ts --production` repeats the read-only checks against the existing public deployment. Verification reports and screenshots remain local and git-ignored.
+
+Import uses the configured server-only service-role credential, requires an explicit matching project ref, checks schema/storage first, validates every source record before writing any publication, and verifies anonymous visibility afterwards. It never deletes target content or imports engagement counts. A rerun cannot duplicate legacy articles or Authors.
+
+The default rerun never updates posts. Optional `--complete-references` can only fill an empty citations field on a pristine import whose source hash, title, summary, and full rich text still match, with `updated_by IS NULL` and insert timestamps within one second (the existing insert trigger uses a separate clock timestamp). Every normal CMS edit sets `updated_by`, so edited posts are excluded. Compare-and-set timestamp and editor guards protect concurrent editing. It cannot overwrite nonempty citations or an edited post. This was used once to recognize the source's additional Azerbaijani reference-heading variant; all original reference text also remains in the body.
+
+`scripts/verify-official-blog.ts` requires a running local server (prefer `npm run build` then `npm run start`) and a successful local `import.json` report, or the explicit production-review flag above. It performs read-only checks of all imported public URLs, full rendered body text, editor-schema round trips, filters, pagination, language persistence, unauthorized access, Gallery viewing, Team records, and browser layouts at 375/768/1440 px. It does not log in or alter publications. Authenticated editor actions still need a separate authorized review; do not use published test records to test them.
+
 `supabase/manual/cleanup_known_demo_content.sql` is a review-only cleanup script. It targets only the exact former example slugs and exact retired inline-content values. Do not run it against production without inspecting the matching rows and approving the operation. It unpublishes matching example posts rather than deleting them and does not target the genuine uploaded HEIC Gallery file.
 
 ## Gallery and media

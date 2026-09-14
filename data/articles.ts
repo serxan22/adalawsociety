@@ -10,6 +10,7 @@ export type Citation = {
 export type Article = {
   id?: string;
   richContent?: RichTextDocument;
+  originalLanguage?: string;
   slug: string;
   title: string;
   author: {

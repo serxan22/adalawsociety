@@ -6,7 +6,7 @@ function render(node:RichTextNode,key:string):ReactNode {
   if(node.type==="text") {
     let text:ReactNode=node.text??"";
     for(const mark of node.marks??[]) {
-      const tag={bold:"strong",italic:"em",underline:"u",code:"code",strike:"s"}[mark.type as string];
+      const tag={bold:"strong",italic:"em",underline:"u",code:"code",strike:"s",superscript:"sup"}[mark.type as string];
       if(tag)text=createElement(tag,{key:mark.type},text);
       if(mark.type==="link"&&safeUrl(mark.attrs?.href))text=<a key="link" href={mark.attrs?.href} rel="noopener noreferrer" target="_blank">{text}</a>;
     }

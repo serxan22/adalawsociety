@@ -34,7 +34,8 @@ test("editorial and public-media migrations enforce publication and admin bounda
  await db.exec(bootstrap);
  const migration3=(await readFile(join(root,"supabase/migrations/003_editorial_cms.sql"),"utf8")).replace("create extension if not exists pgcrypto;","");
  const migration4=await readFile(join(root,"supabase/migrations/004_gallery_team_media.sql"),"utf8");
- await db.exec(migration3);await db.exec(migration4);
+ const archiveMigration=await readFile(join(root,"supabase/migrations/20260914164400_official_blog_archive.sql"),"utf8");
+ await db.exec(migration3);await db.exec(migration4);await db.exec(archiveMigration);await db.exec(archiveMigration);
  await asRole(db,"authenticated",superId,"owner@example.com");
  const author=(await db.query<{id:string}>("insert into public.authors(full_name,bio) values ('Official Author','Biography') returning id")).rows[0];
  const category=(await db.query<{id:string}>("insert into public.categories(name,slug) values ('Legal Research','legal-research') returning id")).rows[0];
@@ -52,6 +53,10 @@ test("editorial and public-media migrations enforce publication and admin bounda
 	await asRole(db,"authenticated",superId,"owner@example.com");
 	assert.equal((await db.query<{status:string}>("select status from public.articles where id=$1",[post.id])).rows[0]?.status,"draft");
  await db.query("update public.articles set status='published' where id=$1",[post.id]);
+ await db.query("update public.articles set legacy_source_id='adalawsociety.com/blogs/19',legacy_source_url='https://www.adalawsociety.com/en/blogs/19',original_language='az' where id=$1",[post.id]);
+ await assert.rejects(()=>db.query("insert into public.articles(title,slug,legacy_source_id) values ('Different title','different-title','adalawsociety.com/blogs/19')"),/unique/i);
+ await db.query("update public.authors set legacy_author_key='exact-source-author' where id=$1",[author.id]);
+ await assert.rejects(()=>db.query("insert into public.authors(full_name,legacy_author_key) values ('Different spelling','exact-source-author')"),/unique/i);
  await db.query("insert into public.gallery_items(image_url,alt_text,status) values ('/api/editorial/media/20000000-0000-4000-8000-000000000001','Official ALS event photo','published')");
  await db.query("insert into public.team_member_photos(member_key,image_url) values ('2025-2026-murad-iskandar-president','/api/editorial/media/20000000-0000-4000-8000-000000000002')");
  await asRole(db,"anon");

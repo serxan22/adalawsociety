@@ -13,7 +13,7 @@ export const postSchema = z.object({
   excerpt: z.string().trim().min(1, "An excerpt is required.").max(2000),
   summary: z.string().trim().max(8000).optional(),
   content: z.custom<RichTextDocument>(isRichTextDocument, "Invalid rich text.").refine(hasMeaningfulRichText, "Article content is required."),
-  citations: z.array(z.object({ label: shortText, source: shortText, url })).max(100).default([]),
+  citations: z.array(z.object({ label: shortText, source: z.string().trim().min(1).max(8000), url })).max(100).default([]),
   coverImage: url,
   authorId: idSchema,
   categoryId: idSchema,
@@ -33,10 +33,10 @@ export const postSchema = z.object({
 export const authorSchema = z.object({
   full_name: shortText,
   avatar_url: url,
-  bio: z.string().trim().max(3000).default(""),
-  position: z.string().trim().max(150).default(""),
+  bio: z.string().trim().max(3000).nullable().optional().transform(v => v || null),
+  position: z.string().trim().max(150).nullable().optional().transform(v => v || null),
   social_links: z.record(z.string().max(40), z.string().refine(safeUrl, "Invalid social URL.")).default({}),
   user_id: optionalId,
 });
-export const categorySchema = z.object({ name: shortText, slug, description: z.string().trim().max(1000).default(""), image_url: url });
+export const categorySchema = z.object({ name: shortText, slug, description: z.string().trim().max(1000).nullable().optional().transform(v => v || null), image_url: url });
 export const tagSchema = z.object({ name: z.string().trim().min(1).max(80), slug });
