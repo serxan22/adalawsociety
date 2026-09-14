@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {mkdir, readFile, writeFile} from "node:fs/promises";
 import {join} from "node:path";
-import {chromium} from "@playwright/test";
+import {chromium,expect} from "@playwright/test";
 import {load} from "cheerio";
 import {getSchema} from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
@@ -130,7 +130,7 @@ async function main(){
           await page.keyboard.press("Shift+Tab");
           assert.ok(await dialog.evaluate(element=>element.contains(document.activeElement)),"Gallery traps reverse keyboard focus");
           await page.keyboard.press("ArrowRight");await page.keyboard.press("ArrowLeft");
-          await page.waitForTimeout(500);
+          await page.waitForFunction(()=>{const content=document.querySelector("dialog > div");return !!content&&Number(getComputedStyle(content).opacity)>=0.99;});
           await page.screenshot({path:join(directory,`gallery-dialog-${width}.png`)});
           await page.keyboard.press("Escape");await dialog.waitFor({state:"detached"});
           assert.notEqual(await page.evaluate(()=>document.body.style.overflow),"hidden");
@@ -143,15 +143,15 @@ async function main(){
           await featured.scrollIntoViewIfNeeded();await page.waitForTimeout(500);
           await page.screenshot({path:join(directory,`featured-${width}.png`)});
           const readLinks=page.locator('a[href^="/blog/"]').filter({hasText:"Read blog"});
-          assert.equal(await readLinks.count(),12);
+          await expect(readLinks).toHaveCount(12,{timeout:30000});
           await page.getByRole("navigation",{name:"Pagination"}).getByRole("button",{name:"Next",exact:true}).click();
           await page.waitForFunction(()=>document.querySelector('nav[aria-label="Pagination"]')?.textContent?.includes("2 / 2"));
-          await page.waitForTimeout(1200);assert.equal(await readLinks.count(),4);
+          await expect(readLinks).toHaveCount(4,{timeout:30000});
           await page.getByRole("navigation",{name:"Pagination"}).getByRole("button",{name:"Previous",exact:true}).click();
           await page.waitForFunction(()=>document.querySelector('nav[aria-label="Pagination"]')?.textContent?.includes("1 / 2"));
-          await page.waitForTimeout(1200);
-          const select=page.locator("select");await select.selectOption("Asim Zülfüqarlı");await page.waitForTimeout(1500);
-          assert.equal(await page.locator('a[href^="/blog/"]').filter({hasText:"Read blog"}).count(),2);
+          await expect(readLinks).toHaveCount(12,{timeout:30000});
+          const select=page.locator("select");await select.selectOption("Asim Zülfüqarlı");
+          await expect(readLinks).toHaveCount(2,{timeout:30000});
         }
         if(path.endsWith(report.results.find(r=>r.sourceId==="3")!.slug)){
           await page.locator(".cms-rich-text").scrollIntoViewIfNeeded();await page.waitForTimeout(500);
